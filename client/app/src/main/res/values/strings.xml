@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">HelpMusic</string>
+    <string name="email" translatable="true">Email</string>
+    <string name="password" translatable="true">Password</string>
+    <string name="forgotPassword" translatable="true">Forgot password</string>
+    <string name="signUp" translatable="true">Sign Up Here</string>
+    <string name="signUpButton" translatable="true">Sign Up</string>
+    <string name="name" translatable="true">Name</string>
+</resources>
