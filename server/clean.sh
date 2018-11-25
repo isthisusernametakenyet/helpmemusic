@@ -1,1 +1,1 @@
-find webroot/WEB-INF/classes/ -name '*class' | xargs rm
+find www/WEB-INF/classes/ -name '*class' | xargs rm
