@@ -124,17 +124,21 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, " Base64 encode " + imageString);
             mImageView.setImageBitmap(base64ToBitmap(imageString));
             Log.d(LOG_TAG, " Decode base64 to bitmap");
-            /*
+
             PictureHash ph = new PictureHash("Marcus", "marcus@gmail.com");
+            JSONObject obj = null;
+            SessionObject sessionObject = SessionObject.getInstance();
             try {
-                JSONObject obj = new JSONObject();
+                obj = new JSONObject();
                 obj.put("imageFileName", ph.hash());
                 obj.put("imageBitMapEncoded", imageString);
+                obj.put("email", sessionObject.user().email());
+                obj.put("password", sessionObject.user().password());
             }
             catch (JSONException e){
                 Log.e(LOG_TAG, " JsonException: " + e.getMessage());
             }
-            */
+            new URLSender().execute(URL, Action.ADD_PROFILE_IMG.value(), obj.toString());
         }
     }
 

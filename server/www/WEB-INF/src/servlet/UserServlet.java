@@ -106,11 +106,11 @@ public class UserServlet extends HttpServlet {
             }
             response.setStatus(200);
             break;
-        case ADD_FRIEND: // TODO @erik make it work
+        case ADD_FRIEND:
             List<User> friendship = parser.jsonToUsers(jsonString);
             new DbInsert().insertFriendship(friendship);
             break;
-        case GET_FRIENDS: // TODO @erik make it work
+        case GET_FRIENDS:
             User u = parser.jsonToUser(jsonString);
             List<User> friends = new DbSelection().readFriends(u);
             JSONArray arr = parser.usersToJson(friends);
@@ -118,7 +118,7 @@ public class UserServlet extends HttpServlet {
             break;
         case ADD_PROFILE_IMG:
             String[] imageData = parser.parseImageData(jsonString);
-            new DbInsert().insertImage(imageData[0], imageData[1]);
+            new DbInsert().insertImage(imageData[0], imageData[1], imageData[2], imageData[3]);
             break;
         default: 
             System.err.println("illegal action");
@@ -126,4 +126,4 @@ public class UserServlet extends HttpServlet {
             break;
         }           
     }
-}		
+}
