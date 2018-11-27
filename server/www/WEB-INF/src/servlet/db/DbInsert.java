@@ -1,6 +1,7 @@
 package servlet.db;
 
 import java.sql.*;
+import java.util.List;
 
 import servlet.model.User;
 
@@ -41,14 +42,14 @@ public class DbInsert {
         } catch(SQLException e){
             System.err.println("unable to insert image data to database: " 
                     + e.getMessage());
-            System.exit(1);
+            status = Status.FAILURE;
         } finally {
             try {
                 pstmt.close();
             } catch(SQLException e){
-                System.err.println("unable to close statment: " 
+                System.err.println("unable to close statement: " 
                         + e.getMessage());
-                System.exit(1);
+                status = Status.FAILURE;
             }
         }
         return status.value();
@@ -75,58 +76,62 @@ public class DbInsert {
         } catch (SQLException sqle) {
             System.err.println("unable to insert into database " 
                     + sqle.getMessage());
-            System.exit(1);
+            status = Status.FAILURE;
         } finally {
             try {
                 pstmt.close();
             } catch (SQLException sqle) {
                 System.err.println("unable to close statement "
                         + sqle.getMessage());
-                System.exit(1);
+                status = Status.FAILURE;
             }
             database.disconnect();
         }
         return status.value();
     }
 
-    public void insertFriendship(String uEmail, String fEmail) {
-    
-        final String SQL_INSERT_FRIENDSHIP = "INSERT INTO friendship "
-            + "(\"usr_email\", \"friend_email\") "
-            + "VALUES (?, ?)";
-            
+    public boolean insertFriendship(List<User> users) {
+        DbSelection selection = new DbSelection();
+        return insertFriend(
+                users.get(0),
+                selection.readUserId(users.get(1)),
+                users.get(1).email())
+                && insertFriend(
+                    users.get(1),
+                    selection.readUserId(users.get(0)),
+                    users.get(0).email());
+    }
+
+    private boolean insertFriend(User user, int friendId, String friendEmail) {
+        String tableName = DbUtil.createFriendTableName(user.email());
+        final String SQL_INSERT_FRIENDSHIP = "INSERT INTO ? (friend_id, friend_email) "
+                                           + "VALUES (?, ?)";
+        Status status = Status.FAILURE;
         DbUtil database = new DbUtil();
         Connection connection = database.connection();
         PreparedStatement pstmt = null;
         try {
             pstmt = connection.prepareStatement(SQL_INSERT_FRIENDSHIP);
-            pstmt.setString(1, uEmail);
-            pstmt.setString(2, fEmail);
+            pstmt.setString(1, tableName);
+            pstmt.setInt(2, friendId);
+            pstmt.setString(3, friendEmail);
             pstmt.executeUpdate();
+            status = Status.SUCCESS;
         } catch (SQLException sqle) {
             System.err.println("unable to close statement "
                     + sqle.getMessage());
-		System.exit(1);
-        }
-        try {
-            pstmt = connection.prepareStatement(SQL_INSERT_FRIENDSHIP);    
-            pstmt.setString(1, fEmail);
-            pstmt.setString(2, uEmail);  
-            pstmt.executeUpdate();
-        } catch (SQLException sqle) {
-            System.err.println("unable to close statement "
-                    + sqle.getMessage());
-		System.exit(1);
-	    } finally {
-                try {
-                    pstmt.close();
-                } catch (SQLException sqle) {
-                    System.err.println("unable to close statement "
+            status = Status.FAILURE;
+	} finally {
+            try {
+                pstmt.close();
+            } catch (SQLException sqle) {
+                System.err.println("unable to close statement "
                             + sqle.getMessage());
-                    System.exit(1);
+                status = Status.FAILURE;
             }
             database.disconnect();
         }
+        return status.value();
     }
 
 }

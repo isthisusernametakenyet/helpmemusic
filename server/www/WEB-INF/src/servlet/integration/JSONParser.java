@@ -36,8 +36,7 @@ public class JSONParser {
                 users.add(new User(
                             jsonObj.getString("name"),
                             jsonObj.getString("email"),
-                            jsonObj.getString("password"),
-                            new ArrayList<User>()
+                            jsonObj.getString("password")
                 ));            
             } catch (JSONException je) {
                 System.err.println("unable to parse: " + je.getMessage());
@@ -56,8 +55,8 @@ public class JSONParser {
             user = new User(
                     jo.getString("name"),
                     jo.getString("email"),
-                    jo.getString("password"),
-                    new ArrayList<User>());
+                    jo.getString("password")
+            );
         } catch (JSONException je) {
             System.err.println("unable to parse: " + je.getMessage());
             System.exit(1);

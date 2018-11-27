@@ -46,4 +46,14 @@ public class DbUtil {
 	}
     }
 
+    public static String createFriendTableName(String email) {
+        StringBuilder tableName = new StringBuilder();
+        for (int i = 0; i < email.length(); i++) {
+            if (email.charAt(i) == '@' || email.charAt(i) == '.') {
+                tableName.setCharAt(i, '_');
+            }
+        }
+        return tableName.toString();
+    }
+
 }

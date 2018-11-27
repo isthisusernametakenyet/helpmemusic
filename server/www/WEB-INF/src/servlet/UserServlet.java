@@ -88,7 +88,8 @@ public class UserServlet extends HttpServlet {
         switch (requestCode) {
         case ADD_USER:
             User user = parser.jsonToUser(jsonString);
-            if (new DbInsert().insertUser(user)) {
+            if (new DbInsert().insertUser(user)
+                    && new DbCreation().createFriendTable(user.email())) {
                 response.setStatus(200);
                 response.getWriter().println("ok");
             } else {
@@ -106,15 +107,12 @@ public class UserServlet extends HttpServlet {
             response.setStatus(200);
             break;
         case ADD_FRIEND: // TODO @erik make it work
-            List<User> frnds = parser.jsonToUsers(jsonString);
-            new DbInsert().insertFriendship(frnds.get(0).email(), frnds.get(1).email());
-            frnds.get(0).addFriend(frnds.get(1));
-            frnds.get(1).addFriend(frnds.get(0));
-            // what a mess!
+            List<User> friendship = parser.jsonToUsers(jsonString);
+            new DbInsert().insertFriendship(friendship);
             break;
         case GET_FRIENDS: // TODO @erik make it work
             User u = parser.jsonToUser(jsonString);
-            List<User> friends = new DbSelection().readFriends(u.email());
+            List<User> friends = new DbSelection().readFriends(u);
             JSONArray arr = parser.usersToJson(friends);
             response.getWriter().println(arr.toString());
             break;
@@ -128,5 +126,4 @@ public class UserServlet extends HttpServlet {
             break;
         }           
     }
-
 }		
