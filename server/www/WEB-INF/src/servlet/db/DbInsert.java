@@ -21,7 +21,7 @@ public class DbInsert {
         }
     }
 
-    public boolean insertImage(String imageName, String imageData){
+    public boolean insertImage(String imageName, String imageData, String email, String password){
         Status status = Status.FAILURE;
         final String SQL_INSERT = "INSERT INTO image "
            + "(\"image_name\", image_bitmap_data, image_owner) "
@@ -29,7 +29,8 @@ public class DbInsert {
         DbUtil database = new DbUtil();
         Connection conn = database.connection();
         DbSelection selection = new DbSelection();
-        //int id = selection.getUserId("marcus");
+
+        User user = selection.readUser(email, password);
         PreparedStatement pstmt = null;
         try {
             pstmt = conn.prepareStatement(SQL_INSERT);

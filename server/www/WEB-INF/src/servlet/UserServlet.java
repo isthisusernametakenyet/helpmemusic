@@ -120,7 +120,7 @@ public class UserServlet extends HttpServlet {
             break;
         case ADD_PROFILE_IMG:
             String[] imageData = parser.parseImageData(jsonString);
-            new DbInsert().insertImage(imageData[0], imageData[1]);
+            new DbInsert().insertImage(imageData[0], imageData[1], imageData[2], imageData[3]);
             break;
         default: 
             System.err.println("illegal action");

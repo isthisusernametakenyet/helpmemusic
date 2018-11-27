@@ -1,4 +1,4 @@
-package servlet.integration;;
+package servlet.integration;
          
 import org.json.*;
 import java.util.*;
@@ -84,17 +84,23 @@ public class JSONParser {
     
     public String[] parseImageData(String json) {
         String imageName = "";   
-        String imageData = "";       
+        String imageData = "";
+        String email = "";
+        String password = "";
         try{
             JSONObject jsonObj = new JSONObject(json);
             imageName = jsonObj.getString("imageFileName");
             imageData = jsonObj.getString("imageBitMapEncoded");
+            email = jsonObj.getString("email");
+            password = jsonObj.getString("password");
         } catch(JSONException e){
             System.out.println("faild to parse image data: " + e.getMessage());
         }
-        String[] imageValue = new String[2];
+        String[] imageValue = new String[4];
         imageValue[0] = imageName;
         imageValue[1] = imageData;
+        imageValue[2] = email;
+        imageValue[3] = password;
         return imageValue;
     }
 }

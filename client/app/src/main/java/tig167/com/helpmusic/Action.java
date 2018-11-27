@@ -5,7 +5,8 @@ public enum Action {
     LOGIN("login"),
     ADD_USER("add user"),
     GET_FRIENDS("get friends"),
-    ADD_FRIEND("add friend");
+    ADD_FRIEND("add friend"),
+    ADD_PROFILE_IMG("add profile-img");
 
     private String value;
 
