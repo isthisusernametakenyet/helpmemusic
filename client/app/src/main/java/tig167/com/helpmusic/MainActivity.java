@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         mImageView = findViewById(R.id.imageView);
         listView.setAdapter(adapter);
         me = this;
+        profileImage();
         PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
     }
 
@@ -174,5 +175,38 @@ public class MainActivity extends AppCompatActivity {
 
     public void addUserChangeListener(UserChangeListener l) {
         listeners.add(l);
+    }
+
+    private List<String> imageData;
+
+    public void profileImage(){
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        Log.d(LOG_TAG, " " + queue.toString());
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                URL+"?profileImage=marcus@gmail.com",
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray array) {
+                        Log.d(LOG_TAG, " :" + array.toString());
+                        imageData = new JsonParser().parseImage(array);
+                        resetListView();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
+                    }
+                }
+        );
+        queue.add(jsonArrayRequest);
+        Bitmap bitMap = null;
+        for(String string : imageData) {
+            bitMap = base64ToBitmap(string);
+        }
+        mImageView.setImageBitmap(bitMap);
     }
 }
