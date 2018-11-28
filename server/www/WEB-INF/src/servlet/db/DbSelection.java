@@ -44,7 +44,7 @@ public class DbSelection {
                                 + email + "' AND \"password\" = '" 
                                 + password + "'";
 	User user = null;
-        DbUtil database = new DbUtil();
+	DbUtil database = new DbUtil();
 	Connection connection = database.connection();
 	Statement stmt  = null;
 	ResultSet rs = null;
