@@ -55,7 +55,8 @@ public class JSONParser {
             user = new User(
                     jo.getString("name"),
                     jo.getString("email"),
-                    jo.getString("password"));
+                    jo.getString("password")
+            );
         } catch (JSONException je) {
             System.err.println("unable to parse: " + je.getMessage());
             System.exit(1);
@@ -80,7 +81,7 @@ public class JSONParser {
         return loginValue;
     }
     
-    public String[] parseImageData(String json) {
+   public String[] parseImageData(String json) {
         String imageName = "";   
         String imageData = "";
         String email = "";
@@ -101,4 +102,5 @@ public class JSONParser {
         imageValue[3] = password;
         return imageValue;
     }
+    
 }

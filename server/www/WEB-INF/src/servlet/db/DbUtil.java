@@ -46,7 +46,7 @@ public class DbUtil {
     }
 
     public static String createFriendTableName(String email) {
-        StringBuilder tableName = new StringBuilder();
+        StringBuilder tableName = new StringBuilder(email);
         for (int i = 0; i < email.length(); i++) {
             if (email.charAt(i) == '@' || email.charAt(i) == '.') {
                 tableName.setCharAt(i, '_');
