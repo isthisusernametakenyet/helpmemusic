@@ -39,7 +39,7 @@ public class DbSelection {
 
     public User readUser(String email, String password) {
         final String SQL_SELECT = "SELECT * "
-                                + "FROM usr "
+                                + "FROM app_user "
                                 + "WHERE \"email\" = '" 
                                 + email + "' AND \"password\" = '" 
                                 + password + "'";
