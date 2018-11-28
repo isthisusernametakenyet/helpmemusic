@@ -39,12 +39,12 @@ public class DbSelection {
 
     public User readUser(String email, String password) {
         final String SQL_SELECT = "SELECT * "
-                                + "FROM usr "
+                                + "FROM app_user "
                                 + "WHERE \"email\" = '" 
                                 + email + "' AND \"password\" = '" 
                                 + password + "'";
 	User user = null;
-	DbUtil database = new DbUtil();
+        DbUtil database = new DbUtil();
 	Connection connection = database.connection();
 	Statement stmt  = null;
 	ResultSet rs = null;
@@ -60,7 +60,7 @@ public class DbSelection {
             }
 	} catch (SQLException sqle) {
             System.err.println("unable to select from database " + sqle.getMessage());
-           
+            System.exit(1);
 	} finally {
             try {
                 rs.close();
@@ -112,7 +112,7 @@ public class DbSelection {
     public List<User> readFriends(User user) {
         String tableName = DbUtil.createFriendTableName(user.email());
         final String SQL_SELECT_FRIENDS = "SELECT \"name\", \"email\", \"password\" "
-                                        + "FROM " + tableName + " "
+                                        + "FROM " + tableName
                                         + "JOIN usr "
                                         + "ON friend_id = usr.id";
         DbUtil database = new DbUtil();

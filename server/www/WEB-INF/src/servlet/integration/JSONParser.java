@@ -1,4 +1,4 @@
-package servlet.integration;;
+package servlet.integration;
          
 import org.json.*;
 import java.util.*;
@@ -22,7 +22,7 @@ public class JSONParser {
         JSONArray jsonArray = null;
         try {                  
             JSONTokener jsonTokener = new JSONTokener(json);
-            JSONObject jsonObject = new JSONObject(jsonTokener);                 
+            JSONObject jsonObject = new JSONObject(jsonTokener);
             jsonArray = jsonObject.getJSONArray("users");                
         } catch (JSONException je) {                                       
             System.err.println("unable to init json array: "

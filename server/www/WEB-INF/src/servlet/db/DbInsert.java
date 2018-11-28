@@ -48,14 +48,14 @@ public class DbInsert {
             try {
                 pstmt.close();
             } catch(SQLException e){
-                System.err.println("unable to close statement: " 
+                System.err.println("unable to close statment: " 
                         + e.getMessage());
                 System.exit(1);
             }
         }
         return status.value();
     }
-	
+
     public boolean insertUser(User user) {
 
         Status status = Status.FAILURE;
