@@ -42,6 +42,11 @@ public class DbUtil {
 	}
     }
 
+    public ResultSet query(String sql) throws SQLException {
+        Statement statement = connection.createStatement();
+        return statement.executeQuery(sql);
+    }
+
     public static String createFriendTableName(String email) {
         StringBuilder tableName = new StringBuilder(email);
         for (int i = 0; i < email.length(); i++) {

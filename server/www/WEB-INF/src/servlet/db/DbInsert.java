@@ -48,7 +48,7 @@ public class DbInsert {
             try {
                 pstmt.close();
             } catch(SQLException e){
-                System.err.println("unable to close statment: " 
+                System.err.println("unable to close statement: " 
                         + e.getMessage());
                 System.exit(1);
             }

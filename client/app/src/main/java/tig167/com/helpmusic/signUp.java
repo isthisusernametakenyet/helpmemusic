@@ -36,6 +36,7 @@ public class signUp extends AppCompatActivity {
             );
 
             Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("accepted_user", email.getText());
             startActivity(intent);
 
         } catch(JSONException e){
