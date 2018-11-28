@@ -14,7 +14,6 @@ public class DbUtil {
             Class.forName(DATA.dbClass());
         } catch (ClassNotFoundException cnfe) {
             System.err.println("no database found " + cnfe.getMessage());
-            System.exit(1);
         }
     }
 
@@ -28,7 +27,6 @@ public class DbUtil {
 	} catch (SQLException sqle) {
             System.err.println("no connection to database " 
 				+ sqle.getMessage());
-            System.exit(1);
 	}
     }
 
@@ -41,7 +39,6 @@ public class DbUtil {
             connection.close();
 	} catch (SQLException sqle) {
             System.err.println("connection not closed " + sqle.getMessage());
-            System.exit(1);
 	}
     }
 
