@@ -112,7 +112,7 @@ public class DbSelection {
     public List<User> readFriends(User user) {
         String tableName = DbUtil.createFriendTableName(user.email());
         final String SQL_SELECT_FRIENDS = "SELECT \"name\", \"email\", \"password\" "
-                                        + "FROM " + tableName
+                                        + "FROM " + tableName + " "
                                         + "JOIN usr "
                                         + "ON friend_id = usr.id";
         DbUtil database = new DbUtil();

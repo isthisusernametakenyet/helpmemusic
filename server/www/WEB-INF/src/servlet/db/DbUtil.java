@@ -14,7 +14,6 @@ public class DbUtil {
             Class.forName(DATA.dbClass());
         } catch (ClassNotFoundException cnfe) {
             System.err.println("no database found " + cnfe.getMessage());
-            System.exit(1);
         }
     }
 
@@ -28,7 +27,6 @@ public class DbUtil {
 	} catch (SQLException sqle) {
             System.err.println("no connection to database " 
 				+ sqle.getMessage());
-            System.exit(1);
 	}
     }
 
@@ -41,12 +39,11 @@ public class DbUtil {
             connection.close();
 	} catch (SQLException sqle) {
             System.err.println("connection not closed " + sqle.getMessage());
-            System.exit(1);
 	}
     }
 
     public static String createFriendTableName(String email) {
-        StringBuilder tableName = new StringBuilder();
+        StringBuilder tableName = new StringBuilder(email);
         for (int i = 0; i < email.length(); i++) {
             if (email.charAt(i) == '@' || email.charAt(i) == '.') {
                 tableName.setCharAt(i, '_');
