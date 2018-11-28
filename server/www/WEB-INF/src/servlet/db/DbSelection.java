@@ -7,9 +7,9 @@ import servlet.model.User;
 
 public class DbSelection {
 
-    public int readUserId(User user) {
+    public int readUserId(String email) {
         final String SQL_READ_ID = "SELECT usr.id FROM usr WHERE email = \'" 
-                                 + user.email() + "\'";
+                                 + email + "\'";
         DbUtil database = new DbUtil();
         Connection connection = database.connection();
         Statement st = null;
@@ -150,5 +150,36 @@ public class DbSelection {
 
     public boolean hasUser(String email, String password) {
         return readUser(email, password) != null;
+    }
+
+    public String readProfilImage(String email){
+        String imageData = "";
+        int id = readUserId(email);
+        final String SQL_SELECT = "SELECT * from image WHERE image_owner = " + id;
+        DbUtil database = new DbUtil();
+        Connection conn = database.connection();
+        Statement statement = null;
+        ResultSet rs = null;
+        try{
+            statement = conn.createStatement();
+            rs = statement.executeQuery(SQL_SELECT);
+            while(rs.next()){
+                imageData = rs.getString("image_bitmap_data");
+            }
+        }
+        catch(SQLException e){
+            System.err.println("Failed to get image data " + e.getMessage());
+        }
+        finally{
+            try{
+                statement.close();
+                rs.close();
+            }
+            catch(SQLException e){
+                System.err.println("Failed to close the rasultset and statment " + e.getMessage());
+            }
+        }
+
+        return imageData;
     }
 }

@@ -95,11 +95,11 @@ public class DbInsert {
         DbSelection selection = new DbSelection();
         return insertFriend(
                 users.get(0),
-                selection.readUserId(users.get(1)),
+                selection.readUserId(users.get(1).email()),
                 users.get(1).email())
                 && insertFriend(
                     users.get(1),
-                    selection.readUserId(users.get(0)),
+                    selection.readUserId(users.get(0).email()),
                     users.get(0).email());
     }
 
