@@ -2,7 +2,8 @@ package servlet.integration;
          
 import org.json.*;
 import java.util.*;
-         
+
+import servlet.db.DbSelection;
 import servlet.model.User;
          
 public class JSONParser {
@@ -101,6 +102,21 @@ public class JSONParser {
         imageValue[2] = email;
         imageValue[3] = password;
         return imageValue;
+    }
+
+    public JSONArray imageToJson(String email){
+        JSONArray arr = new JSONArray();
+        try{
+            
+            JSONObject obj = new JSONObject();
+            DbSelection selection = new DbSelection();
+            obj.put("imageData",selection.readProfilImage(email));
+            arr.put(obj);
+        }
+        catch(JSONException e){
+            System.err.println("Unable to parse the image data to json " + e.getMessage());
+        }
+        return arr;
     }
     
 }

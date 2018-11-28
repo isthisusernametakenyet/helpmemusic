@@ -7,15 +7,24 @@ public class User {
 	private String name;
 	private String email;
 	private String password;
+	private int id;
 
 	public User(
 			String name,
 			String email,
-                        String password) {
+            String password) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 	}
+	//Added id to the user.
+	public User(String name,
+				String email,
+				String password,
+				int id){
+			this(name, email, password);
+			this.id = id;
+		}
 
 	public String name() {
 		return name;
@@ -27,6 +36,10 @@ public class User {
 
 	public String email() {
 		return email;
+	}
+
+	public int id(){
+		return id;
 	}
 
 	@Override
