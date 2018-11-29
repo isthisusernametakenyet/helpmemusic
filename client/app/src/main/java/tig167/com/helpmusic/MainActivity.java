@@ -33,35 +33,25 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    // TODO
-    // this class/activity needs to know who logged in
-    // in order to get friends of that user
-    // and display them in a list-view on a tab
-
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String URL = "http://10.0.2.2:8080/users";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private ArrayAdapter<User> adapter;
     private ListView listView;
+    private String email;
+    private List<User> friends;
     private List<User> users;
     private MainActivity me;
     private ImageView mImageView;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        users = new ArrayList<>();  // remove this later!
-                                    // we need to read friends of a specific user
-                                    // NOT ALL USERS
-                                    // correct me if I'm wrong
-
-        listView = findViewById(R.id.activity_volley);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, users);
+        friends = new ArrayList<>();
+        resetListView();
         mImageView = findViewById(R.id.imageView);
-        listView.setAdapter(adapter);
         me = this;
         profileImage();
         PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
@@ -69,16 +59,41 @@ public class MainActivity extends AppCompatActivity {
 
     private void resetListView(){
         listView = findViewById(R.id.activity_volley);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, users);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, friends);
         listView.setAdapter(adapter);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        //getUsers(); // we don't want this
-                      // because it will blurt all users out
-                      // on top of the beautiful ui
+        Intent intent = getIntent();
+        email = intent.getStringExtra("accepted_user");
+        getFriends();
+    }
+
+    private void getFriends() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        Log.d(LOG_TAG, " " + queue.toString());
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                URL + "?getFriends=" + email,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray array) {
+                        Log.d(LOG_TAG, " :" + array.toString());
+                        friends = new JsonParser().jsonToUsers(array);
+                        resetListView();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
+                    }
+                }
+        );
+        queue.add(jsonArrayRequest);
     }
 
     private void getUsers() { // this method is never executed
