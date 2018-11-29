@@ -57,20 +57,23 @@ public class UserServlet extends HttpServlet {
     HttpServletRequest request,
     HttpServletResponse response)
     throws ServletException, IOException {
-        String param = request.getQueryString();
-        if(param == null){
+        Map<String,String[]> map = request.getParameterMap();
+        System.out.println("Start doGet whith param: " + map.toString());
+        /*
+        if(map.containsKey("friend")){
             response.setContentType("application/json");
             List<User> users = new DbSelection().readUsers();
             JSONArray arr = new JSONParser().usersToJson(users);
             response.getWriter().println(arr.toString(2));
             System.out.println("never printed"); // else remove line
         }
-        if(param.equals("profileImage")){
-            String userEmail = request.getParameter(param);
+        */
+            System.out.println("Start image process");
+            String[] userEmail = map.get("profileImage");
             response.setContentType("application/json");
-            JSONArray arr = new JSONParser().imageToJson(userEmail);
+            JSONArray arr = new JSONParser().imageToJson(userEmail[0]);
             response.getWriter().println(arr.toString());
-        }
+            System.out.println("never printed");
     }
     
     @Override        
