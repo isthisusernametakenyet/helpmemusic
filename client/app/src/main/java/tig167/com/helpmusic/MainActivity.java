@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         mImageView = findViewById(R.id.imageView);
         listView.setAdapter(adapter);
         me = this;
-        profileImage();
+
         PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
     }
 
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        profileImage();
         //getUsers(); // we don't want this
                       // because it will blurt all users out
                       // on top of the beautiful ui
@@ -180,9 +181,10 @@ public class MainActivity extends AppCompatActivity {
     private List<String> imageData;
 
     public void profileImage(){
-
+        Log.d(LOG_TAG, " Start geting the image");
         RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d(LOG_TAG, " " + queue.toString());
+        Log.d(LOG_TAG, " Created a request que");
+        //Log.d(LOG_TAG, " " + queue.toString());
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 URL+"?profileImage=marcus@gmail.com",
@@ -202,11 +204,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+        Log.d(LOG_TAG, " JsonArrayRequest done");
         queue.add(jsonArrayRequest);
         Bitmap bitMap = null;
         for(String string : imageData) {
             bitMap = base64ToBitmap(string);
         }
-        mImageView.setImageBitmap(bitMap);
+        if(bitMap != null) {
+            mImageView.setImageBitmap(bitMap);
+        }
     }
 }

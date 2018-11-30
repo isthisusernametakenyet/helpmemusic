@@ -11,7 +11,7 @@ import java.util.List;
 
 public class JsonParser {
 
-    private static final String LOG_TAG = "JsonParser";
+    private static final String LOG_TAG = JsonParser.class.getSimpleName();
 
     public String userToJson(String name, String password, String email){
         StringBuilder sb = new StringBuilder();
@@ -48,18 +48,19 @@ public class JsonParser {
 
     public List<String> parseImage(JSONArray array){
         List<String> imageData = new ArrayList<>();
-
-        for(int i = 0;i<array.length();i++){
+        Log.d(LOG_TAG, ": Array length" + array.length());
+        for(int i = 0; i < array.length(); i++){
             try{
                 JSONObject obj = array.getJSONObject(i);
                 String imageString = obj.getString("imageData");
+                Log.d(LOG_TAG, ": ImageData = " + imageString);
                 imageData.add(imageString);
             }
             catch(JSONException e){
                 Log.e(LOG_TAG, ": " + e.getMessage());
             }
         }
-
+        Log.d(LOG_TAG, ": List String = " + imageData.toString());
         return imageData;
     }
 }
