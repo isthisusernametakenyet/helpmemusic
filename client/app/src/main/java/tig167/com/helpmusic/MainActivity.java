@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
     }
 
-    private void resetListView(){
+    private void resetListView() {
         listView = findViewById(R.id.activity_volley);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, friends);
         listView.setAdapter(adapter);

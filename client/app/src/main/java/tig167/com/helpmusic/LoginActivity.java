@@ -20,7 +20,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void signUp(View view){
-        Intent intent = new Intent(this, signUp.class);
+        Intent intent = new Intent(this, SignUp.class);
         startActivity(intent);
     }
 
@@ -40,10 +40,11 @@ public class LoginActivity extends AppCompatActivity {
                     jsonObject.toString()
             );
         }
-        catch(JSONException e){
+        catch(JSONException e) {
             e.printStackTrace();
         }
-        intent.putExtra("accepted_user", email.getText());
+        String identifier = email.getText().toString();
+        intent.putExtra("accepted_user", identifier);
         startActivity(intent);
     }
 }
