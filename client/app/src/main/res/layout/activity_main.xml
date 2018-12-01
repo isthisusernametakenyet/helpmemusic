@@ -6,11 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <fragment android:name="tig167.com.helpmusic.FriendsFragment"
-        android:id="@+id/fragment_friends"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <SearchView
         android:id="@+id/search_bar"
         android:layout_width="395dp"
@@ -85,6 +80,11 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <fragment android:name="tig167.com.helpmusic.FriendsFragment"
+        android:id="@+id/fragment_friends"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"

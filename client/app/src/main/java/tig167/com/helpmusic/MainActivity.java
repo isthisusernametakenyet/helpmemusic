@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -35,13 +34,11 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String URL = "http://10.0.2.2:8080/users";
+    private static final String SERVER_REQUEST_FRIENDS = "?getFriends=";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private ArrayAdapter<User> adapter;
-    private ListView listView;
     private String email;
     private List<User> friends;
-    private List<User> users;
     private MainActivity me;
     private ImageView mImageView;
 
@@ -49,26 +46,28 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        friends = new ArrayList<>();
-        resetListView();
         mImageView = findViewById(R.id.imageView);
         me = this;
+        //getFriends();
+        friends = new ArrayList<>();
+        friends.add(new User("Lasse Kongo", "usr1337@remote.webz"));
+        friends.add(new User("Jan Banan", "janne@dark.net"));
+        resetListView();
         profileImage();
         PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
     }
 
     private void resetListView() {
-        listView = findViewById(R.id.activity_volley);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, friends);
-        listView.setAdapter(adapter);
+        ListView listView = findViewById(R.id.activity_volley);
+        UserAdapter userAdapter = new UserAdapter(me, friends);
+        listView.setAdapter(userAdapter);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Intent intent = getIntent();
-        email = intent.getStringExtra("accepted_user");
-        getFriends();
+        //Intent intent = getIntent();
+        //email = intent.getStringExtra("accepted_user");
     }
 
     private void getFriends() {
@@ -76,38 +75,13 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, " " + queue.toString());
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                URL + "?getFriends=" + email,
+                URL + SERVER_REQUEST_FRIENDS + email,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray array) {
                         Log.d(LOG_TAG, " :" + array.toString());
                         friends = new JsonParser().jsonToUsers(array);
-                        resetListView();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
-                    }
-                }
-        );
-        queue.add(jsonArrayRequest);
-    }
-
-    private void getUsers() { // this method is never executed
-        RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d(LOG_TAG, " " + queue.toString());
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                URL,
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray array) {
-                        Log.d(LOG_TAG, " :" + array.toString());
-                        users = new JsonParser().jsonToUsers(array);
                         resetListView();
                     }
                 },
@@ -172,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
 
     String mCurrentPhotoPath;
 
-    private File createImageFile() throws IOException{
+    private File createImageFile() throws IOException {
         PictureHash ph = new PictureHash("Marcus", "marcus@gmail.com");
         String fileName = "JPEG_" + ph.hash();
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
