@@ -191,7 +191,7 @@ public class DbSelection {
     public String readProfilImage(String email){
         String imageData = "";
         int id = readUserId(email);
-        final String SQL_SELECT = "SELECT * from image WHERE image_owner = " + id;
+        final String SQL_SELECT = "SELECT * from image WHERE owner = " + id;
         DbUtil database = new DbUtil();
         Connection conn = database.connection();
         Statement statement = null;
@@ -200,7 +200,7 @@ public class DbSelection {
             statement = conn.createStatement();
             rs = statement.executeQuery(SQL_SELECT);
             while(rs.next()){
-                imageData = rs.getString("image_bitmap_data");
+                imageData = rs.getString("imagebitmap");
             }
         }
         catch(SQLException e){
@@ -217,5 +217,35 @@ public class DbSelection {
         }
 
         return imageData;
+    }
+
+    public int profileImageId(int owner){
+	int imageId = -1;
+	final String SQL = "SELECT \"id\" FROM image WHERE ower = " + owner + " AND profileimage = true;";
+	DbUtil database = new DbUtil();
+	Connection conn = database.connection();
+	Statment statment = null;
+	ResultSet rs = null;
+	try{
+	    statment = conn.createStatment();
+	    rs = statment.excecuteQuery(SQL);
+
+	    while(rs.next()){
+		imageId = rs.getInt("\"id\"");
+	    }
+	}
+	catch(SQLException e){
+	    System.err.println("faild to get imageid");
+	}
+	finally{
+	    try{
+		statment.close();
+		rs.close();
+	    }
+	    catch(SQLException e){
+		System.err.println("faild to close statment and resultset");
+	    }
+	}
+	return imageId;
     }
 }
