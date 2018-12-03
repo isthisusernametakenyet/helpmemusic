@@ -8,12 +8,12 @@ public class PictureHash {
     private String hashStart;
     private static final String LOG_TAG = "PictureHash: ";
 
-    public PictureHash(String name, String mail){
+    public PictureHash(String name, String mail) {
         hashStart = name + mail;
         setHashStart(hashStart);
     }
 
-    private void setHashStart(String hashStart){
+    private void setHashStart(String hashStart) {
         //Time time = new Time();
         LocalDateTime now = LocalDateTime.now();
 

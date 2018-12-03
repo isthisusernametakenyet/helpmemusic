@@ -9,7 +9,7 @@ import android.widget.EditText;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class signUp extends AppCompatActivity {
+public class SignUp extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,26 +24,21 @@ public class signUp extends AppCompatActivity {
         EditText password = findViewById(R.id.signUpPassword);
         EditText email = findViewById(R.id.signUpEmail);
         String securePassword = ph.getSHA256SecurePassword(password.getText().toString());
+        String identifier = "";
         try {
             jsonObject.put("name", name.getText());
             jsonObject.put("email", email.getText());
             jsonObject.put("password", securePassword);
-
-            String identifier = email.getText().toString();
-
             new URLSender().execute(
                     "http://10.0.2.2:8080/users",
                     Action.ADD_USER.value(),
                     jsonObject.toString()
             );
-
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("accepted_user", identifier);
-            startActivity(intent);
-
+            identifier = email.getText().toString();
         } catch (JSONException e) {
             System.err.println(e.getMessage());
         }
+        // identifier --> sessionObject
     }
 
 }

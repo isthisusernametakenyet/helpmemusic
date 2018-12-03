@@ -46,21 +46,23 @@ public class JsonParser {
         return userList;
     }
 
-    public List<String> parseImage(JSONArray array){
-        List<String> imageData = new ArrayList<>();
+
+    public String parseImage(JSONArray array){
+        String imageData = null;
         Log.d(LOG_TAG, ": Array length" + array.length());
         for(int i = 0; i < array.length(); i++){
             try{
                 JSONObject obj = array.getJSONObject(i);
-                String imageString = obj.getString("imageData");
-                Log.d(LOG_TAG, ": ImageData = " + imageString);
-                imageData.add(imageString);
+                imageData = obj.getString("imageData");
+                Log.d(LOG_TAG, ": ImageData = " + imageData);
+
+
             }
             catch(JSONException e){
                 Log.e(LOG_TAG, ": " + e.getMessage());
             }
         }
-        Log.d(LOG_TAG, ": List String = " + imageData.toString());
+        Log.d(LOG_TAG, ": List String = " + imageData);
         return imageData;
     }
 }

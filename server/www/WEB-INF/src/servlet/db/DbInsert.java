@@ -25,19 +25,20 @@ public class DbInsert {
     public boolean insertImage(String imageName, String imageData, String email, String password){
         Status status = Status.FAILURE;
         final String SQL_INSERT = "INSERT INTO image "
-           + "(\"image_name\", image_bitmap_data, image_owner) "
-           + "VALUES (?, ?, ?)";
+           + "(\"name\", imagebitmap, owner, profileimage) "
+           + "VALUES (?, ?, ?, ?)";
         DbUtil database = new DbUtil();
         Connection conn = database.connection();
         DbSelection selection = new DbSelection();
 
-        User user = selection.readUser(email, password);
+        User user = selection.readUserId(email);
         PreparedStatement pstmt = null;
         try {
             pstmt = conn.prepareStatement(SQL_INSERT);
             pstmt.setString(1, imageName);
             pstmt.setString(2, imageData);
-            pstmt.setInt(3, 0);
+            pstmt.setInt(3, user.id());
+	    pstmt.setBoolean(4, true);
             pstmt.executeUpdate();
             status = Status.SUCCESS;
         } catch(SQLException e){

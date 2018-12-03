@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -31,19 +31,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.app.Activity.RESULT_OK;
-
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private static final String URL = "http://10.0.2.2:8080/users";
+    public static final String URL = "http://10.0.2.2:8080/users";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private ArrayAdapter<User> adapter;
-    private ListView listView;
-    private String email;
-    private List<User> friends;
-    private List<User> users;
     private MainActivity me;
     private ImageView mImageView;
 
@@ -51,91 +44,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        friends = new ArrayList<>();
-        resetListView();
         mImageView = findViewById(R.id.imageView);
         me = this;
 
-        PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
-    }
-
-    private void resetListView(){
-        listView = findViewById(R.id.activity_volley);
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, friends);
-        listView.setAdapter(adapter);
+        //profileImage();
+        //PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        profileImage();
-        //getUsers(); // we don't want this
-                      // because it will blurt all users out
-                      // on top of the beautiful ui
-
-        Intent intent = getIntent();
-        email = intent.getStringExtra("accepted_user");
-        getFriends();
-    }
-
-    private void getFriends() {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d(LOG_TAG, " " + queue.toString());
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                URL + "?getFriends=" + email,
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray array) {
-                        Log.d(LOG_TAG, " :" + array.toString());
-                        friends = new JsonParser().jsonToUsers(array);
-                        resetListView();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
-                    }
-                }
-        );
-        queue.add(jsonArrayRequest);
-
-    }
-
-    private void getUsers() { // this method is never executed
-        RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d(LOG_TAG, " " + queue.toString());
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                URL,
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray array) {
-                        Log.d(LOG_TAG, " :" + array.toString());
-                        users = new JsonParser().jsonToUsers(array);
-                        resetListView();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
-                    }
-                }
-        );
-        queue.add(jsonArrayRequest);
     }
 
     public void cameraClick(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if(intent.resolveActivity(getPackageManager()) != null) {
             Log.d(LOG_TAG, " Click camera");
-                //intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+            //intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
         }
     }
 
@@ -181,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
     String mCurrentPhotoPath;
 
-    private File createImageFile() throws IOException{
+    private File createImageFile() throws IOException {
         PictureHash ph = new PictureHash("Marcus", "marcus@gmail.com");
         String fileName = "JPEG_" + ph.hash();
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -201,13 +127,12 @@ public class MainActivity extends AppCompatActivity {
         listeners.add(l);
     }
 
-    private List<String> imageData;
+    private String imageData;
 
     public void profileImage(){
-        Log.d(LOG_TAG, " Start geting the image");
+
         RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d(LOG_TAG, " Created a request que");
-        //Log.d(LOG_TAG, " " + queue.toString());
+        Log.d(LOG_TAG, " " + queue.toString());
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 URL+"?profileImage=marcus@gmail.com",
@@ -217,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONArray array) {
                         Log.d(LOG_TAG, " :" + array.toString());
                         imageData = new JsonParser().parseImage(array);
-                        resetListView();
                     }
                 },
                 new Response.ErrorListener() {
@@ -227,14 +151,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-        Log.d(LOG_TAG, " JsonArrayRequest done");
         queue.add(jsonArrayRequest);
         Bitmap bitMap = null;
-        for(String string : imageData) {
-            bitMap = base64ToBitmap(string);
-        }
-        if(bitMap != null) {
-            mImageView.setImageBitmap(bitMap);
-        }
+        bitMap = imageData == null ? base64ToBitmap(imageData) : null;
+        mImageView.setImageBitmap(bitMap);
     }
 }

@@ -20,16 +20,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void signUp(View view){
-        Intent intent = new Intent(this, signUp.class);
+        Intent intent = new Intent(this, SignUp.class);
         startActivity(intent);
     }
 
     public void loginClick(View view){
-        Intent intent = new Intent(this, MainActivity.class);
+
         PasswordHashing ph = new PasswordHashing();
         EditText email = findViewById(R.id.loginEmail);
         EditText password = findViewById(R.id.loginPassword);
         String securePassword = ph.getSHA256SecurePassword(password.getText().toString());
+        String identifier = "";
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("email", email.getText());
@@ -39,11 +40,11 @@ public class LoginActivity extends AppCompatActivity {
                     Action.LOGIN.value(),
                     jsonObject.toString()
             );
+            identifier = email.getText().toString();
         }
-        catch(JSONException e){
+        catch(JSONException e) {
             e.printStackTrace();
         }
-        intent.putExtra("accepted_user", email.getText());
-        startActivity(intent);
+        // identifier-->sessionObject
     }
 }
