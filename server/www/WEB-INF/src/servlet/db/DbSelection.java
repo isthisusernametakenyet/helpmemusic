@@ -224,11 +224,11 @@ public class DbSelection {
 	final String SQL = "SELECT \"id\" FROM image WHERE ower = " + owner + " AND profileimage = true;";
 	DbUtil database = new DbUtil();
 	Connection conn = database.connection();
-	Statment statment = null;
+	Statement st = null;
 	ResultSet rs = null;
 	try{
-	    statment = conn.createStatment();
-	    rs = statment.excecuteQuery(SQL);
+	    st = conn.createStatement();
+	    rs = st.executeQuery(SQL);
 
 	    while(rs.next()){
 		imageId = rs.getInt("\"id\"");
@@ -239,7 +239,7 @@ public class DbSelection {
 	}
 	finally{
 	    try{
-		statment.close();
+		st.close();
 		rs.close();
 	    }
 	    catch(SQLException e){
