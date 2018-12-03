@@ -132,12 +132,6 @@ public class UserServlet extends HttpServlet {
             List<User> friendship = parser.jsonToUsers(jsonString);
             new DbInsert().insertFriendship(friendship);
             break;
-            case GET_FRIENDS:
-            User u = parser.jsonToUser(jsonString);
-            List<User> friends = new DbSelection().readFriends(u);
-            JSONArray arr = parser.usersToJson(friends);
-            response.getWriter().println(arr.toString());
-            break;
             case ADD_PROFILE_IMG:
             String[] imageData = parser.parseImageData(jsonString);
             new DbInsert().insertImage(imageData[0], imageData[1], imageData[2], imageData[3]);
