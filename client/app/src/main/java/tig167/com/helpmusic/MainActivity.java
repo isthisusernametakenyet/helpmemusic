@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -33,12 +34,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private static final String URL = "http://10.0.2.2:8080/users";
-    private static final String SERVER_REQUEST_FRIENDS = "?getFriends=";
+    public static final String URL = "http://10.0.2.2:8080/users";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private String email;
-    private List<User> friends;
+
     private MainActivity me;
     private ImageView mImageView;
 
@@ -48,19 +48,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mImageView = findViewById(R.id.imageView);
         me = this;
-        //getFriends();
-        friends = new ArrayList<>();
-        friends.add(new User("Lasse Kongo", "usr1337@remote.webz"));
-        friends.add(new User("Jan Banan", "janne@dark.net"));
-        resetListView();
-        profileImage();
-        PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
-    }
 
-    private void resetListView() {
-        ListView listView = findViewById(R.id.activity_volley);
-        UserAdapter userAdapter = new UserAdapter(me, friends);
-        listView.setAdapter(userAdapter);
+        //profileImage();
+        //PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
     }
 
     @Override
@@ -68,31 +58,6 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         //Intent intent = getIntent();
         //email = intent.getStringExtra("accepted_user");
-    }
-
-    private void getFriends() {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d(LOG_TAG, " " + queue.toString());
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                URL + SERVER_REQUEST_FRIENDS + email,
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray array) {
-                        Log.d(LOG_TAG, " :" + array.toString());
-                        friends = new JsonParser().jsonToUsers(array);
-                        resetListView();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
-                    }
-                }
-        );
-        queue.add(jsonArrayRequest);
     }
 
     public void cameraClick(View view) {
@@ -181,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONArray array) {
                         Log.d(LOG_TAG, " :" + array.toString());
                         imageData = new JsonParser().parseImage(array);
-                        resetListView();
                     }
                 },
                 new Response.ErrorListener() {

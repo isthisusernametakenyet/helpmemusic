@@ -44,9 +44,10 @@
             app:layout_constraintTop_toBottomOf="@+id/search_bar">
 
             <android.support.design.widget.TabItem
+                android:id="@+id/friendsTab"
+                android:text="Friends"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Left" />
+                android:layout_height="wrap_content" />
 
             <android.support.design.widget.TabItem
                 android:layout_width="wrap_content"
@@ -67,7 +68,7 @@
 
     </android.support.v4.view.ViewPager>
 
-    <ListView
+    <LinearLayout
         android:id="@+id/activity_volley"
         android:layout_width="395dp"
         android:layout_height="456dp"
@@ -77,14 +78,23 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.703"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        android:orientation="horizontal" >
 
-    <fragment android:name="tig167.com.helpmusic.FriendsFragment"
-        android:id="@+id/fragment_friends"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <fragment
+            android:id="@+id/fragment_friends"
+            android:name="tig167.com.helpmusic.FriendsFragment"
+            android:layout_width="match_parent"
+            android:layout_height="427dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:layout_constraintVertical_bias="0.0" />
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingActionButton"
