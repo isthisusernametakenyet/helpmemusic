@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
     public static final String URL = "http://10.0.2.2:8080/users";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private String email;
-
     private MainActivity me;
     private ImageView mImageView;
 
@@ -56,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        //Intent intent = getIntent();
-        //email = intent.getStringExtra("accepted_user");
     }
 
     public void cameraClick(View view) {

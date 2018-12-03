@@ -1,13 +1,11 @@
 package tig167.com.helpmusic;
 
-import android.content.Context;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -26,14 +24,11 @@ import java.util.List;
 
 public class FriendsFragment extends ListFragment implements OnItemClickListener {
 
-    private static final String SERVER_REQUEST_FRIENDS = "?getFriends=";
-
     private List<User> friends;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-        Log.d("debug","FRIENDS_FRAGMENT[onCreateView]");
         return inflater.inflate(R.layout.fragment_friends, container, false);
     }
 
@@ -41,30 +36,28 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        Log.d("debug","FRIENDS_FRAGMENT[onActivityCreated]");
-
         //getFriends();
         friends = new ArrayList<>();
         friends.add(new User("Lasse Kongo", "usr1337@remote.webz"));
         friends.add(new User("Jan Banan", "janne@dark.net"));
 
         resetListView();
-
+        getListView().setOnItemClickListener(this);
     }
 
     private void resetListView() {
         ListView listView = getListView();
-
         UserAdapter userAdapter = new UserAdapter(getActivity(), friends);
         listView.setAdapter(userAdapter);
     }
 
     private void getFriends() {
+        final String SERVER_REQUEST_FRIENDS = "?getFriends=";
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-
+        String email = SessionObject.getInstance().user().email();
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                MainActivity.URL + SERVER_REQUEST_FRIENDS + SessionObject.getInstance().user().email(),
+                MainActivity.URL + SERVER_REQUEST_FRIENDS + email,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -88,8 +81,6 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
 
         // show friend profile
 
-
-        Log.d("debug","FRIENDS_FRAGMENT[onItemClick:" + position + "]");
         resetListView();
     }
 
