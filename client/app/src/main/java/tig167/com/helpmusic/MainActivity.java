@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         listeners.add(l);
     }
 
-    private List<String> imageData;
+    private String imageData;
 
     public void profileImage(){
 
@@ -153,9 +153,7 @@ public class MainActivity extends AppCompatActivity {
         );
         queue.add(jsonArrayRequest);
         Bitmap bitMap = null;
-        for(String string : imageData) {
-            bitMap = base64ToBitmap(string);
-        }
+        bitMap = imageData == null ? base64ToBitmap(imageData) : null;
         mImageView.setImageBitmap(bitMap);
     }
 }

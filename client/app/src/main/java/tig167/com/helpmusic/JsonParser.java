@@ -46,14 +46,14 @@ public class JsonParser {
         return userList;
     }
 
-    public List<String> parseImage(JSONArray array){
-        List<String> imageData = new ArrayList<>();
+    public String parseImage(JSONArray array){
+        String imageData = null;
 
         for(int i = 0;i<array.length();i++){
             try{
                 JSONObject obj = array.getJSONObject(i);
-                String imageString = obj.getString("imageData");
-                imageData.add(imageString);
+                imageData = obj.getString("imageData");
+
             }
             catch(JSONException e){
                 Log.e(LOG_TAG, ": " + e.getMessage());
