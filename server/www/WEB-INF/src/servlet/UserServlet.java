@@ -50,30 +50,40 @@ public class UserServlet extends HttpServlet {
         }
     }
     
-    private DbSelection dbSelection;
-    
     @Override
-    public void doGet( // method never executed, else @marcus remove this comment
+    public void doGet( // added getfriends
     HttpServletRequest request,
     HttpServletResponse response)
     throws ServletException, IOException {
-        Map<String,String[]> map = request.getParameterMap();
-        System.out.println("Start doGet whith param: " + map.toString());
-        /*
-        if(map.containsKey("friend")){
+        String query = request.getQueryString();
+        System.out.println("query: " + query);
+        if(query == null){
             response.setContentType("application/json");
             List<User> users = new DbSelection().readUsers();
             JSONArray arr = new JSONParser().usersToJson(users);
             response.getWriter().println(arr.toString(2));
             System.out.println("never printed"); // else remove line
         }
-        */
-            System.out.println("Start image process");
-            String[] userEmail = map.get("profileImage");
+        String[] data = query.split("=");
+        final int KEY = 0;
+        final int VAL = 1;
+        System.out.println("key:   " + data[KEY]);
+        System.out.println("value: " + data[VAL]);
+        if(data[KEY].equals("profileImage")) {
+            String userEmail = data[VAL];
             response.setContentType("application/json");
-            JSONArray arr = new JSONParser().imageToJson(userEmail[0]);
+            JSONArray arr = new JSONParser().imageToJson(userEmail);
             response.getWriter().println(arr.toString());
-            System.out.println("never printed");
+        }
+        if (data[KEY].equals("getFriends")) {
+            String email = data[VAL];
+            response.setContentType("application/json");
+            User user = new DbSelection().getUser(email);
+            List<User> friends = new DbSelection().readFriends(user);
+            System.out.println("user has " + friends.size() + " friends");
+            JSONArray arr = new JSONParser().usersToJson(friends);
+            response.getWriter().println(arr.toString());
+        }
     }
     
     @Override        

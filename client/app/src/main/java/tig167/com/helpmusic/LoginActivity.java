@@ -43,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
         catch(JSONException e){
             e.printStackTrace();
         }
-
+        intent.putExtra("accepted_user", email.getText());
         startActivity(intent);
     }
 }

@@ -17,7 +17,7 @@ public class signUp extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
     }
 
-    public void signUpButton(View view){
+    public void signUpButton(View view) {
         PasswordHashing ph = new PasswordHashing();
         JSONObject jsonObject = new JSONObject();
         EditText name = findViewById(R.id.signUpName);
@@ -29,6 +29,8 @@ public class signUp extends AppCompatActivity {
             jsonObject.put("email", email.getText());
             jsonObject.put("password", securePassword);
 
+            String identifier = email.getText().toString();
+
             new URLSender().execute(
                     "http://10.0.2.2:8080/users",
                     Action.ADD_USER.value(),
@@ -36,10 +38,12 @@ public class signUp extends AppCompatActivity {
             );
 
             Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("accepted_user", identifier);
             startActivity(intent);
 
-        } catch(JSONException e){
+        } catch (JSONException e) {
             System.err.println(e.getMessage());
         }
     }
+
 }

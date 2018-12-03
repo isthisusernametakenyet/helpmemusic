@@ -37,6 +37,42 @@ public class DbSelection {
         return id;
     }
 
+    public User getUser(String email) {
+        final String SQL_SELECT = "SELECT * "
+                                + "FROM usr "
+                                + "WHERE \"email\" = '" + email + "'";
+        User user = null;
+        DbUtil database = new DbUtil();
+        Connection connection = database.connection();
+        Statement st = null;
+        ResultSet rs = null;
+        try {
+            st = connection.createStatement();
+            rs = st.executeQuery(SQL_SELECT);
+            if (rs.next()) {
+                user = new User(
+                                rs.getString("name"),
+                                rs.getString("email"),
+                                rs.getString("password"),
+                                rs.getInt("id")
+                );
+            }
+        } catch (SQLException sqle){
+            System.err.println("unable to select from database "
+                    + sqle.getMessage());
+        } finally {
+            try {
+                rs.close();
+                st.close();
+            } catch (SQLException sqle) {
+                System.err.println("unable to select from database " 
+                        + sqle.getMessage());
+            }
+            database.disconnect();
+        }
+        return user;
+    }
+
     public User readUser(String email, String password) {
         final String SQL_SELECT = "SELECT * "
                                 + "FROM usr "
@@ -112,7 +148,7 @@ public class DbSelection {
     public List<User> readFriends(User user) {
         String tableName = DbUtil.createFriendTableName(user.email());
         final String SQL_SELECT_FRIENDS = "SELECT \"name\", \"email\", \"password\" "
-                                        + "FROM " + tableName
+                                        + "FROM " + tableName + " "
                                         + "JOIN usr "
                                         + "ON friend_id = usr.id";
         DbUtil database = new DbUtil();
