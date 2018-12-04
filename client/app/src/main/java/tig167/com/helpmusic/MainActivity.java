@@ -7,13 +7,16 @@ import android.media.MediaCas;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,27 +32,86 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = MainActivity.class.getSimpleName();
     public static final String URL = "http://10.0.2.2:8080/users";
+    private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_IMAGE_CAPTURE = 1;
 
-    private MainActivity me;
+    private enum FragmentTab {
+        NEWS("News"),
+        FRIENDS("Friends"),
+        PROFILE("Profile"),
+        MUSIC("Music");
+
+        private final String text;
+
+        FragmentTab(String str) {
+            text = str;
+        }
+
+        public String text() {
+            return text;
+        }
+    }
+
     private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mImageView = findViewById(R.id.imageView);
-        me = this;
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        for (FragmentTab tab : FragmentTab.values()) {
+            tabLayout.addTab(tabLayout.newTab().setText(tab.text()));
+        }
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        final ViewPager viewPager = findViewById(R.id.view_pager);
+        final PagerAdapter adapter = new PagerAdapter
+                (getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
-        profileImage();
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+
+        //mImageView = findViewById(R.id.imageView);
+        //profileImage();
         //PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -76,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, " Base64 encode " + imageString);
             mImageView.setImageBitmap(base64ToBitmap(imageString));
             Log.d(LOG_TAG, " Decode base64 to bitmap");
-
             PictureHash ph = new PictureHash("Marcus", "marcus@gmail.com");
             JSONObject obj = null;
             SessionObject sessionObject = SessionObject.getInstance();
@@ -113,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
         String fileName = "JPEG_" + ph.hash();
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(fileName, ".jpg", storageDir);
-
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
