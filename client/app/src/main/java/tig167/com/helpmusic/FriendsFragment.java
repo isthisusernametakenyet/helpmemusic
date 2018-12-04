@@ -26,6 +26,10 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
 
     private List<User> friends;
 
+    public FriendsFragment(){
+        System.out.println("friends fragment constructor");
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
