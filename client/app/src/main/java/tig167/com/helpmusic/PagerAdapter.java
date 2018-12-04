@@ -17,7 +17,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return null;
+                return new NewsFeed();
             case 1:
                 return new FriendsFragment();
             case 2:
