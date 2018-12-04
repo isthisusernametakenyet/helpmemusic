@@ -31,7 +31,7 @@ public class DbInsert {
         Connection conn = database.connection();
         DbSelection selection = new DbSelection();
 
-        User user = selection.readUser(email, password);
+        User user = selection.readUserId(email);
         PreparedStatement pstmt = null;
         try {
             pstmt = conn.prepareStatement(SQL_INSERT);

@@ -8,7 +8,7 @@ import servlet.model.User;
 public class DbSelection {
 
     public int readUserId(String email) {
-        final String SQL_READ_ID = "SELECT usr.id FROM usr WHERE email = \'" 
+        final String SQL_READ_ID = "SELECT \"id\" FROM usr WHERE email = \'" 
                                  + email + "\'";
         DbUtil database = new DbUtil();
         Connection connection = database.connection();
@@ -75,7 +75,7 @@ public class DbSelection {
 
     public User readUser(String email, String password) {
         final String SQL_SELECT = "SELECT * "
-                                + "FROM app_user "
+                                + "FROM usr "
                                 + "WHERE \"email\" = '" 
                                 + email + "' AND \"password\" = '" 
                                 + password + "'";

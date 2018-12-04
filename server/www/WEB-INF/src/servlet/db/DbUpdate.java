@@ -27,8 +27,8 @@ public class DbUpdate{
         Connection conn = database.connection();
         DbSelection selection = new DbSelection();
         int id = selection.readUserId(user.email());
-	int imageId = selection.profileImage(id);
-	final String SQL_UPDATE = "UPDATE usr SET user_profile_image = ? WHERE user_id = " + id;
+	    int imageId = selection.profileImage(id);
+	    final String SQL_UPDATE = "UPDATE usr SET profileimage = ? WHERE \"id\" = " + id;
         try{
             PreparedStatement pstm = conn.prepareStatement(SQL_UPDATE);
         
