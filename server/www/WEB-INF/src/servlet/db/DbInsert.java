@@ -31,14 +31,14 @@ public class DbInsert {
         Connection conn = database.connection();
         DbSelection selection = new DbSelection();
 
-        User user = selection.readUserId(email);
+        int id = selection.readUserId(email);
         PreparedStatement pstmt = null;
         try {
             pstmt = conn.prepareStatement(SQL_INSERT);
             pstmt.setString(1, imageName);
             pstmt.setString(2, imageData);
-            pstmt.setInt(3, user.id());
-	    pstmt.setBoolean(4, true);
+            pstmt.setInt(3, id);
+	        pstmt.setBoolean(4, true);
             pstmt.executeUpdate();
             status = Status.SUCCESS;
         } catch(SQLException e){

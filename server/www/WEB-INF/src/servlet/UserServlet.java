@@ -58,7 +58,7 @@ public class UserServlet extends HttpServlet {
         String query = request.getQueryString();
         System.out.println("query: " + query);
         if(query == null){
-            response.setContentType("application/json");
+            response.setContentType("application/json;charset=UTF-8");
             List<User> users = new DbSelection().readUsers();
             JSONArray arr = new JSONParser().usersToJson(users);
             response.getWriter().println(arr.toString(2));
@@ -71,13 +71,14 @@ public class UserServlet extends HttpServlet {
         System.out.println("value: " + data[VAL]);
         if(data[KEY].equals("profileImage")) {
             String userEmail = data[VAL];
-            response.setContentType("application/json");
+            response.setContentType("application/json;charset=UTF-8");
             JSONArray arr = new JSONParser().imageToJson(userEmail);
+            System.out.println("Return image: " + arr.toString());
             response.getWriter().println(arr.toString());
         }
         if (data[KEY].equals("getFriends")) {
             String email = data[VAL];
-            response.setContentType("application/json");
+            response.setContentType("application/json;charset=UTF-8");
             User user = new DbSelection().getUser(email);
             List<User> friends = new DbSelection().readFriends(user);
             System.out.println("user has " + friends.size() + " friends");

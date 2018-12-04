@@ -3,6 +3,7 @@ package tig167.com.helpmusic;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaCas;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         mImageView = findViewById(R.id.imageView);
         me = this;
 
-        //profileImage();
+        profileImage();
         //PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
     }
 
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, " " + queue.toString());
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                URL+"?profileImage=marcus@gmail.com",
+                URL+"?profileImage=" + SessionObject.getInstance().user().email(),
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -153,7 +154,9 @@ public class MainActivity extends AppCompatActivity {
         );
         queue.add(jsonArrayRequest);
         Bitmap bitMap = null;
+        Log.d(LOG_TAG, ": before decoding " + imageData);
         bitMap = imageData == null ? base64ToBitmap(imageData) : null;
+        Log.d(LOG_TAG, ": after decoding");
         mImageView.setImageBitmap(bitMap);
     }
 }
