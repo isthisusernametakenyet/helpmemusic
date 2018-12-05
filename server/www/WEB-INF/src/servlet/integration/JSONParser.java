@@ -110,7 +110,7 @@ public class JSONParser {
             
             JSONObject obj = new JSONObject();
             DbSelection selection = new DbSelection();
-            obj.put("imageData",selection.readProfilImage(email));
+            obj.put("imageData", selection.readProfileImage(email));
             arr.put(obj);
         }
         catch(JSONException e){
