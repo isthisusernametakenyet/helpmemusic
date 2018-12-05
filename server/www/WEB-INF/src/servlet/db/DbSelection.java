@@ -191,7 +191,7 @@ public class DbSelection {
     public String readProfileImage(String email){
         String imageData = "";
         int id = readUserId(email);
-        final String SQL_SELECT = "SELECT * from image WHERE owner = " + id;
+        final String SQL_SELECT = "SELECT * from image WHERE owner = " + id + " AND profileimage = true";
         DbUtil database = new DbUtil();
         Connection conn = database.connection();
         Statement statement = null;

@@ -3,6 +3,7 @@ package tig167.com.helpmusic;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaCas;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -33,6 +34,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String URL = "http://10.0.2.2:8080/users";
@@ -62,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         for (FragmentTab tab : FragmentTab.values()) {
             tabLayout.addTab(tabLayout.newTab().setText(tab.text()));
@@ -92,8 +95,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //mImageView = findViewById(R.id.imageView);
-        //profileImage();
+
+        mImageView = findViewById(R.id.imageView);
+        profileImage();
         //PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
     }
 
@@ -157,11 +161,11 @@ public class MainActivity extends AppCompatActivity {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream .toByteArray();
-        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+        return Base64.encodeToString(byteArray, Base64.NO_WRAP);
     }
 
     private Bitmap base64ToBitmap(String b64) {
-        byte[] imageAsBytes = Base64.decode(b64.getBytes(), Base64.DEFAULT);
+        byte[] imageAsBytes = Base64.decode(b64.getBytes(), Base64.NO_WRAP);
         return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 
@@ -194,7 +198,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, " " + queue.toString());
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                URL + "?profileImage=marcus@gmail.com",
+                URL+"?profileImage=" + SessionObject.getInstance().user().email(),
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -212,7 +216,9 @@ public class MainActivity extends AppCompatActivity {
         );
         queue.add(jsonArrayRequest);
         Bitmap bitMap = null;
+        Log.d(LOG_TAG, ": before decoding " + imageData);
         bitMap = imageData == null ? base64ToBitmap(imageData) : null;
+        Log.d(LOG_TAG, ": after decoding");
         mImageView.setImageBitmap(bitMap);
     }
 }
