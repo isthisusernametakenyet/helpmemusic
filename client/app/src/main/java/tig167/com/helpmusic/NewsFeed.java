@@ -25,6 +25,10 @@ public class NewsFeed extends ListFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        /*
+         *  DEBUG
+         */
         List<NewsFeedElement> feed = new ArrayList<>();
         feed.add(new NewsFeedElement("hello feed"));
         ListView listView = getListView();
