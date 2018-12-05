@@ -96,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        mImageView = findViewById(R.id.imageView);
-        profileImage();
+        //mImageView = findViewById(R.id.imageView);
+        //profileImage();
         //PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
     }
 
