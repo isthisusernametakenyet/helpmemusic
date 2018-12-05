@@ -161,11 +161,13 @@ public class MainActivity extends AppCompatActivity {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream .toByteArray();
+        Log.d(LOG_TAG, ": done encoding");
         return Base64.encodeToString(byteArray, Base64.NO_WRAP);
     }
 
     private Bitmap base64ToBitmap(String b64) {
         byte[] imageAsBytes = Base64.decode(b64.getBytes(), Base64.NO_WRAP);
+        Log.d(LOG_TAG, ": decoding done");
         return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 
@@ -193,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
     private String imageData;
 
     public void profileImage(){
-
+        //Bitmap bitMap = null;
         RequestQueue queue = Volley.newRequestQueue(this);
         Log.d(LOG_TAG, " " + queue.toString());
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
@@ -205,6 +207,13 @@ public class MainActivity extends AppCompatActivity {
                     public void onResponse(JSONArray array) {
                         Log.d(LOG_TAG, " :" + array.toString());
                         imageData = new JsonParser().parseImage(array);
+                        Log.d(LOG_TAG, ": before decoding " + imageData);
+                        Bitmap bitMap = null;
+                        bitMap = imageData != null ? base64ToBitmap(imageData) : null;
+                        Log.d(LOG_TAG, ": after decoding");
+                        //Log.d(LOG_TAG, ": Setting the bitmap " + bitMap.toString());
+                        mImageView.setImageBitmap(bitMap);
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -215,10 +224,5 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
         queue.add(jsonArrayRequest);
-        Bitmap bitMap = null;
-        Log.d(LOG_TAG, ": before decoding " + imageData);
-        bitMap = imageData == null ? base64ToBitmap(imageData) : null;
-        Log.d(LOG_TAG, ": after decoding");
-        mImageView.setImageBitmap(bitMap);
     }
 }

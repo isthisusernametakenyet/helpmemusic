@@ -11,6 +11,8 @@ import java.net.URL;
 
 public class URLSender extends AsyncTask<String, Void, String> {
 
+    private static final String LOG_TAG = URLSender.class.getSimpleName();
+
     public String doInBackground(String... params){
         String data = "";
 
@@ -38,7 +40,7 @@ public class URLSender extends AsyncTask<String, Void, String> {
                 inputStreamData = inputStreamReader.read();
                 data += current;
             }
-            System.out.println("TAG " + data);
+            Log.d(LOG_TAG , ": " + data);
         }
         catch(Exception e){
             e.printStackTrace();
