@@ -32,7 +32,7 @@ public class URLSender extends AsyncTask<String, Void, String> {
             InputStreamReader inputStreamReader = new InputStreamReader(in);
 
             int inputStreamData = inputStreamReader.read();
-            Log.d("DATA_Tag", data + " inputstremdata: " + inputStreamData);
+            Log.d("DATA_Tag", data + " inputstreamdata: " + inputStreamData);
             while(inputStreamData != -1) {
                 char current = (char) inputStreamData;
                 inputStreamData = inputStreamReader.read();
