@@ -24,11 +24,8 @@ import java.util.List;
 
 public class FriendsFragment extends ListFragment implements OnItemClickListener {
 
+    private static SessionObject session;
     private List<User> friends;
-
-    public FriendsFragment(){
-        System.out.println("friends fragment constructor");
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,12 +36,9 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        //getFriends();
         friends = new ArrayList<>();
-        friends.add(new User("Lasse Kongo", "usr1337@remote.webz"));
-        friends.add(new User("Jan Banan", "janne@dark.net"));
-
+        session = SessionObject.getInstance();
+        getFriends();
         resetListView();
         getListView().setOnItemClickListener(this);
     }
@@ -58,10 +52,9 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
     private void getFriends() {
         final String SERVER_REQUEST_FRIENDS = "?getFriends=";
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        String email = SessionObject.getInstance().user().email();
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                MainActivity.URL + SERVER_REQUEST_FRIENDS + email,
+                MainActivity.URL + SERVER_REQUEST_FRIENDS + session.user().email(),
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override

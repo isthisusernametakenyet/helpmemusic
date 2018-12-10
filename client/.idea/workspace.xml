@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-<<<<<<< HEAD
   <component name="AndroidLayouts">
     <shared>
       <config />
@@ -11,8 +10,6 @@
     <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
   </component>
-=======
->>>>>>> 20533e176d6fcdbdcde62e8beae837908fced5b8
   <component name="CMakeSettings">
     <configurations>
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
@@ -40,14 +37,12 @@
     </system>
   </component>
   <component name="FileEditorManager">
-<<<<<<< HEAD
     <leaf>
       <file leaf-file-name="LoginActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/tig167/com/helpmusic/LoginActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="289">
               <caret line="45" column="50" selection-start-line="45" selection-start-column="50" selection-end-line="45" selection-end-column="50" />
-=======
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/tig167/com/helpmusic/MainActivity.java">
@@ -93,18 +88,15 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-271">
               <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
->>>>>>> 9119f03131e871b718bfc6ebe2d21c34aa16fc4b
             </state>
           </provider>
         </entry>
       </file>
-<<<<<<< HEAD
       <file leaf-file-name="signUp.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/tig167/com/helpmusic/signUp.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="272">
               <caret line="38" column="45" lean-forward="true" selection-start-line="38" selection-start-column="45" selection-end-line="38" selection-end-column="45" />
-=======
       <file leaf-file-name="URLSender.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/tig167/com/helpmusic/URLSender.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -137,7 +129,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-50">
               <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
->>>>>>> 9119f03131e871b718bfc6ebe2d21c34aa16fc4b
             </state>
           </provider>
         </entry>

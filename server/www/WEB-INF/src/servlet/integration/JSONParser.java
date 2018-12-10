@@ -18,6 +18,14 @@ public class JSONParser {
         }
         return array;
     }
+
+    public JSONArray userToJson(User user) {
+        JSONArray array = new JSONArray();
+        JSONObject obj = new JSONObject();
+        obj.put("name", user.name());
+        array.put(obj);
+        return array;
+    }
              
     public List<User> jsonToUsers(String json) {                            
         JSONArray jsonArray = null;

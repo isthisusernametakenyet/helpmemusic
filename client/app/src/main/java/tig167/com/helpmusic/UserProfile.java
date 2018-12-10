@@ -8,10 +8,6 @@ import android.view.ViewGroup;
 
 public class UserProfile extends Fragment {
 
-    public UserProfile(){
-        System.out.println("user profile constructor");
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

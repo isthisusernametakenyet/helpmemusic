@@ -19,10 +19,12 @@ public class UserServlet extends HttpServlet {
     
     private enum RequestCode {
         LOGIN("login"),
-        ADD_USER("add user"),
-        ADD_FRIEND("add friend"),
-        GET_FRIENDS("get friends"),
-        ADD_PROFILE_IMG("add profile-img");
+        ADD_USER("addUser"),
+        GET_USER_NAME("getUserName"),
+        ADD_FRIEND("addFriend"),
+        GET_FRIENDS("getFriends"),
+        GET_PROFILE_IMG("getProfileImg"),
+        ADD_PROFILE_IMG("addProfileImg");
         
         private String value;
         private static final Map<String, RequestCode> ENUM_MAP;
@@ -32,13 +34,11 @@ public class UserServlet extends HttpServlet {
         }
         
         static {
-            // init a map in order to get eg. RequestCode.LOGIN from a string "login"
-            // we can then switch values later on to perform the right task :-)
             Map<String, RequestCode> tmp = new HashMap<String, RequestCode>();
             for (RequestCode instance : RequestCode.values()) {
                 tmp.put(instance.value(), instance);
             }
-            ENUM_MAP = Collections.unmodifiableMap(tmp); 
+            ENUM_MAP = Collections.unmodifiableMap(tmp);
         }
         
         String value() {
@@ -51,24 +51,14 @@ public class UserServlet extends HttpServlet {
     }
     
     @Override
-    public void doGet( // added getfriends
+    public void doGet(
     HttpServletRequest request,
     HttpServletResponse response)
     throws ServletException, IOException {
         String query = request.getQueryString();
-        System.out.println("query: " + query);
-        if(query == null){
-            response.setContentType("application/json;charset=UTF-8");
-            List<User> users = new DbSelection().readUsers();
-            JSONArray arr = new JSONParser().usersToJson(users);
-            response.getWriter().println(arr.toString(2));
-            System.out.println("never printed"); // else remove line
-        }
         String[] data = query.split("=");
         final int KEY = 0;
         final int VAL = 1;
-        System.out.println("key:   " + data[KEY]);
-        System.out.println("value: " + data[VAL]);
         if(data[KEY].equals("profileImage")) {
             String userEmail = data[VAL];
             response.setContentType("application/json;charset=UTF-8");
@@ -81,8 +71,14 @@ public class UserServlet extends HttpServlet {
             response.setContentType("application/json;charset=UTF-8");
             User user = new DbSelection().getUser(email);
             List<User> friends = new DbSelection().readFriends(user);
-            System.out.println("user has " + friends.size() + " friends");
             JSONArray arr = new JSONParser().usersToJson(friends);
+            response.getWriter().println(arr.toString());
+        }
+        if (data[KEY].equals("getUserName")) {
+            String usrEmail = data[VAL];
+            response.setContentType("application/json;charset=UTF-8");
+            User usr = new DbSelection().getUser(usrEmail);
+            JSONArray arr = new JSONParser().userToJson(usr);
             response.getWriter().println(arr.toString());
         }
     }
@@ -105,9 +101,6 @@ public class UserServlet extends HttpServlet {
         
         RequestCode requestCode = RequestCode.get(string);
         
-        /*
-        *      here be dragons...
-        */
         switch (requestCode) {
             case ADD_USER:
             User user = parser.jsonToUser(jsonString);

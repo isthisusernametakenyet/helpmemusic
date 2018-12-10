@@ -65,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Toolbar toolbar = findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         for (FragmentTab tab : FragmentTab.values()) {
             tabLayout.addTab(tabLayout.newTab().setText(tab.text()));
@@ -94,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
 
         //mImageView = findViewById(R.id.imageView);
         //profileImage();
@@ -200,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, " " + queue.toString());
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                URL+"?profileImage=" + SessionObject.getInstance().user().email(),
+                URL+"?getProfileImg=" + SessionObject.getInstance().user().email(),
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
