@@ -35,6 +35,7 @@ public class JsonParser {
                 String name = obj.getString("name");
                 String email = obj.getString("email");
 
+
                 User u = new User(name, email);
 
                 userList.add(u);
@@ -44,6 +45,28 @@ public class JsonParser {
             }
         }
         return userList;
+    }
+
+    public List<User> jsonToUsersImage(JSONArray array){
+        List<User> users = new ArrayList<>();
+
+        for ( int i = 0; i < array.length(); i++){
+            try{
+                JSONObject obj = array.getJSONObject(i);
+                String name = obj.getString("name");
+                String email = obj.getString("email");
+                String imageString = obj.getString("profileimage");
+
+                User  u = new User(name, email);
+                u.setProfileImage(new Image().decode(imageString));
+
+                users.add(u);
+            }
+            catch(JSONException e){
+                e.getMessage();
+            }
+        }
+        return users;
     }
 
 

@@ -1,5 +1,7 @@
 package tig167.com.helpmusic;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SearchView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -98,7 +101,22 @@ public class MainActivity extends AppCompatActivity {
 
         mImageView = findViewById(R.id.imageView);
         profileImage();
+        initSearch();
         //PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
+    }
+
+    private void initSearch(){
+        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = findViewById(R.id.search_bar);
+
+        searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        //searchView.setIconifiedByDefault(false);
+    }
+
+    @Override
+    public boolean onSearchRequested() {
+        return super.onSearchRequested();
     }
 
     @Override
@@ -136,13 +154,14 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, " data.getExtra() " + data.getExtras().toString());
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            String imageString = bitmapToBase64(imageBitmap);
+            String imageString = new Image().encode(imageBitmap);
             Log.d(LOG_TAG, " Base64 encode " + imageString);
-            mImageView.setImageBitmap(base64ToBitmap(imageString));
-            Log.d(LOG_TAG, " Decode base64 to bitmap");
-            PictureHash ph = new PictureHash("Marcus", "marcus@gmail.com");
-            JSONObject obj = null;
+            mImageView.setImageBitmap(new Image().decode(imageString));
             SessionObject sessionObject = SessionObject.getInstance();
+            Log.d(LOG_TAG, " Decode base64 to bitmap");
+            PictureHash ph = new PictureHash(sessionObject.user().name(), sessionObject.user().email() );
+            JSONObject obj = null;
+
             try {
                 obj = new JSONObject();
                 obj.put("imageFileName", ph.hash());
@@ -157,10 +176,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //TODO: moved thes to a new class can be removed after testing.
+    /*
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream .toByteArray();
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
         Log.d(LOG_TAG, ": done encoding");
         return Base64.encodeToString(byteArray, Base64.NO_WRAP);
     }
@@ -170,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, ": decoding done");
         return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
+    */
 
     String mCurrentPhotoPath;
 
@@ -209,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
                         imageData = new JsonParser().parseImage(array);
                         Log.d(LOG_TAG, ": before decoding " + imageData);
                         Bitmap bitMap = null;
-                        bitMap = imageData != null ? base64ToBitmap(imageData) : null;
+                        bitMap = imageData != null ? new Image().decode(imageData) : null;
                         Log.d(LOG_TAG, ": after decoding");
                         //Log.d(LOG_TAG, ": Setting the bitmap " + bitMap.toString());
                         mImageView.setImageBitmap(bitMap);
@@ -225,4 +247,5 @@ public class MainActivity extends AppCompatActivity {
         );
         queue.add(jsonArrayRequest);
     }
+
 }

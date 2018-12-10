@@ -57,6 +57,7 @@ public class UserServlet extends HttpServlet {
     throws ServletException, IOException {
         String query = request.getQueryString();
         System.out.println("query: " + query);
+        /*
         if(query == null){
             response.setContentType("application/json;charset=UTF-8");
             List<User> users = new DbSelection().readUsers();
@@ -64,6 +65,7 @@ public class UserServlet extends HttpServlet {
             response.getWriter().println(arr.toString(2));
             System.out.println("never printed"); // else remove line
         }
+        */
         String[] data = query.split("=");
         final int KEY = 0;
         final int VAL = 1;
@@ -83,6 +85,14 @@ public class UserServlet extends HttpServlet {
             List<User> friends = new DbSelection().readFriends(user);
             System.out.println("user has " + friends.size() + " friends");
             JSONArray arr = new JSONParser().usersToJson(friends);
+            response.getWriter().println(arr.toString());
+        }
+        if (data[KEY].equals("getSearchResult")){
+            String name = data[VAL];
+            response.setContentType("application/json;charset=UTF-8");
+            List<User> users = new DbSelection().readUsers(name);
+            JSONArray arr = new JSONParser().usersToJson(users);
+            System.out.println(arr.toString());
             response.getWriter().println(arr.toString());
         }
     }

@@ -6,10 +6,10 @@ import java.sql.*;
 import servlet.model.User;
 
 public class DbSelection {
-
+    
     public int readUserId(String email) {
         final String SQL_READ_ID = "SELECT \"id\" FROM usr WHERE email = \'" 
-                                 + email + "\'";
+        + email + "\'";
         DbUtil database = new DbUtil();
         Connection connection = database.connection();
         Statement st = null;
@@ -23,24 +23,24 @@ public class DbSelection {
             }
         } catch (SQLException sqle) {
             System.err.println("unable to read id from db "
-                    + sqle.getMessage());
+            + sqle.getMessage());
         } finally {
             try {
                 st.close();
                 rs.close();
             } catch (SQLException sqle) {
                 System.err.println("unable to close statement or resultset "
-                        + sqle.getMessage());
+                + sqle.getMessage());
             }
             database.disconnect();
         }
         return id;
     }
-
+    
     public User getUser(String email) {
         final String SQL_SELECT = "SELECT * "
-                                + "FROM usr "
-                                + "WHERE \"email\" = '" + email + "'";
+        + "FROM usr "
+        + "WHERE \"email\" = '" + email + "'";
         User user = null;
         DbUtil database = new DbUtil();
         Connection connection = database.connection();
@@ -51,86 +51,86 @@ public class DbSelection {
             rs = st.executeQuery(SQL_SELECT);
             if (rs.next()) {
                 user = new User(
-                                rs.getString("name"),
-                                rs.getString("email"),
-                                rs.getString("password"),
-                                rs.getInt("id")
+                rs.getString("name"),
+                rs.getString("email"),
+                rs.getString("password"),
+                rs.getInt("id")
                 );
             }
         } catch (SQLException sqle){
             System.err.println("unable to select from database "
-                    + sqle.getMessage());
+            + sqle.getMessage());
         } finally {
             try {
                 rs.close();
                 st.close();
             } catch (SQLException sqle) {
                 System.err.println("unable to select from database " 
-                        + sqle.getMessage());
+                + sqle.getMessage());
             }
             database.disconnect();
         }
         return user;
     }
-
+    
     public User readUser(String email, String password) {
         final String SQL_SELECT = "SELECT * "
-                                + "FROM usr "
-                                + "WHERE \"email\" = '" 
-                                + email + "' AND \"password\" = '" 
-                                + password + "'";
-	User user = null;
+        + "FROM usr "
+        + "WHERE \"email\" = '" 
+        + email + "' AND \"password\" = '" 
+        + password + "'";
+        User user = null;
         DbUtil database = new DbUtil();
-	Connection connection = database.connection();
-	Statement stmt  = null;
-	ResultSet rs = null;
-	try {
+        Connection connection = database.connection();
+        Statement stmt  = null;
+        ResultSet rs = null;
+        try {
             stmt = connection.createStatement();
             rs = stmt.executeQuery(SQL_SELECT);
             if (rs.next()) {
                 user = new User(
-		                rs.getString("name"),
+                rs.getString("name"),
 				rs.getString("email"),
 				rs.getString("password")
-		);
+                );
             }
-	} catch (SQLException sqle) {
+        } catch (SQLException sqle) {
             System.err.println("unable to select from database " + sqle.getMessage());
             System.exit(1);
-	} finally {
+        } finally {
             try {
                 rs.close();
-		stmt.close();
+                stmt.close();
             } catch (SQLException sqle) {
                 System.out.println("unable to close result set or statement " 
-					+ sqle.getMessage());
+                + sqle.getMessage());
             }
             database.disconnect();
-	}
-	return user;
+        }
+        return user;
     }
     
-    public List<User> readUsers() {
+    public List<User> readUsers(String name) {
         final String SQL_SELECT_ALL = "SELECT * "
-                                    + "FROM usr";
+        + "FROM usr WHERE \"name\" LIKE '" + name+ "%';" ;
         List<User> users = new ArrayList<User>();
         DbUtil database = new DbUtil();
         Connection connection = database.connection();
         Statement stmt  = null;
-	ResultSet rs = null;
-	try {
+        ResultSet rs = null;
+        try {
             stmt = connection.createStatement();
             rs = stmt.executeQuery(SQL_SELECT_ALL);
             while (rs.next()) {
                 users.add(new User(
-                            rs.getString("name"),
-                            rs.getString("email"),
-                            rs.getString("password")
-		));
+                rs.getString("name"),
+                rs.getString("email"),
+                rs.getString("password")
+                ));
             }
         } catch (SQLException sqle) {
             System.err.println("unable to select from database " 
-		                  + sqle.getMessage());
+            + sqle.getMessage());
             
         } finally {
             try {
@@ -138,19 +138,19 @@ public class DbSelection {
                 stmt.close();
             } catch (SQLException sqle) {
                 System.err.println("unable to close result set "
-				  + sqle.getMessage());
+                + sqle.getMessage());
             }
             database.disconnect();
-	}
-	return users;
+        }
+        return users;
     }
-
+    
     public List<User> readFriends(User user) {
         String tableName = DbUtil.createFriendTableName(user.email());
         final String SQL_SELECT_FRIENDS = "SELECT \"name\", \"email\", \"password\" "
-                                        + "FROM " + tableName + " "
-                                        + "JOIN usr "
-                                        + "ON friend_id = usr.id";
+        + "FROM " + tableName + " "
+        + "JOIN usr "
+        + "ON friend_id = usr.id";
         DbUtil database = new DbUtil();
         Connection connection = database.connection();
         Statement statement = null;
@@ -161,14 +161,14 @@ public class DbSelection {
             rs = statement.executeQuery(SQL_SELECT_FRIENDS);
             while (rs.next()) {
                 friends.add(new User(
-                            rs.getString("name"),
-                            rs.getString("email"),
-                            rs.getString("password")
+                rs.getString("name"),
+                rs.getString("email"),
+                rs.getString("password")
                 ));
             }
         } catch (SQLException sqle) {
             System.out.println("unable to select from database " 
-		                  + sqle.getMessage());
+            + sqle.getMessage());
             // handle exception
         } finally {
             try {
@@ -176,22 +176,25 @@ public class DbSelection {
                 rs.close();
             } catch (SQLException sqle) {
                 System.err.println("unable to close statement or resultset "
-                        + sqle.getMessage());
+                + sqle.getMessage());
                 // handle exception
             }
             database.disconnect();
         }   
         return friends;
     }
-
-    public boolean hasUser(String email, String password) {
+    
+    public boolean hasUser(String email) {
+        return getUser(email) != null;
+    }
+    public boolean hasUser(String email, String password){
         return readUser(email, password) != null;
     }
-
+    
     public String readProfileImage(String email){
         String imageData = "";
         int id = readUserId(email);
-        final String SQL_SELECT = "SELECT * from image WHERE owner = " + id + " AND profileimage = true";
+        final String SQL_SELECT = "SELECT imagebitmap from image INNER JOIN usr ON image.id = usr.profileimage WHERE owner = " + id;
         DbUtil database = new DbUtil();
         Connection conn = database.connection();
         Statement statement = null;
@@ -215,37 +218,37 @@ public class DbSelection {
                 System.err.println("Failed to close the rasultset and statment " + e.getMessage());
             }
         }
-
+        
         return imageData;
     }
-
+    
     public int profileImageId(int owner){
-	int imageId = -1;
-	final String SQL = "SELECT \"id\" FROM image WHERE ower = " + owner + " AND profileimage = true;";
-	DbUtil database = new DbUtil();
-	Connection conn = database.connection();
-	Statement st = null;
-	ResultSet rs = null;
-	try{
-	    st = conn.createStatement();
-	    rs = st.executeQuery(SQL);
-
-	    while(rs.next()){
-		imageId = rs.getInt("\"id\"");
-	    }
-	}
-	catch(SQLException e){
-	    System.err.println("faild to get imageid");
-	}
-	finally{
-	    try{
-		st.close();
-		rs.close();
-	    }
-	    catch(SQLException e){
-		System.err.println("faild to close statment and resultset");
-	    }
-	}
-	return imageId;
+        int imageId = -1;
+        final String SQL = "SELECT \"id\" FROM image WHERE ower = " + owner + " AND profileimage = true;";
+        DbUtil database = new DbUtil();
+        Connection conn = database.connection();
+        Statement st = null;
+        ResultSet rs = null;
+        try{
+            st = conn.createStatement();
+            rs = st.executeQuery(SQL);
+            
+            while(rs.next()){
+                imageId = rs.getInt("\"id\"");
+            }
+        }
+        catch(SQLException e){
+            System.err.println("faild to get imageid");
+        }
+        finally{
+            try{
+                st.close();
+                rs.close();
+            }
+            catch(SQLException e){
+                System.err.println("faild to close statment and resultset");
+            }
+        }
+        return imageId;
     }
 }

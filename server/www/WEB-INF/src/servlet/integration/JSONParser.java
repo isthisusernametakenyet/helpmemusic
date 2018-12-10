@@ -14,6 +14,7 @@ public class JSONParser {
             JSONObject obj = new JSONObject();
             obj.put("name", user.name());
             obj.put("email", user.email());
+            obj.put("image", user.image());
             array.put(obj);
         }
         return array;
