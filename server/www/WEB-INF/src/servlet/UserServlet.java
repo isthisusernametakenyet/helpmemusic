@@ -80,6 +80,7 @@ public class UserServlet extends HttpServlet {
             User usr = new DbSelection().getUser(usrEmail);
             System.out.println("new login: " + usr.name());
             JSONArray arr = new JSONParser().userToJson(usr);
+            response.getWriter().println(arr.toString());
         }
         if (data[KEY].equals("getSearchResult")){
             String name = data[VAL];

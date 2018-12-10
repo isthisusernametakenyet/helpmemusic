@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("error: ", error.getCause().getMessage());
+                        Log.d("error: getUserName ", error.getCause().getMessage());
                     }
                 }
         );

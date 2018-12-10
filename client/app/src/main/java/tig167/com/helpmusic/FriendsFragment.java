@@ -66,7 +66,7 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("error: ", error.getCause().getMessage());
+                        Log.d("error: getFriends. ", error.getCause().getMessage());
                     }
                 }
         );
