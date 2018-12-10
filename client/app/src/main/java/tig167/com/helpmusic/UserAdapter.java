@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserAdapter extends ArrayAdapter<User> {
@@ -17,7 +17,7 @@ public class UserAdapter extends ArrayAdapter<User> {
     private List<User> friendList;
 
     UserAdapter(Context context, List<User> list) {
-        super(context, 0, list);
+        super(context, R.layout.friend_layout, list);
         c = context;
         friendList = list;
     }
@@ -27,12 +27,13 @@ public class UserAdapter extends ArrayAdapter<User> {
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if (listItem == null) {
-            listItem = LayoutInflater.from(c).inflate(R.layout.list_item, parent, false);
+            listItem = LayoutInflater.from(c).inflate(R.layout.friend_layout, parent, false);
         }
         User friend = friendList.get(position);
 
         // image view
-
+        ImageView imageView = listItem.findViewById(R.id.imageView);
+        imageView.setImageBitmap(friend.getProfileImage());
         TextView name = listItem.findViewById(R.id.textView_name);
         name.setText(friend.name());
         return listItem;

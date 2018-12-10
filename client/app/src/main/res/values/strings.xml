@@ -6,4 +6,5 @@
     <string name="signUp" translatable="true">Sign Up Here</string>
     <string name="signUpButton" translatable="true">Sign Up</string>
     <string name="name" translatable="true">Name</string>
+    <string name="search_hint" translatable="true">Search</string>
 </resources>

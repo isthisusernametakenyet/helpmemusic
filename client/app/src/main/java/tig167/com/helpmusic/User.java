@@ -1,5 +1,7 @@
 package tig167.com.helpmusic;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 
 public class User implements Serializable {
@@ -7,6 +9,7 @@ public class User implements Serializable {
     private String name;
     private String email;
     private String password;
+    private Bitmap profileImage;
 
     public User(String name, String email) {
         this.name = name;
@@ -29,4 +32,8 @@ public class User implements Serializable {
     public String password() { return password; }
 
     public String toString() { return name + " " + email; }
+
+    public Bitmap getProfileImage() {return profileImage;}
+
+    public void setProfileImage(Bitmap profileImage){ this.profileImage = profileImage; }
 }

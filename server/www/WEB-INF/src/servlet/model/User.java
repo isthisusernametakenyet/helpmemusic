@@ -7,6 +7,7 @@ public class User {
 	private String name;
 	private String email;
 	private String password;
+	private String image;
 	private int id;
 
 	public User(
@@ -24,7 +25,16 @@ public class User {
 				int id){
 			this(name, email, password);
 			this.id = id;
-		}
+	}
+	
+	public User(String name,
+				String email,
+				String password,
+				int id,
+				String image){
+		this(name, email, password, id);
+		this.image = image;
+	}
 
 	public String name() {
 		return name;
@@ -40,6 +50,10 @@ public class User {
 
 	public int id(){
 		return id;
+	}
+
+	public String image(){
+		return image;
 	}
 
 	@Override

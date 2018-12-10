@@ -79,6 +79,13 @@ public class UserServlet extends HttpServlet {
             response.setContentType("application/json;charset=UTF-8");
             User usr = new DbSelection().getUser(usrEmail);
             JSONArray arr = new JSONParser().userToJson(usr);
+        }
+        if (data[KEY].equals("getSearchResult")){
+            String name = data[VAL];
+            response.setContentType("application/json;charset=UTF-8");
+            List<User> users = new DbSelection().readUsers(name);
+            JSONArray arr = new JSONParser().usersToJson(users);
+            System.out.println(arr.toString());
             response.getWriter().println(arr.toString());
         }
     }

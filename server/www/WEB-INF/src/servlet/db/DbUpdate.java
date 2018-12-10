@@ -21,19 +21,20 @@ public class DbUpdate{
         }
     }
 
-    public boolean updateProfileImage(User user){
+    public boolean updateProfileImage(int id, int imageId){
         Status status = Status.FAILURE;
         DbUtil database = new DbUtil();
         Connection conn = database.connection();
-        DbSelection selection = new DbSelection();
-        int id = selection.readUserId(user.email());
-	    int imageId = selection.profileImage(id);
+        //DbSelection selection = new DbSelection();
+        //int id = selection.readUserId(email);
+	    //int imageId = selection.profileImage(id);
 	    final String SQL_UPDATE = "UPDATE usr SET profileimage = ? WHERE \"id\" = " + id;
+        PreparedStatement pstm = null;
         try{
-            PreparedStatement pstm = conn.prepareStatement(SQL_UPDATE);
+            pstm = conn.prepareStatement(SQL_UPDATE);
         
-            pstm.setInt(1, id);
-
+            pstm.setInt(1, imageId);
+            pstm.executeUpdate();
             status = Status.SUCCESS;
         }
         catch(SQLException e){

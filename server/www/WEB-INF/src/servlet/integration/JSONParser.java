@@ -14,6 +14,7 @@ public class JSONParser {
             JSONObject obj = new JSONObject();
             obj.put("name", user.name());
             obj.put("email", user.email());
+            obj.put("image", user.image());
             array.put(obj);
         }
         return array;
@@ -55,7 +56,7 @@ public class JSONParser {
         return users;
     }
 
-    public User jsonToUser(String json) {    // name not found at login
+    public User jsonToUser(String json) {
         User user = null;
         json = json.replace("PostData=", "");
         try {
