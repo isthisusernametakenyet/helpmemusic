@@ -59,7 +59,7 @@ public class UserServlet extends HttpServlet {
         String[] data = query.split("=");
         final int KEY = 0;
         final int VAL = 1;
-        if(data[KEY].equals("profileImage")) {
+        if(data[KEY].equals("getProfileImg")) {
             String userEmail = data[VAL];
             response.setContentType("application/json;charset=UTF-8");
             JSONArray arr = new JSONParser().imageToJson(userEmail);
@@ -78,6 +78,7 @@ public class UserServlet extends HttpServlet {
             String usrEmail = data[VAL];
             response.setContentType("application/json;charset=UTF-8");
             User usr = new DbSelection().getUser(usrEmail);
+            System.out.println("new login: " + usr.name());
             JSONArray arr = new JSONParser().userToJson(usr);
         }
         if (data[KEY].equals("getSearchResult")){

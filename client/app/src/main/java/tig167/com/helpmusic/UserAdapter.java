@@ -17,7 +17,7 @@ public class UserAdapter extends ArrayAdapter<User> {
     private List<User> friendList;
 
     UserAdapter(Context context, List<User> list) {
-        super(context, R.layout.friend_layout, list);
+        super(context, R.layout.fragment_friends, list);
         c = context;
         friendList = list;
     }
@@ -27,11 +27,10 @@ public class UserAdapter extends ArrayAdapter<User> {
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if (listItem == null) {
-            listItem = LayoutInflater.from(c).inflate(R.layout.friend_layout, parent, false);
+            listItem = LayoutInflater.from(c).inflate(R.layout.fragment_friends, parent, false);
         }
         User friend = friendList.get(position);
 
-        // image view
         ImageView imageView = listItem.findViewById(R.id.imageView);
         imageView.setImageBitmap(friend.getProfileImage());
         TextView name = listItem.findViewById(R.id.textView_name);

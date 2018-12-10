@@ -96,15 +96,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-<<<<<<< HEAD
         //mImageView = findViewById(R.id.imageView);
         //profileImage();
-=======
-
-        mImageView = findViewById(R.id.imageView);
-        profileImage();
-        initSearch();
->>>>>>> f4cfab585ec8774850a20bb8a387cde3f3eff756
+        //initSearch();
         //PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
     }
 
@@ -179,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //TODO: moved thes to a new class can be removed after testing.
+    //TODO: moved these to a new class can be removed after testing.
     /*
     private String bitmapToBase64(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
