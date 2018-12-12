@@ -1,25 +1,29 @@
 package servlet.integration;
-         
+
 import org.json.*;
 import java.util.*;
 
 import servlet.db.DbSelection;
 import servlet.model.User;
-         
-public class JSONParser {
 
+public class JSONParser {
+    
     public JSONArray usersToJson(List<User> users) {
         JSONArray array = new JSONArray();
         for (User user : users) {
             JSONObject obj = new JSONObject();
             obj.put("name", user.name());
             obj.put("email", user.email());
-            obj.put("image", user.image());
+            if(user.image() == null){
+                obj.put("image", "");
+            }else{
+                obj.put("image", user.image());
+            }
             array.put(obj);
         }
         return array;
     }
-             
+    
     public List<User> jsonToUsers(String json) {                            
         JSONArray jsonArray = null;
         try {                  
@@ -28,7 +32,7 @@ public class JSONParser {
             jsonArray = jsonObject.getJSONArray("users");                
         } catch (JSONException je) {                                       
             System.err.println("unable to init json array: "
-                    + je.getMessage());
+            + je.getMessage());
             System.exit(1);
         }
         List<User> users = new ArrayList<User>();
@@ -36,9 +40,9 @@ public class JSONParser {
             try {
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
                 users.add(new User(
-                            jsonObj.getString("name"),
-                            jsonObj.getString("email"),
-                            jsonObj.getString("password")
+                jsonObj.getString("name"),
+                jsonObj.getString("email"),
+                jsonObj.getString("password")
                 ));            
             } catch (JSONException je) {
                 System.err.println("unable to parse: " + je.getMessage());
@@ -47,7 +51,7 @@ public class JSONParser {
         }
         return users;
     }
-
+    
     public User jsonToUser(String json) {    // name not found at login
         User user = null;
         json = json.replace("PostData=", "");
@@ -55,9 +59,9 @@ public class JSONParser {
             JSONTokener jsonTokener = new JSONTokener(json);
             JSONObject jo = new JSONObject(jsonTokener);
             user = new User(
-                    jo.getString("name"),
-                    jo.getString("email"),
-                    jo.getString("password")
+            jo.getString("name"),
+            jo.getString("email"),
+            jo.getString("password")
             );
         } catch (JSONException je) {
             System.err.println("unable to parse: " + je.getMessage());
@@ -65,7 +69,7 @@ public class JSONParser {
         }
         return user;
     }
-
+    
     public String[] parseLogin(String json){
         String email = "";
         String password = "";
@@ -83,7 +87,7 @@ public class JSONParser {
         return loginValue;
     }
     
-   public String[] parseImageData(String json) {
+    public String[] parseImageData(String json) {
         String imageName = "";   
         String imageData = "";
         String email = "";
@@ -104,7 +108,7 @@ public class JSONParser {
         imageValue[3] = password;
         return imageValue;
     }
-
+    
     public JSONArray imageToJson(String email){
         JSONArray arr = new JSONArray();
         try{

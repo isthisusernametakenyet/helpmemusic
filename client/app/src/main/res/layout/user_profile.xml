@@ -11,12 +11,27 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/view_pager">
 
+    <ImageView
+        android:id="@+id/usrFragmentProfileImage"
+        android:layout_width="match_parent"
+        android:layout_height="247dp"
+        android:contentDescription="Profile image"
+        app:srcCompat="@android:drawable/ic_menu_gallery" />
+
     <TextView
-        android:id="@+id/profile_view"
-        android:text="profile fragment"
+        android:id="@+id/profile_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"/>
+        android:text="profile fragment"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/usrFragmentAddFriend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/usrFragmentAddFriendBtn"
+        android:textAlignment="center"
+        android:textAllCaps="false" />
 
 </LinearLayout>

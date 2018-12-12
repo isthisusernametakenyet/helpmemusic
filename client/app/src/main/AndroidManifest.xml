@@ -17,40 +17,44 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="tig167.com.helpmusic.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_path" />
-        </provider>
 
-        <activity android:name=".MainActivity"
+
+        <activity
+            android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.default_searchable"
+
+            <meta-data
+                android:name="android.app.default_searchable"
                 android:value=".SearchBar" />
         </activity>
-        <activity android:name=".SignUp"
+        <activity
+            android:name=".SignUp"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".LoginActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
+            android:name=".SearchBar"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan">
-        </activity>
-        <activity android:name=".LoginActivity"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
-        <activity android:name=".SearchBar"
-            android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-            <meta-data android:name="android.app.searchable"
-                       android:resource="@xml/searchable" />
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
+        <activity android:name=".ShowProfileFragment"
+                  android:windowSoftInputMode="adjustPan">
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
     </application>
 

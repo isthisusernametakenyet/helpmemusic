@@ -75,7 +75,6 @@ public class UserServlet extends HttpServlet {
             String userEmail = data[VAL];
             response.setContentType("application/json;charset=UTF-8");
             JSONArray arr = new JSONParser().imageToJson(userEmail);
-            System.out.println("Return image: " + arr.toString());
             response.getWriter().println(arr.toString());
         }
         if (data[KEY].equals("getFriends")) {

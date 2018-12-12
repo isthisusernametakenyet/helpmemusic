@@ -30,6 +30,7 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
     private static final String URL = "http://10.0.2.2:8080/users";
 
     SearchView mSearchBar;
+    ListView mListView;
     private List<User> users;
 
     @Override
@@ -38,7 +39,7 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
         setContentView(R.layout.activity_search_bar);
         mSearchBar = findViewById(R.id.searchBar);
         //mSearchBar.requestFocus();
-
+        mListView = findViewById(R.id.searchResult);
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -59,8 +60,9 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
 
                         JsonParser parser = new JsonParser();
                         users = parser.jsonToUsers(array);
-                        Log.d(LOG_TAG, ": parsed json " + users.toString());
+                        //Log.d(LOG_TAG, ": parsed json " + users.toString());
                         resetListView();
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -74,23 +76,32 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
     }
 
     private void resetListView(){
+        mListView.setOnItemClickListener(this);
         ListView listView = findViewById(R.id.searchResult);
         UserAdapter adapter = new UserAdapter(getApplicationContext(), users);
-        Log.d(LOG_TAG, ": create a new adapter whith count " + adapter.getCount());
+        //Log.d(LOG_TAG, ": create a new adapter whith count " + adapter.getCount());
         listView.setAdapter(adapter);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        // show friend profile
 
-        resetListView();
+        Intent intent = new Intent(this, ShowProfileFragment.class);
+        Log.d(LOG_TAG, ": SearchBar onItemClick");
+        startActivity(intent);
+
+        //resetListView();
     }
 
     public void onNewIntent(Intent intent){
         super.onNewIntent(intent);
 
         setIntent(intent);
+
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            doMySearch(query);
+        }
     }
 }

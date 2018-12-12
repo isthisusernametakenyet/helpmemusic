@@ -1,5 +1,6 @@
 package tig167.com.helpmusic;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -34,10 +35,11 @@ public class JsonParser {
                 JSONObject obj = array.getJSONObject(i);
                 String name = obj.getString("name");
                 String email = obj.getString("email");
+                Bitmap profileImage = new Image().decode(obj.getString("image"));
 
 
                 User u = new User(name, email);
-
+                u.setProfileImage(profileImage);
                 userList.add(u);
             }
             catch(JSONException e) {
