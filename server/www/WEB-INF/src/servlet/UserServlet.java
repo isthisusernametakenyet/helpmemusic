@@ -16,6 +16,8 @@ import servlet.db.*;
 import servlet.integration.JSONParser;
 
 public class UserServlet extends HttpServlet {
+
+    private static final String JSON_CONTENT = "application/json;charset=UTF-8";
     
     private enum RequestCode {
         LOGIN("login"),
@@ -24,7 +26,8 @@ public class UserServlet extends HttpServlet {
         ADD_FRIEND("addFriend"),
         GET_FRIENDS("getFriends"),
         GET_PROFILE_IMG("getProfileImg"),
-        ADD_PROFILE_IMG("addProfileImg");
+        ADD_PROFILE_IMG("addProfileImg"),
+        GET_SEARCH_RESULT("getSearchResult");
         
         private String value;
         private static final Map<String, RequestCode> ENUM_MAP;
@@ -59,36 +62,39 @@ public class UserServlet extends HttpServlet {
         String[] data = query.split("=");
         final int KEY = 0;
         final int VAL = 1;
-        if(data[KEY].equals("getProfileImg")) {
-            String userEmail = data[VAL];
-            response.setContentType("application/json;charset=UTF-8");
-            JSONArray arr = new JSONParser().imageToJson(userEmail);
-            System.out.println("Return image: " + arr.toString());
-            response.getWriter().println(arr.toString());
-        }
-        if (data[KEY].equals("getFriends")) {
-            String email = data[VAL];
-            response.setContentType("application/json;charset=UTF-8");
-            User user = new DbSelection().getUser(email);
-            List<User> friends = new DbSelection().readFriends(user);
-            JSONArray arr = new JSONParser().usersToJson(friends);
-            response.getWriter().println(arr.toString());
-        }
-        if (data[KEY].equals("getUserName")) {
-            String usrEmail = data[VAL];
-            response.setContentType("application/json;charset=UTF-8");
-            User usr = new DbSelection().getUser(usrEmail);
-            System.out.println("new login: " + usr.name());
-            JSONArray arr = new JSONParser().userToJson(usr);
-            response.getWriter().println(arr.toString());
-        }
-        if (data[KEY].equals("getSearchResult")){
-            String name = data[VAL];
-            response.setContentType("application/json;charset=UTF-8");
-            List<User> users = new DbSelection().readUsers(name);
-            JSONArray arr = new JSONParser().usersToJson(users);
-            System.out.println(arr.toString());
-            response.getWriter().println(arr.toString());
+
+        RequestCode requestCode = RequestCode.get(data[KEY]);
+        response.setContentType(JSON_CONTENT);
+        JSONParser parser = new JSONParser();
+        DbSelection selection = new DbSelection();
+        JSONArray array = null;
+        User user = null;
+        List<User> users = null;
+
+        switch (requestCode) {
+            case GET_PROFILE_IMG:
+            array = parser.imageToJson(data[VAL]);
+            response.getWriter().println(array.toString());
+            break;
+            case GET_FRIENDS:
+            user = selection.getUser(data[VAL]);
+            users = selection.readFriends(user);
+            array = parser.usersToJson(users);
+            response.getWriter().println(array.toString());
+            break;
+            case GET_USER_NAME:
+            user = selection.getUser(data[VAL]);
+            array = parser.userToJson(user);
+            response.getWriter().println(array.toString());
+            break;
+            case GET_SEARCH_RESULT:
+            users = selection.readUsers(data[VAL]);
+            array = parser.usersToJson(users);
+            response.getWriter().println(array.toString());
+            break;
+            default:
+            System.err.println("illegal action");
+            break;
         }
     }
     
@@ -99,46 +105,41 @@ public class UserServlet extends HttpServlet {
     throws ServletException, IOException {
         PrintWriter out = new PrintWriter(
         new OutputStreamWriter(response.getOutputStream(), UTF_8), true);
-        response.setContentType("application/json");
+        response.setContentType(JSON_CONTENT);
         BufferedReader reader = request.getReader();
+        String json = reader.readLine();
         JSONParser parser = new JSONParser();
-        
-        String string = reader.readLine();
-        int pos = string.indexOf('{');
-        String jsonString = string.substring(pos);
-        string = string.substring(0, pos);
-        
-        RequestCode requestCode = RequestCode.get(string);
+        String rc = parser.jsonToRequestCode(json);
+        RequestCode requestCode = RequestCode.get(rc);
         
         switch (requestCode) {
             case ADD_USER:
-            User user = parser.jsonToUser(jsonString);
+            User user = parser.jsonToUser(json);
             if (new DbInsert().insertUser(user)
             && new DbCreation().createFriendTable(user.email())) {
-                response.setStatus(200);
-                response.getWriter().println("ok");
+                response.getWriter().println(parser.stringToJson("ok"));
             } else {
-                response.setStatus(210);
-                response.getWriter().println("failed");
+                response.getWriter().println(parser.stringToJson("failed"));
             }
             break;
             case LOGIN:
-            String[] val = parser.parseLogin(jsonString);
+            String[] val = parser.jsonToLoginData(json);
             if (new DbSelection().hasUser(val[0], val[1])) {
-                response.getWriter().println("ok");
+                response.getWriter().println(parser.stringToJson("ok"));
             } else {
-                response.getWriter().println("access denied");
+                response.getWriter().println(parser.stringToJson("access denied"));
             }
-            response.setStatus(200);
             break;
             case ADD_FRIEND:
-            List<User> friendship = parser.jsonToUsers(jsonString);
-            new DbInsert().insertFriendship(friendship);
+            List<User> users = parser.jsonToUsers(json);
+            new DbInsert().insertFriendship(users);
             break;
+            /*
             case ADD_PROFILE_IMG:
             String[] imageData = parser.parseImageData(jsonString);
             new DbInsert().insertImage(imageData[0], imageData[1], imageData[2], imageData[3]);
             break;
+            */
             default: 
             System.err.println("illegal action");
             response.setStatus(400);

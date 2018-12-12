@@ -26,9 +26,60 @@ public class JsonParser {
         return sb.toString();
     }
 
+    public JSONArray loginDataToJson(String requestCode, String email, String str) {
+        JSONArray array = new JSONArray();
+        try {
+            JSONObject obj = new JSONObject();
+            obj.put("requestCode", requestCode);
+            obj.put("email", email);
+            obj.put("password", str);
+            array.put(obj);
+        } catch (JSONException je) {
+            je.printStackTrace();
+        }
+        return array;
+    }
+
+    public JSONArray signupDataToJson(String requestCode, String name, String email, String str) {
+        JSONArray array = new JSONArray();
+        try {
+            JSONObject obj = new JSONObject();
+            obj.put("requestCode", requestCode);
+            obj.put("name", name);
+            obj.put("email", email);
+            obj.put("password", str);
+            array.put(obj);
+        } catch (JSONException je) {
+            je.printStackTrace();
+        }
+        return array;
+    }
+
+    public String jsonToLoginResponse(JSONArray array) {
+        String response = "";
+        try {
+            JSONObject obj = array.getJSONObject(0);
+            response = obj.getString("response");
+        } catch (JSONException je) {
+            je.printStackTrace();
+        }
+        return response;
+    }
+
+    public String jsonToSignupResponse(JSONArray array) {
+        String response = "";
+        try {
+            JSONObject obj = array.getJSONObject(0);
+            response = obj.getString("response");
+        } catch (JSONException je) {
+            je.printStackTrace();
+        }
+        return response;
+    }
+
     public List<User> jsonToUsers(JSONArray array){
         List<User> userList = new ArrayList<>();
-        for(int i = 0; i < array.length(); i++){
+        for(int i = 0; i < array.length(); i++) {
             try{
                 JSONObject obj = array.getJSONObject(i);
                 String name = obj.getString("name");

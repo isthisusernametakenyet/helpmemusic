@@ -20,16 +20,13 @@ import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String SERVER_URL = "http://10.0.2.2:8080/users";
     private static SessionObject session;
-    private LoginActivity me;
     private String identifier;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        me = this;
         session = SessionObject.getInstance();
     }
 
@@ -43,31 +40,38 @@ public class LoginActivity extends AppCompatActivity {
         EditText emailField = findViewById(R.id.loginEmail);
         EditText passwordField = findViewById(R.id.loginPassword);
         String securePassword = ph.getSHA256SecurePassword(passwordField.getText().toString());
-        try {
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("email", emailField.getText());
-            jsonObject.put("password", securePassword);
-            new URLSender().execute(
-                    SERVER_URL,
-                    Action.LOGIN.value(),
-                    jsonObject.toString()
-            );
-        }
-        catch(JSONException e) {
-            e.printStackTrace();
-        }
         identifier = emailField.getText().toString();
-        getUserName();
+        getAccess(new JsonParser().loginDataToJson(Action.LOGIN.value(), identifier, securePassword));
     }
 
-    private void nextActivity() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+    private void getAccess(JSONArray json) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.POST,
+                MainActivity.URL,
+                json,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray array) {
+                        String str = new JsonParser().jsonToLoginResponse(array);
+                        if ("ok".equalsIgnoreCase(str)) {
+                            getUserName();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("error: getAccess ", error.getCause().getMessage());
+                    }
+                }
+        );
+        queue.add(jsonArrayRequest);
     }
 
     private void getUserName() {
         final String SERVER_REQUEST_USER_NAME = "?getUserName=";
-        RequestQueue queue = Volley.newRequestQueue(me);
+        RequestQueue queue = Volley.newRequestQueue(this);
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 MainActivity.URL + SERVER_REQUEST_USER_NAME + identifier,
@@ -88,4 +92,10 @@ public class LoginActivity extends AppCompatActivity {
         );
         queue.add(jsonArrayRequest);
     }
+
+    private void nextActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
 }
