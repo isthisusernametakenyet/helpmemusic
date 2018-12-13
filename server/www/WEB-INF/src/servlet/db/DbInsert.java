@@ -22,7 +22,7 @@ public class DbInsert {
         }
     }
     
-    public boolean insertImage(String imageName, String imageData, String email, String password){
+    public boolean insertImage(String imageName, String imageData, String email) {
         Status status = Status.FAILURE;
         final String SQL_INSERT = "INSERT INTO image "
         + "(\"name\", imagebitmap, owner) "
@@ -51,14 +51,12 @@ public class DbInsert {
         } catch(SQLException e){
             System.err.println("unable to insert image data to database: " 
             + e.getMessage());
-            System.exit(1);
         } finally {
             try {
                 pstmt.close();
             } catch(SQLException e){
                 System.err.println("unable to close statement: " 
                 + e.getMessage());
-                System.exit(1);
             }
         }
         return status.value();
