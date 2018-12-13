@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String URL = "http://10.0.2.2:8080/users";
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static SessionObject session;
 
     private enum FragmentTab {
         NEWS("News"),
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        session = SessionObject.getInstance();
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         for (FragmentTab tab : FragmentTab.values()) {
             tabLayout.addTab(tabLayout.newTab().setText(tab.text()));
@@ -96,10 +98,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //mImageView = findViewById(R.id.imageView);
-        //profileImage();
-        //initSearch();
-        //PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
+        mImageView = findViewById(R.id.imageView);
+        profileImage();
+        initSearch();
+        PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
     }
 
     private void initSearch(){
@@ -147,48 +149,45 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Log.d(LOG_TAG, " data.getExtra() " + data.getExtras().toString());
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             String imageString = new Image().encode(imageBitmap);
             Log.d(LOG_TAG, " Base64 encode " + imageString);
             mImageView.setImageBitmap(new Image().decode(imageString));
-            SessionObject sessionObject = SessionObject.getInstance();
             Log.d(LOG_TAG, " Decode base64 to bitmap");
-            PictureHash ph = new PictureHash(sessionObject.user().name(), sessionObject.user().email() );
-            JSONObject obj = null;
-
-            try {
-                obj = new JSONObject();
-                obj.put("imageFileName", ph.hash());
-                obj.put("imageBitMapEncoded", imageString);
-                obj.put("email", sessionObject.user().email());
-                obj.put("password", sessionObject.user().password());
-            }
-            catch (JSONException e){
-                Log.e(LOG_TAG, " JsonException: " + e.getMessage());
-            }
-            new URLSender().execute(URL, Action.ADD_PROFILE_IMG.value(), obj.toString());
+            PictureHash ph = new PictureHash(session.user().name(), session.user().email());
+            addProfileImage(new JsonParser().imageDataToJson(
+                    Action.ADD_PROFILE_IMG.value(),
+                    ph.hash(),
+                    imageString,
+                    session.user().email()
+            ));
         }
     }
 
-    //TODO: moved these to a new class can be removed after testing.
-    /*
-    private String bitmapToBase64(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        Log.d(LOG_TAG, ": done encoding");
-        return Base64.encodeToString(byteArray, Base64.NO_WRAP);
-    }
+    private void addProfileImage(JSONArray json) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.POST,
+                URL,
+                json,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray array) {
 
-    private Bitmap base64ToBitmap(String b64) {
-        byte[] imageAsBytes = Base64.decode(b64.getBytes(), Base64.NO_WRAP);
-        Log.d(LOG_TAG, ": decoding done");
-        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("error: addUser ", error.getCause().getMessage());
+                    }
+                }
+        );
+        queue.add(jsonArrayRequest);
     }
-    */
 
     String mCurrentPhotoPath;
 
@@ -199,16 +198,6 @@ public class MainActivity extends AppCompatActivity {
         File image = File.createTempFile(fileName, ".jpg", storageDir);
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
-    }
-
-    private List<UserChangeListener> listeners;
-
-    public interface UserChangeListener {
-        void onUserChangeList(List<User> users);
-    }
-
-    public void addUserChangeListener(UserChangeListener l) {
-        listeners.add(l);
     }
 
     private String imageData;

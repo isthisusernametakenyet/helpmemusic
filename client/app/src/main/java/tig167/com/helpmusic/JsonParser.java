@@ -13,27 +13,37 @@ public class JsonParser {
 
     private static final String LOG_TAG = JsonParser.class.getSimpleName();
 
-    public String userToJson(String name, String password, String email){
-        StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        sb.append("{");
-        sb.append("\"name\":" + name + ",");
-        sb.append("\"email\":" + email);
-        sb.append("\"password\":" + password + ",");
-        sb.append("}");
-        sb.append("}");
-
-        return sb.toString();
+    public JSONArray imageDataToJson(
+            String requestCode,
+            String pictureHash,
+            String image,
+            String email) {
+        JSONArray array = new JSONArray();
+        try {
+            JSONObject requestCodeObj = new JSONObject();
+            requestCodeObj.put("requestCode", requestCode);
+            array.put(requestCodeObj);
+            JSONObject dataObj = new JSONObject();
+            dataObj.put("pictureHash", pictureHash);
+            dataObj.put("image", image);
+            dataObj.put("email", email);
+            array.put(dataObj);
+        } catch (JSONException je) {
+            je.printStackTrace();
+        }
+        return array;
     }
 
     public JSONArray loginDataToJson(String requestCode, String email, String str) {
         JSONArray array = new JSONArray();
         try {
-            JSONObject obj = new JSONObject();
-            obj.put("requestCode", requestCode);
-            obj.put("email", email);
-            obj.put("password", str);
-            array.put(obj);
+            JSONObject requestCodeObj = new JSONObject();
+            requestCodeObj.put("requestCode", requestCode);
+            array.put(requestCodeObj);
+            JSONObject dataObj = new JSONObject();
+            dataObj.put("email", email);
+            dataObj.put("password", str);
+            array.put(dataObj);
         } catch (JSONException je) {
             je.printStackTrace();
         }
@@ -43,12 +53,14 @@ public class JsonParser {
     public JSONArray signupDataToJson(String requestCode, String name, String email, String str) {
         JSONArray array = new JSONArray();
         try {
-            JSONObject obj = new JSONObject();
-            obj.put("requestCode", requestCode);
-            obj.put("name", name);
-            obj.put("email", email);
-            obj.put("password", str);
-            array.put(obj);
+            JSONObject requestCodeObj = new JSONObject();
+            JSONObject dataObj = new JSONObject();
+            requestCodeObj.put("requestCode", requestCode);
+            array.put(requestCodeObj);
+            dataObj.put("name", name);
+            dataObj.put("email", email);
+            dataObj.put("password", str);
+            array.put(dataObj);
         } catch (JSONException je) {
             je.printStackTrace();
         }

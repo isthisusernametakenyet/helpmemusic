@@ -9,7 +9,8 @@ import servlet.model.User;
 public class JSONParser {
 
     private static final int POST_REQUEST_INDEX = 0;
-
+    private static final int POST_DATA_INDEX = 1;
+    
     public String jsonToRequestCode(String json) {
         String requestCode = "";
         try {
@@ -81,7 +82,7 @@ public class JSONParser {
         User user = null;
         try {
             JSONArray array = new JSONArray(json);
-            JSONObject obj = array.getJSONObject(0);
+            JSONObject obj = array.getJSONObject(POST_DATA_INDEX);
             user = new User(
                     obj.getString("name"),
                     obj.getString("email"),
@@ -98,7 +99,7 @@ public class JSONParser {
         String password = "";
         try {
             JSONArray array = new JSONArray(json);
-            JSONObject obj = array.getJSONObject(0);
+            JSONObject obj = array.getJSONObject(POST_DATA_INDEX);
             email = obj.getString("email");
             password = obj.getString("password");
         }
@@ -135,8 +136,7 @@ public class JSONParser {
 
     public JSONArray imageToJson(String email){
         JSONArray arr = new JSONArray();
-        try{
-            
+        try{            
             JSONObject obj = new JSONObject();
             DbSelection selection = new DbSelection();
             obj.put("imageData", selection.readProfileImage(email));

@@ -59,36 +59,34 @@ public class UserServlet extends HttpServlet {
     HttpServletResponse response)
     throws ServletException, IOException {
         String query = request.getQueryString();
-        String[] data = query.split("=");
-        final int KEY = 0;
-        final int VAL = 1;
-
-        RequestCode requestCode = RequestCode.get(data[KEY]);
+        String[] queryStrings = query.split("=");
+        final int REQUEST_CODE_INDEX = 0;
+        final int DATA_INDEX = 1;
+        RequestCode requestCode = RequestCode.get(queryStrings[REQUEST_CODE_INDEX]);
         response.setContentType(JSON_CONTENT);
         JSONParser parser = new JSONParser();
         DbSelection selection = new DbSelection();
         JSONArray array = null;
         User user = null;
         List<User> users = null;
-
         switch (requestCode) {
             case GET_PROFILE_IMG:
-            array = parser.imageToJson(data[VAL]);
+            array = parser.imageToJson(queryStrings[DATA_INDEX]);
             response.getWriter().println(array.toString());
             break;
             case GET_FRIENDS:
-            user = selection.getUser(data[VAL]);
+            user = selection.getUser(queryStrings[DATA_INDEX]);
             users = selection.readFriends(user);
             array = parser.usersToJson(users);
             response.getWriter().println(array.toString());
             break;
             case GET_USER_NAME:
-            user = selection.getUser(data[VAL]);
+            user = selection.getUser(queryStrings[DATA_INDEX]);
             array = parser.userToJson(user);
             response.getWriter().println(array.toString());
             break;
             case GET_SEARCH_RESULT:
-            users = selection.readUsers(data[VAL]);
+            users = selection.readUsers(queryStrings[DATA_INDEX]);
             array = parser.usersToJson(users);
             response.getWriter().println(array.toString());
             break;
@@ -110,8 +108,7 @@ public class UserServlet extends HttpServlet {
         String json = reader.readLine();
         JSONParser parser = new JSONParser();
         String rc = parser.jsonToRequestCode(json);
-        RequestCode requestCode = RequestCode.get(rc);
-        
+        RequestCode requestCode = RequestCode.get(rc);     
         switch (requestCode) {
             case ADD_USER:
             User user = parser.jsonToUser(json);
@@ -134,13 +131,11 @@ public class UserServlet extends HttpServlet {
             List<User> users = parser.jsonToUsers(json);
             new DbInsert().insertFriendship(users);
             break;
-            /*
             case ADD_PROFILE_IMG:
-            String[] imageData = parser.parseImageData(jsonString);
-            new DbInsert().insertImage(imageData[0], imageData[1], imageData[2], imageData[3]);
+            String[] imageData = parser.parseImageData(json);
+            new DbInsert().insertImage(imageData[0], imageData[1], imageData[2]);
             break;
-            */
-            default: 
+            default:
             System.err.println("illegal action");
             response.setStatus(400);
             break;
