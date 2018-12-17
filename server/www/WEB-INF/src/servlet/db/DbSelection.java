@@ -111,8 +111,9 @@ public class DbSelection {
     }
     
     public List<User> readUsers(String name) {
-        final String SQL_SELECT_ALL = "SELECT * "
-        + "FROM usr WHERE \"name\" LIKE '" + name+ "%';" ;
+        final String SQL_SELECT_ALL = "SELECT usr.id, usr.name, usr.email, usr.password, image.imagebitmap FROM usr " +
+        "LEFT OUTER JOIN image ON usr.id = image.owner AND usr.profileimage = image.id " + 
+        "WHERE usr.name ILIKE '" + name + "%';";
         List<User> users = new ArrayList<User>();
         DbUtil database = new DbUtil();
         Connection connection = database.connection();
@@ -125,8 +126,11 @@ public class DbSelection {
                 users.add(new User(
                 rs.getString("name"),
                 rs.getString("email"),
-                rs.getString("password")
+                rs.getString("password"),
+                rs.getInt("id"),
+                rs.getString("imagebitmap")
                 ));
+                
             }
         } catch (SQLException sqle) {
             System.err.println("unable to select from database " 
@@ -142,6 +146,7 @@ public class DbSelection {
             }
             database.disconnect();
         }
+        System.out.println(users.toString());
         return users;
     }
     

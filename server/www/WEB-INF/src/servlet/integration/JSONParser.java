@@ -1,12 +1,12 @@
 package servlet.integration;
-         
+
 import org.json.*;
 import java.util.*;
 
 import servlet.db.DbSelection;
 import servlet.model.User;
-         
-public class JSONParser {
+
+public class JSONParser{
 
     private static final int POST_REQUEST_INDEX = 0;
     private static final int POST_DATA_INDEX = 1;
@@ -38,7 +38,11 @@ public class JSONParser {
             JSONObject obj = new JSONObject();
             obj.put("name", user.name());
             obj.put("email", user.email());
-            obj.put("image", user.image());
+            if(user.image() == null){
+                obj.put("image", "");
+            }else{
+                obj.put("image", user.image());
+            }
             array.put(obj);
         }
         return array;
@@ -67,9 +71,9 @@ public class JSONParser {
             try {
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
                 users.add(new User(
-                            jsonObj.getString("name"),
-                            jsonObj.getString("email"),
-                            jsonObj.getString("password")
+                jsonObj.getString("name"),
+                jsonObj.getString("email"),
+                jsonObj.getString("password")
                 ));            
             } catch (JSONException je) {
                 System.err.println("unable to parse: " + je.getMessage());
@@ -112,7 +116,7 @@ public class JSONParser {
         return loginValue;
     }
     
-   public String[] parseImageData(String json) {
+    public String[] parseImageData(String json) {
         String imageName = "";   
         String imageData = "";
         String email = "";
@@ -133,7 +137,7 @@ public class JSONParser {
         imageValue[3] = password;
         return imageValue;
     }
-
+    
     public JSONArray imageToJson(String email){
         JSONArray arr = new JSONArray();
         try{            

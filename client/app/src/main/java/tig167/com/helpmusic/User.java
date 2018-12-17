@@ -28,4 +28,5 @@ public class User implements Serializable {
     public Bitmap getProfileImage() {return profileImage;}
 
     public void setProfileImage(Bitmap profileImage){ this.profileImage = profileImage; }
+
 }
