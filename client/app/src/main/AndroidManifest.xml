@@ -17,21 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-<<<<<<< HEAD
 
-
-        <activity
-            android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.default_searchable"
-=======
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="tig167.com.helpmusic.fileprovider"
@@ -41,33 +27,32 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path" />
         </provider>
-        <activity android:name=".MainActivity"
+
+        <activity
+            android:name=".LoginActivity"
             android:windowSoftInputMode="adjustPan">
-            <meta-data android:name="android.app.default_searchable"
->>>>>>> 4a75ad9b365c98c2683244d4050cc80b63fd13f1
-                android:value=".SearchBar" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+
         </activity>
         <activity
             android:name=".SignUp"
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
-            android:name=".LoginActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
-        <activity
-            android:name=".SearchBar"
-            android:launchMode="singleTop"
+            android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan">
-<<<<<<< HEAD
-=======
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:resource="@xml/searchable" />
         </activity>
+
         <activity android:name=".SearchBar"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop">
->>>>>>> 4a75ad9b365c98c2683244d4050cc80b63fd13f1
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>

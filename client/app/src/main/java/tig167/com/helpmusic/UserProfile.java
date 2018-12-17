@@ -1,9 +1,7 @@
 package tig167.com.helpmusic;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-//import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+//import android.support.v4.app.FragmentActivity;
 
 public class UserProfile extends Fragment {
 
@@ -57,5 +57,9 @@ public class UserProfile extends Fragment {
         mButton = view.findViewById(R.id.usrFragmentAddFriend);
         mTextView = view.findViewById(R.id.profile_name);
         mBitMap = view.findViewById(R.id.usrFragmentProfileImage);
+
+        mBitMap.setImageBitmap(SessionObject.getInstance().user().getProfileImage());
+        mTextView.setText(SessionObject.getInstance().user().name());
+
     }
 }
