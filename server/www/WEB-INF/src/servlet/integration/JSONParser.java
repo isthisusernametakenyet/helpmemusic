@@ -6,8 +6,32 @@ import java.util.*;
 import servlet.db.DbSelection;
 import servlet.model.User;
 
-public class JSONParser {
+public class JSONParser{
+
+    private static final int POST_REQUEST_INDEX = 0;
+    private static final int POST_DATA_INDEX = 1;
     
+    public String jsonToRequestCode(String json) {
+        String requestCode = "";
+        try {
+            JSONArray array = new JSONArray(json);
+            JSONObject obj = array.getJSONObject(POST_REQUEST_INDEX);
+            requestCode = obj.getString("requestCode");
+        } catch (JSONException je) {
+            System.err.println("server_error: unable to parse request");
+            je.printStackTrace();
+        }
+        return requestCode;
+    }
+
+    public JSONArray stringToJson(String answer) {
+        JSONArray array = new JSONArray();
+        JSONObject obj = new JSONObject();
+        obj.put("response", answer);
+        array.put(obj);
+        return array;
+    }
+
     public JSONArray usersToJson(List<User> users) {
         JSONArray array = new JSONArray();
         for (User user : users) {
@@ -23,7 +47,15 @@ public class JSONParser {
         }
         return array;
     }
-    
+
+    public JSONArray userToJson(User user) {
+        JSONArray array = new JSONArray();
+        JSONObject obj = new JSONObject();
+        obj.put("name", user.name());
+        array.put(obj);
+        return array;
+    }
+             
     public List<User> jsonToUsers(String json) {                            
         JSONArray jsonArray = null;
         try {                  
@@ -32,8 +64,7 @@ public class JSONParser {
             jsonArray = jsonObject.getJSONArray("users");                
         } catch (JSONException je) {                                       
             System.err.println("unable to init json array: "
-            + je.getMessage());
-            System.exit(1);
+                    + je.getMessage());
         }
         List<User> users = new ArrayList<User>();
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -46,37 +77,35 @@ public class JSONParser {
                 ));            
             } catch (JSONException je) {
                 System.err.println("unable to parse: " + je.getMessage());
-                System.exit(1);
             }
         }
         return users;
     }
-    
-    public User jsonToUser(String json) {    // name not found at login
+
+    public User jsonToUser(String json) {
         User user = null;
-        json = json.replace("PostData=", "");
         try {
-            JSONTokener jsonTokener = new JSONTokener(json);
-            JSONObject jo = new JSONObject(jsonTokener);
+            JSONArray array = new JSONArray(json);
+            JSONObject obj = array.getJSONObject(POST_DATA_INDEX);
             user = new User(
-            jo.getString("name"),
-            jo.getString("email"),
-            jo.getString("password")
+                    obj.getString("name"),
+                    obj.getString("email"),
+                    obj.getString("password")
             );
         } catch (JSONException je) {
             System.err.println("unable to parse: " + je.getMessage());
-            System.exit(1);
         }
         return user;
     }
-    
-    public String[] parseLogin(String json){
+
+    public String[] jsonToLoginData(String json){
         String email = "";
         String password = "";
         try {
-            JSONObject jsonObj = new JSONObject(json);
-            email = jsonObj.getString("email");
-            password = jsonObj.getString("password");
+            JSONArray array = new JSONArray(json);
+            JSONObject obj = array.getJSONObject(POST_DATA_INDEX);
+            email = obj.getString("email");
+            password = obj.getString("password");
         }
         catch (JSONException e) {
             System.err.println(e.getMessage());   
@@ -111,8 +140,7 @@ public class JSONParser {
     
     public JSONArray imageToJson(String email){
         JSONArray arr = new JSONArray();
-        try{
-            
+        try{            
             JSONObject obj = new JSONObject();
             DbSelection selection = new DbSelection();
             obj.put("imageData", selection.readProfileImage(email));

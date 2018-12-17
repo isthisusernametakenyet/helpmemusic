@@ -14,27 +14,90 @@ public class JsonParser {
 
     private static final String LOG_TAG = JsonParser.class.getSimpleName();
 
-    public String userToJson(String name, String password, String email){
-        StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        sb.append("{");
-        sb.append("\"name\":" + name + ",");
-        sb.append("\"email\":" + email);
-        sb.append("\"password\":" + password + ",");
-        sb.append("}");
-        sb.append("}");
+    public JSONArray imageDataToJson(
+            String requestCode,
+            String pictureHash,
+            String image,
+            String email) {
+        JSONArray array = new JSONArray();
+        try {
+            JSONObject requestCodeObj = new JSONObject();
+            requestCodeObj.put("requestCode", requestCode);
+            array.put(requestCodeObj);
+            JSONObject dataObj = new JSONObject();
+            dataObj.put("pictureHash", pictureHash);
+            dataObj.put("image", image);
+            dataObj.put("email", email);
+            array.put(dataObj);
+        } catch (JSONException je) {
+            je.printStackTrace();
+        }
+        return array;
+    }
 
-        return sb.toString();
+    public JSONArray loginDataToJson(String requestCode, String email, String str) {
+        JSONArray array = new JSONArray();
+        try {
+            JSONObject requestCodeObj = new JSONObject();
+            requestCodeObj.put("requestCode", requestCode);
+            array.put(requestCodeObj);
+            JSONObject dataObj = new JSONObject();
+            dataObj.put("email", email);
+            dataObj.put("password", str);
+            array.put(dataObj);
+        } catch (JSONException je) {
+            je.printStackTrace();
+        }
+        return array;
+    }
+
+    public JSONArray signupDataToJson(String requestCode, String name, String email, String str) {
+        JSONArray array = new JSONArray();
+        try {
+            JSONObject requestCodeObj = new JSONObject();
+            JSONObject dataObj = new JSONObject();
+            requestCodeObj.put("requestCode", requestCode);
+            array.put(requestCodeObj);
+            dataObj.put("name", name);
+            dataObj.put("email", email);
+            dataObj.put("password", str);
+            array.put(dataObj);
+        } catch (JSONException je) {
+            je.printStackTrace();
+        }
+        return array;
+    }
+
+    public String jsonToLoginResponse(JSONArray array) {
+        String response = "";
+        try {
+            JSONObject obj = array.getJSONObject(0);
+            response = obj.getString("response");
+        } catch (JSONException je) {
+            je.printStackTrace();
+        }
+        return response;
+    }
+
+    public String jsonToSignupResponse(JSONArray array) {
+        String response = "";
+        try {
+            JSONObject obj = array.getJSONObject(0);
+            response = obj.getString("response");
+        } catch (JSONException je) {
+            je.printStackTrace();
+        }
+        return response;
     }
 
     public List<User> jsonToUsers(JSONArray array){
         List<User> userList = new ArrayList<>();
-
-        for(int i = 0; i < array.length(); i++){
+        for(int i = 0; i < array.length(); i++) {
             try{
                 JSONObject obj = array.getJSONObject(i);
                 String name = obj.getString("name");
                 String email = obj.getString("email");
+
                 Bitmap profileImage = new Image().decode(obj.getString("image"));
 
 
@@ -47,6 +110,17 @@ public class JsonParser {
             }
         }
         return userList;
+    }
+
+    public String jsonToUserName(JSONArray array) {
+        String name = "";
+        try {
+            JSONObject obj = array.getJSONObject(0);
+            name = obj.getString("name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return name;
     }
 
     public List<User> jsonToUsersImage(JSONArray array){
@@ -71,7 +145,6 @@ public class JsonParser {
         return users;
     }
 
-
     public String parseImage(JSONArray array){
         String imageData = null;
         Log.d(LOG_TAG, ": Array length" + array.length());
@@ -80,8 +153,6 @@ public class JsonParser {
                 JSONObject obj = array.getJSONObject(i);
                 imageData = obj.getString("imageData");
                 Log.d(LOG_TAG, ": ImageData = " + imageData);
-
-
             }
             catch(JSONException e){
                 Log.e(LOG_TAG, ": " + e.getMessage());

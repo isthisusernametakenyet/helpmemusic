@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 public class UserProfile extends Fragment {
 
+
     public UserProfile(){
 
     }

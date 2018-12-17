@@ -8,10 +8,6 @@ import android.view.ViewGroup;
 
 public class MusicFragment extends Fragment {
 
-    public MusicFragment(){
-        System.out.println("music fragment constructor");
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

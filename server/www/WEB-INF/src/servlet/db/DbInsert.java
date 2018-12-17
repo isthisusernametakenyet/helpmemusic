@@ -22,7 +22,7 @@ public class DbInsert {
         }
     }
     
-    public boolean insertImage(String imageName, String imageData, String email, String password){
+    public boolean insertImage(String imageName, String imageData, String email) {
         Status status = Status.FAILURE;
         final String SQL_INSERT = "INSERT INTO image "
         + "(\"name\", imagebitmap, owner) "
@@ -51,14 +51,12 @@ public class DbInsert {
         } catch(SQLException e){
             System.err.println("unable to insert image data to database: " 
             + e.getMessage());
-            System.exit(1);
         } finally {
             try {
                 pstmt.close();
             } catch(SQLException e){
                 System.err.println("unable to close statement: " 
                 + e.getMessage());
-                System.exit(1);
             }
         }
         return status.value();
@@ -76,32 +74,27 @@ public class DbInsert {
         DbSelection select = new DbSelection();
         Connection connection = database.connection();
         PreparedStatement pstmt = null;
-        if(select.hasUser(user.email())){
-            try {
-                pstmt = connection.prepareStatement(SQL_INSERT);
-                pstmt.setString(1, user.name());
-                pstmt.setString(2, user.email());
-                pstmt.setString(3, user.password());
-                pstmt.executeUpdate();
-                status = Status.SUCCESS;
-            } catch (SQLException sqle) {
-                System.err.println("unable to insert into database " 
-                + sqle.getMessage());
-                status = Status.FAILURE;
-            } finally {
-                try {
-                    pstmt.close();
-                } catch (SQLException sqle) {
-                    System.err.println("unable to close statement "
-                    + sqle.getMessage());
-                    status = Status.FAILURE;
-                }
-                database.disconnect();
-            }
-        }
-        else {
+        try {
+            pstmt = connection.prepareStatement(SQL_INSERT);
+            pstmt.setString(1, user.name());
+            pstmt.setString(2, user.email());
+            pstmt.setString(3, user.password());
+            pstmt.executeUpdate();
+            status = Status.SUCCESS;
+        } catch (SQLException sqle) {
+            System.err.println("unable to insert into database " 
+                        + sqle.getMessage());
             status = Status.FAILURE;
-        }
+        } finally {
+            try {
+                pstmt.close();
+            } catch (SQLException sqle) {
+                System.err.println("unable to close statement "
+                        + sqle.getMessage());
+                status = Status.FAILURE;
+            }
+            database.disconnect();
+        } 
         return status.value();
     }
     

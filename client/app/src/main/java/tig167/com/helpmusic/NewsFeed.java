@@ -12,10 +12,6 @@ import java.util.List;
 
 public class NewsFeed extends ListFragment {
 
-    public NewsFeed(){
-        System.out.println("news feed constructor");
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
