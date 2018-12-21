@@ -52,7 +52,8 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray array) {
                         String str = new JsonParser().jsonToLoginResponse(array);
-                        if ("ok".equalsIgnoreCase(str)) {
+                        if ("ok".equalsIgnoreCase(str)) { // get username here instead of ok
+                                                            // remove getUserName()
                             getUserName();
                         }
                     }
