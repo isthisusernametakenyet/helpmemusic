@@ -30,6 +30,7 @@
         android:id="@+id/usrFragmentAddFriend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="addFriend"
         android:text="@string/usrFragmentAddFriendBtn"
         android:textAlignment="center"
         android:textAllCaps="false" />

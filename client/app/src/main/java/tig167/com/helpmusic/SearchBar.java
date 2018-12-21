@@ -1,9 +1,6 @@
 package tig167.com.helpmusic;
 
-import android.app.Fragment;
-import android.app.ListActivity;
 import android.app.SearchManager;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +47,8 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
     public void doMySearch(String query){
         RequestQueue queue = Volley.newRequestQueue(this);
 
+        Log.d(LOG_TAG, ": query = " + query);
+
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 URL+"?getSearchResult=" + query,
@@ -60,7 +59,7 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
 
                         JsonParser parser = new JsonParser();
                         users = parser.jsonToUsers(array);
-                        //Log.d(LOG_TAG, ": parsed json " + users.toString());
+                        Log.d(LOG_TAG, ": parsed json " + users.toString());
                         resetListView();
 
                     }
@@ -90,8 +89,9 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
         Intent intent = new Intent(this, ShowProfileFragment.class);
         Log.d(LOG_TAG, ": SearchBar onItemClick");
         Log.d(LOG_TAG, ": user name " + users.get(position).name());
-        intent.putExtra("userName", users.get(position).name());
+        intent.putExtra("name", users.get(position).name());
         intent.putExtra("image", users.get(position).getProfileImage());
+        intent.putExtra("email", users.get(position).email());
         startActivity(intent);
 
         //resetListView();

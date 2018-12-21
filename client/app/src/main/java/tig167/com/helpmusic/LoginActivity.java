@@ -15,8 +15,6 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -80,7 +78,10 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray array) {
                         session.setUser(new JsonParser().jsonToUserName(array), identifier);
+                        Log.d("Login activity: ", array.toString());
+                        session.user().setProfileImage(new Image().decode(new JsonParser().parseImage(array)));
                         nextActivity();
+
                     }
                 },
                 new Response.ErrorListener() {

@@ -36,8 +36,11 @@ public class DbInsert {
         PreparedStatement pstmt = null;
         try {
             pstmt = conn.prepareStatement(SQL_INSERT);
+            System.out.println(imageName);
             pstmt.setString(1, imageName);
+            System.out.println(imageData);
             pstmt.setString(2, imageData);
+            System.out.println(email + " | " + id);
             pstmt.setInt(3, id);
             pstmt.execute();
             ResultSet rs = pstmt.getResultSet();
