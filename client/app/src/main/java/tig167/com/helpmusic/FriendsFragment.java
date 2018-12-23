@@ -60,6 +60,7 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
                     @Override
                     public void onResponse(JSONArray array) {
                         friends = new JsonParser().jsonToUsers(array);
+                        Log.d("FriendsFragment: ", "friendList " + friends.toString());
                         resetListView();
                     }
                 },

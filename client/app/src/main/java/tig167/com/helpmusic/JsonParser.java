@@ -68,7 +68,7 @@ public class JsonParser {
         return array;
     }
 
-    public JSONArray addFriend(String requestCode, String friendEmail, String thisEmail){
+    public JSONArray addFriend(String requestCode, String friendEmail,String thisName, String thisEmail){
         JSONArray arr = new JSONArray();
 
         try{
@@ -77,9 +77,13 @@ public class JsonParser {
             JSONObject thisEmailObj = new JSONObject();
             requestCodeObj.put("requestCode", requestCode);
             arr.put(requestCodeObj);
-            friendEmailObj.put("friendEmail", friendEmail);
+            friendEmailObj.put("name", "");
+            friendEmailObj.put("email", friendEmail);
+            friendEmailObj.put("password", "");
             arr.put(friendEmailObj);
-            thisEmailObj.put("thisEmail", thisEmail);
+            thisEmailObj.put("name", thisName);
+            thisEmailObj.put("email", thisEmail);
+            thisEmailObj.put("password", "");
             arr.put(thisEmailObj);
         }catch(JSONException e){
             e.getMessage();

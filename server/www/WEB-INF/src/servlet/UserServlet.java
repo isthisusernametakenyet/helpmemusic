@@ -78,6 +78,7 @@ public class UserServlet extends HttpServlet {
             user = selection.getUser(queryStrings[DATA_INDEX]);
             users = selection.readFriends(user);
             array = parser.usersToJson(users);
+            System.out.println(array.toString());
             response.getWriter().println(array.toString());
             break;
             case GET_USER_NAME:
@@ -136,7 +137,7 @@ public class UserServlet extends HttpServlet {
             }
             break;
             case ADD_PROFILE_IMG:
-            System.out.println(json.toString());
+            //System.out.println(json.toString());
             String[] imageData = parser.parseImageData(json);
             //System.out.println(imageData[0]);
             new DbInsert().insertImage(imageData[0], imageData[1], imageData[2]);

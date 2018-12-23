@@ -81,7 +81,7 @@ public class UserProfile extends Fragment {
         mTextView = view.findViewById(R.id.profile_name);
         mBitMap = view.findViewById(R.id.usrFragmentProfileImage);
         args = getArguments();
-        Log.d(LOG_TAG, ": " + args.toString());
+        //Log.d(LOG_TAG, ": " + args.toString());
         if(args == null) {
             if (SessionObject.getInstance().user().getProfileImage() != null) {
                 mBitMap.setImageBitmap(SessionObject.getInstance().user().getProfileImage());
@@ -108,7 +108,7 @@ public class UserProfile extends Fragment {
 
     public void addFriend(View view){
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        JSONArray json = new JsonParser().addFriend(Action.ADD_FRIEND.value(), email ,SessionObject.getInstance().user().email());
+        JSONArray json = new JsonParser().addFriend(Action.ADD_FRIEND.value(), email , SessionObject.getInstance().user().name(), SessionObject.getInstance().user().email());
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.POST,
                 URL,

@@ -115,7 +115,7 @@ public class DbInsert {
     
     private boolean insertFriend(User user, int friendId, String friendEmail) {
         String tableName = DbUtil.createFriendTableName(user.email());
-        final String SQL_INSERT_FRIENDSHIP = "INSERT INTO ? (friend_id, friend_email) "
+        final String SQL_INSERT_FRIENDSHIP = "INSERT INTO "+ tableName +" (friend_id, friend_email) "
         + "VALUES (?, ?)";
         Status status = Status.FAILURE;
         DbUtil database = new DbUtil();
@@ -123,9 +123,9 @@ public class DbInsert {
         PreparedStatement pstmt = null;
         try {
             pstmt = connection.prepareStatement(SQL_INSERT_FRIENDSHIP);
-            pstmt.setString(1, tableName);
-            pstmt.setInt(2, friendId);
-            pstmt.setString(3, friendEmail);
+            //pstmt.setString(1, tableName);
+            pstmt.setInt(1, friendId);
+            pstmt.setString(2, friendEmail);
             pstmt.executeUpdate();
             status = Status.SUCCESS;
         } catch (SQLException sqle) {

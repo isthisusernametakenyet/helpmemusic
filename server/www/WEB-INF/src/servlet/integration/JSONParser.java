@@ -64,17 +64,17 @@ public class JSONParser{
     
     public List<User> jsonToUsers(String json) {                            
         JSONArray jsonArray = null;
+        System.out.println("the json array: " + json);
         try {                  
-            JSONTokener jsonTokener = new JSONTokener(json);
-            JSONObject jsonObject = new JSONObject(jsonTokener);
-            System.out.println("the json array: " + json);
-            jsonArray = jsonObject.getJSONArray("users");                
+            //JSONTokener jsonTokener = new JSONTokener(json);
+            //JSONObject jsonObject = new JSONObject(jsonTokener);
+            jsonArray = new JSONArray(json);            
         } catch (JSONException je) {                                       
             System.err.println("unable to init json array: "
             + je.getMessage());
         }
         List<User> users = new ArrayList<User>();
-        for (int i = 0; i < jsonArray.length(); i++) {
+        for (int i = 1; i < jsonArray.length(); i++) {
             try {
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
                 users.add(new User(
@@ -141,7 +141,7 @@ public class JSONParser{
             System.err.println("unable to init json array: "
             + je.getMessage());
         }
-        System.err.println("  jsonArray: " + jsonArray);
+        //System.err.println("  jsonArray: " + jsonArray);
         for(int i = 0; i < jsonArray.length(); i++){
             try{
                 System.err.println("  pincing obj");
