@@ -54,12 +54,23 @@ public class UserProfile extends Fragment {
 
         args = getArguments();
 
-        Log.d(LOG_TAG, ": Create the userFragment");
-        // profile logic
-        Log.d(LOG_TAG, ": " + container.getId());
 
-        View view = inflater.inflate(R.layout.user_profile, container, false);
+        View view;
 
+        if(args == null || SessionObject.getInstance().user().friends().contains(args.getString("email")) || SessionObject.getInstance().user().email().equals(args.getString("email"))) {
+            view = inflater.inflate(R.layout.user_profile_no_button, container, false);
+
+        }else{
+            view = inflater.inflate(R.layout.user_profile, container, false);
+            mButton = view.findViewById(R.id.usrFragmentAddFriend);
+            //adding a onClickListener since fragment dont have one
+            mButton.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    addFriend(view);
+                }
+            });
+        }
 
 
         return view;
@@ -90,14 +101,7 @@ public class UserProfile extends Fragment {
             mTextView.setText(SessionObject.getInstance().user().name());
         }else{
 
-            mButton = view.findViewById(R.id.usrFragmentAddFriend);
-            //adding a onClickListener since fragment dont have one
-            mButton.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view){
-                    addFriend(view);
-                }
-            });
+
             String name = args.getString("name");
             mTextView.setText(name);
             Bitmap image = (Bitmap) args.get("image");

@@ -11,7 +11,7 @@ public class User implements Serializable {
     private String name;
     private String email;
     private Bitmap profileImage;
-    private List<User> friends;
+    private List<String> friends;
 
     public User(String name, String email) {
         this.name = name;
@@ -33,7 +33,7 @@ public class User implements Serializable {
     public Bitmap getProfileImage() {return profileImage;}
 
     //TODO: how shuld we handel the list??
-    public List<User> friends(){return friends;}
+    public List<String> friends(){return friends;}
 
     public void setProfileImage(Bitmap profileImage){ this.profileImage = profileImage; }
 

@@ -63,7 +63,7 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
                         friends = new JsonParser().jsonToUsers(array);
                         Log.d("FriendsFragment: ", "friendList " + friends.toString());
                         for(User user : friends) {
-                            SessionObject.getInstance().user().friends().add(user);
+                            SessionObject.getInstance().user().friends().add(user.email());
                         }
                         resetListView();
                     }
