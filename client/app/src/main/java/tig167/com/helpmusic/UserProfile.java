@@ -52,6 +52,7 @@ public class UserProfile extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        args = getArguments();
 
         Log.d(LOG_TAG, ": Create the userFragment");
         // profile logic
@@ -80,7 +81,6 @@ public class UserProfile extends Fragment {
 
         mTextView = view.findViewById(R.id.profile_name);
         mBitMap = view.findViewById(R.id.usrFragmentProfileImage);
-        args = getArguments();
         //Log.d(LOG_TAG, ": " + args.toString());
         if(args == null) {
             if (SessionObject.getInstance().user().getProfileImage() != null) {
