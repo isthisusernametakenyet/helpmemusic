@@ -1,11 +1,13 @@
 package tig167.com.helpmusic;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,8 +17,6 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class SignUp extends AppCompatActivity {
 
@@ -38,6 +38,11 @@ public class SignUp extends AppCompatActivity {
         EditText passwordField = findViewById(R.id.signUpPassword);
         name = nameField.getText().toString();
         email = emailField.getText().toString();
+        if(!email.contains("@")){
+            emailField.setTextColor(Color.RED);
+            Toast.makeText(getApplicationContext(), "Not a valid email address", Toast.LENGTH_SHORT).show();
+            return;
+        }
         String securePassword = ph.getSHA256SecurePassword(passwordField.getText().toString());
         addUser(new JsonParser().signupDataToJson(Action.ADD_USER.value(), name, email, securePassword));
     }
