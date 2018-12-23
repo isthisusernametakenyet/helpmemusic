@@ -1,11 +1,13 @@
 package tig167.com.helpmusic;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,6 +19,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String LOG_TAG = ShowProfileFragment.class.getSimpleName();
 
     private static SessionObject session;
     private String identifier;
@@ -53,14 +56,24 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(JSONArray array) {
                         String str = new JsonParser().jsonToLoginResponse(array);
                         if ("ok".equalsIgnoreCase(str)) { // get username here instead of ok
-                                                            // remove getUserName()
+                                                          // remove getUserName()
+                            Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_SHORT).show();
+
                             getUserName();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "You entered the wrong password or email address", Toast.LENGTH_SHORT).show();
+                            EditText email = findViewById(R.id.loginEmail);
+                            EditText password = findViewById(R.id.loginPassword);
+                            email.setTextColor(Color.RED);
+                            password.setTextColor(Color.RED);
                         }
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
                         Log.d("error: getAccess ", error.getCause().getMessage());
                     }
                 }
@@ -79,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray array) {
                         session.setUser(new JsonParser().jsonToUserName(array), identifier);
-                        Log.d("Login activity: ", array.toString());
+                        Log.d(LOG_TAG, array.toString());
                         session.user().setProfileImage(new Image().decode(new JsonParser().parseImage(array)));
                         nextActivity();
 
@@ -88,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
                         Log.d("error: getUserName ", error.getCause().getMessage());
                     }
                 }

@@ -1,9 +1,12 @@
 package tig167.com.helpmusic;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,7 +90,10 @@ public class UserProfile extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        float cornerRadius = 7f;
 
+        RoundedBitmapDrawable drawable;
+        Resources res = getResources();
         Log.d(LOG_TAG, ": onViewCreated");
 
         mTextView = view.findViewById(R.id.profile_name);
@@ -95,7 +101,12 @@ public class UserProfile extends Fragment {
         //Log.d(LOG_TAG, ": " + args.toString());
         if(args == null) {
             if (SessionObject.getInstance().user().getProfileImage() != null) {
-                mBitMap.setImageBitmap(SessionObject.getInstance().user().getProfileImage());
+                drawable = RoundedBitmapDrawableFactory.create( res, SessionObject.getInstance().user().getProfileImage());
+
+                drawable.setCornerRadius(cornerRadius);
+
+                mBitMap.setImageDrawable(drawable);
+                //mBitMap.setImageBitmap(SessionObject.getInstance().user().getProfileImage());
                 Log.d(LOG_TAG, ": bitmap " + SessionObject.getInstance().user().getProfileImage().toString());
             }
             mTextView.setText(SessionObject.getInstance().user().name());
@@ -105,7 +116,11 @@ public class UserProfile extends Fragment {
             String name = args.getString("name");
             mTextView.setText(name);
             Bitmap image = (Bitmap) args.get("image");
-            mBitMap.setImageBitmap(image);
+            drawable = RoundedBitmapDrawableFactory.create( res, image);
+
+            drawable.setCornerRadius(cornerRadius);
+
+            mBitMap.setImageDrawable(drawable);
             email = args.getString("email");
         }
     }
