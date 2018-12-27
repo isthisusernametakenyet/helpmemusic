@@ -10,7 +10,7 @@ import java.util.List;
 
 public class DbHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "client_users";
+    private static final String DATABASE_NAME = "client_session";
     private static final int DATABASE_VERSION = 1;
     private static DbHelper instance;
 
@@ -31,25 +31,31 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     private void createUserTable(SQLiteDatabase db) {
-        final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS user( "
+        final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS user ( "
                                       + "id INTEGER PRIMARY KEY, "
                                       + "name TEXT, "
                                       + "email TEXT UNIQUE, "
                                       + "profile_img TEXT);";
         db.execSQL(SQL_CREATE_TABLE);
-        createFriendTable(db, SessionObject.getInstance().user().email());
+        createFriendTable(db);
     }
 
-    public void createFriendTable(SQLiteDatabase db, String tableName) {
-        final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + tableName + " ( "
-                                      + "friend_id INTEGER PRIMARY KEY, "
-                                      + "user_id INTEGER, "
-                                      + "friend_email TEXT UNIQUE, "
-                                      + "FOREIGN KEY (user_id) REFERENCES user(id));";
+    public void createFriendTable(SQLiteDatabase db) {
+        final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS friend ( "
+                                      + "id INTEGER PRIMARY KEY, "
+                                      + "name TEXT, "
+                                      + "email TEXT UNIQUE, "
+                                      + "profile_img TEXT);";
         db.execSQL(SQL_CREATE_TABLE);
     }
 
+    public void deleteOldSessionData() {
+        this.getWritableDatabase().execSQL("DELETE FROM user WHERE id > 0;");
+        this.getWritableDatabase().execSQL("DELETE FROM friend WHERE id > 0;");
+    }
+
     public void write(User user) {
+        deleteOldSessionData();
         final String SQL_INSERT = "INSERT INTO user (name, email, profile_img) "
                                 + "VALUES ('"
                                 + user.name() + "' , '"
@@ -60,36 +66,20 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     private void writeFriends(User user) {
-        int id = getUserId(user.email());
         SQLiteDatabase db = this.getReadableDatabase();
         for (User friend : user.friends()) {
-            final String SQL_INSERT = "INSERT INTO " + user.email() + "( "
-                    + "email, user_id )"
+            final String SQL_INSERT = "INSERT INTO friend (name, email, profile_img) "
                     + "VALUES( '"
                     + friend.name() + "', '"
                     + friend.email() + "', '"
-                    + new Image().encode(friend.profileImage()) + "', "
-                    + id + ");";
+                    + new Image().encode(friend.profileImage()) + "');";
             db.execSQL(SQL_INSERT);
         }
     }
 
-    private int getUserId(String email) {
-        final String SQL_SELECT = "SELECT id FROM user WHERE email = '" + email + "';";
-        SQLiteDatabase db = this.getReadableDatabase();
-        int id = -1;
-        try (Cursor cursor = db.rawQuery(SQL_SELECT, null)) {
-            if (cursor.moveToFirst()) {
-                id = cursor.getInt(0);
-            }
-        }
-        return id;
-    }
-
-    public User read(String email) {
+    public User read() {
         final String SQL_SELECT = "SELECT name, email, profile_img "
-                                + "FROM user "
-                                + "WHERE email = '" + email + "';";
+                                + "FROM user;";
         SQLiteDatabase db = this.getReadableDatabase();
         User user = null;
         try (Cursor cursor = db.rawQuery(SQL_SELECT, null)) {
@@ -102,15 +92,14 @@ public class DbHelper extends SQLiteOpenHelper {
             }
         }
         if (user != null) {
-            user.setFriends(readFriends(user.email()));
+            user.setFriends(readFriends());
         }
         return user;
     }
 
-    private List<User> readFriends(String tableName) {
+    private List<User> readFriends() {
         final String SQL_SELECT = "SELECT name, email, profile_img "
-                                + "FROM " + tableName + " "
-                                + "JOIN user ON user_id = user(id);";
+                                + "FROM friend;";
         SQLiteDatabase db = this.getReadableDatabase();
         List<User> friends = new ArrayList<>();
         try (Cursor cursor = db.rawQuery(SQL_SELECT, null)) {
@@ -125,17 +114,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        List<String> tables = new ArrayList<>();
-        final String SQL_SELECT = "SELECT email FROM user;";
-        try (Cursor cursor = db.rawQuery(SQL_SELECT, null)) {
-            while (cursor.moveToNext()) {
-                tables.add(cursor.getString(0));
-            }
-        }
-        for (String tableName : tables) {
-            db.execSQL("DROP TABLE IF EXISTS " + tableName + ";");
-        }
-        db.execSQL("DROP TABLE IF EXISTS user;");
+        db.execSQL("DROP TABLE IF EXISTS friend;");
+        db.execSQL("DROP TABLE IF EXISTS session_user;");
         onCreate(db);
     }
 }

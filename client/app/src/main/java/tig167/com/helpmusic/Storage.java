@@ -25,7 +25,10 @@ public class Storage {
     }
 
     public void load() {
-        session.setUser(database.read(session.user().email()));
+        User user = database.read();
+        if (user != null) {
+            session.setUser(user);
+        }
     }
 
 }
