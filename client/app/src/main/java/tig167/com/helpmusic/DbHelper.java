@@ -37,12 +37,11 @@ public class DbHelper extends SQLiteOpenHelper {
                                       + "email TEXT UNIQUE, "
                                       + "profile_img TEXT);";
         db.execSQL(SQL_CREATE_TABLE);
-        System.out.println(SessionObject.getInstance().user().email());
         createFriendTable(db, SessionObject.getInstance().user().email());
     }
 
     public void createFriendTable(SQLiteDatabase db, String tableName) {
-        final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS '" + tableName + "' ( "
+        final String SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + tableName + " ( "
                                       + "friend_id INTEGER PRIMARY KEY, "
                                       + "user_id INTEGER, "
                                       + "friend_email TEXT UNIQUE, "
@@ -110,7 +109,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     private List<User> readFriends(String tableName) {
         final String SQL_SELECT = "SELECT name, email, profile_img "
-                                + "FROM '" + tableName + "' "
+                                + "FROM " + tableName + " "
                                 + "JOIN user ON user_id = user(id);";
         SQLiteDatabase db = this.getReadableDatabase();
         List<User> friends = new ArrayList<>();

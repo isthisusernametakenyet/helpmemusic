@@ -93,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
         mImageView = findViewById(R.id.imageView);
         profileImage();
         initSearch();
-        PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
-
     }
 
     @Override
@@ -113,6 +111,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Storage.getInstance(this).load();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     private void initSearch(){
@@ -203,8 +211,8 @@ public class MainActivity extends AppCompatActivity {
 
     String mCurrentPhotoPath;
 
-    private File createImageFile() throws IOException {
-        PictureHash ph = new PictureHash("Marcus", "marcus@gmail.com");
+    private File createImageFile() throws IOException { // never used
+        PictureHash ph = new PictureHash(session.user().name(), session.user().email());
         String fileName = "JPEG_" + ph.hash();
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(fileName, ".jpg", storageDir);
