@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static SessionObject session;
+    private MainActivity mainActivity;
 
     private enum FragmentTab {
         NEWS("News"),
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         session = SessionObject.getInstance();
+        mainActivity = this;
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         for (FragmentTab tab : FragmentTab.values()) {
             tabLayout.addTab(tabLayout.newTab().setText(tab.text()));
@@ -212,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
     private String imageData;
 
-    public void profileImage(){
+    public void profileImage() {
         //Bitmap bitMap = null;
         RequestQueue queue = Volley.newRequestQueue(this);
         Log.d(LOG_TAG, " " + queue.toString());
@@ -238,38 +240,45 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
-        if(SessionObject.getInstance().user().profileImage() != null){
-            mImageView.setImageBitmap(SessionObject.getInstance().user().profileImage());
-        }else {
-            RequestQueue queue = Volley.newRequestQueue(this);
-            Log.d(LOG_TAG, " " + queue.toString());
-            final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                    Request.Method.GET,
-                    URL + "?getProfileImg=" + SessionObject.getInstance().user().email(),
-                    null,
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray array) {
-                            Log.d(LOG_TAG, " :" + array.toString());
-                            imageData = new JsonParser().parseImage(array);
-                            Log.d(LOG_TAG, ": before decoding " + imageData);
-                            Bitmap bitMap = null;
-                            bitMap = imageData != null ? new Image().decode(imageData) : null;
-                            Log.d(LOG_TAG, ": after decoding");
-                            //Log.d(LOG_TAG, ": Setting the bitmap " + bitMap.toString());
-                            mImageView.setImageBitmap(bitMap);
+                        if (SessionObject.getInstance().user().profileImage() != null) {
+                            mImageView.setImageBitmap(SessionObject.getInstance().user().profileImage());
+                        } else {
+                            RequestQueue queue = Volley.newRequestQueue(mainActivity);
+                            Log.d(LOG_TAG, " " + queue.toString());
+                            final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                                    Request.Method.GET,
+                                    URL + "?getProfileImg=" + SessionObject.getInstance().user().email(),
+                                    null,
+                                    new Response.Listener<JSONArray>() {
+                                        @Override
+                                        public void onResponse(JSONArray array) {
+                                            Log.d(LOG_TAG, " :" + array.toString());
+                                            imageData = new JsonParser().parseImage(array);
+                                            Log.d(LOG_TAG, ": before decoding " + imageData);
+                                            Bitmap bitMap = null;
+                                            bitMap = imageData != null ? new Image().decode(imageData) : null;
+                                            Log.d(LOG_TAG, ": after decoding");
+                                            //Log.d(LOG_TAG, ": Setting the bitmap " + bitMap.toString());
+                                            mImageView.setImageBitmap(bitMap);
 
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
+                                        }
+                                    }
+                            );
+                            queue.add(jsonArrayRequest);
                         }
                     }
-            );
-            queue.add(jsonArrayRequest);
-        }
-    }
+                }
+        );
 
+    }
 }
+
+
+
+
