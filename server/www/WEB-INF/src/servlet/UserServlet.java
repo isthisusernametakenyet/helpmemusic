@@ -125,6 +125,7 @@ public class UserServlet extends HttpServlet {
                 response.getWriter().println(parser.stringToJson("ok"));
             } else {
                 response.getWriter().println(parser.stringToJson("access denied"));
+                System.out.println("access denied");
             }
             break;
             case ADD_FRIEND:

@@ -58,7 +58,7 @@ public class UserProfile extends Fragment {
         mTextView = view.findViewById(R.id.profile_name);
         mBitMap = view.findViewById(R.id.usrFragmentProfileImage);
 
-        mBitMap.setImageBitmap(SessionObject.getInstance().user().getProfileImage());
+        mBitMap.setImageBitmap(SessionObject.getInstance().user().profileImage());
         mTextView.setText(SessionObject.getInstance().user().name());
 
     }

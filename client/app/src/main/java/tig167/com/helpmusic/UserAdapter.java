@@ -32,7 +32,7 @@ public class UserAdapter extends ArrayAdapter<User> {
         User friend = friendList.get(position);
 
         ImageView imageView = listItem.findViewById(R.id.imageView);
-        imageView.setImageBitmap(friend.getProfileImage());
+        imageView.setImageBitmap(friend.profileImage());
         TextView name = listItem.findViewById(R.id.textView_name);
         name.setText(friend.name());
         return listItem;

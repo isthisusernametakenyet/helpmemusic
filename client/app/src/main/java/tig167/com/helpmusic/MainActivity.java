@@ -4,16 +4,12 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaCas;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,15 +25,9 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-
-import static android.app.Activity.RESULT_OK;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -102,6 +92,25 @@ public class MainActivity extends AppCompatActivity {
         profileImage();
         initSearch();
         PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Storage.getInstance(this).save();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Storage.getInstance(this).save();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Storage.getInstance(this).load();
     }
 
     private void initSearch(){
@@ -208,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, " " + queue.toString());
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                URL+"?getProfileImg=" + SessionObject.getInstance().user().email(),
+                URL + "?getProfileImg=" + session.user().email(),
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
