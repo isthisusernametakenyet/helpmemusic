@@ -1,5 +1,6 @@
 package tig167.com.helpmusic;
 
+import android.content.Intent;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -61,6 +62,7 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
                     public void onResponse(JSONArray array) {
                         friends = new JsonParser().jsonToUsers(array);
                         session.user().setFriends(friends);
+                        Log.d("FriendsFragment: ", "friendList " + friends.toString());
                         resetListView();
                     }
                 },
@@ -77,9 +79,15 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        // show friend profile
+        Intent intent = new Intent(getActivity(), ShowProfileFragment.class);
+        //Log.d(LOG_TAG, ": SearchBar onItemClick");
+        //Log.d(LOG_TAG, ": user name " + friends.get(position).name());
+        intent.putExtra("name", friends.get(position).name());
+        intent.putExtra("image", friends.get(position).profileImage());
+        intent.putExtra("email", friends.get(position).email());
+        startActivity(intent);
 
-        resetListView();
+        //resetListView();
     }
 
 }

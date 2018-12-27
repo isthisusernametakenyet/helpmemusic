@@ -38,9 +38,9 @@ public class DbSelection {
     }
     
     public User getUser(String email) {
-        final String SQL_SELECT = "SELECT * "
-        + "FROM usr "
-        + "WHERE \"email\" = '" + email + "'";
+        final String SQL_SELECT = "SELECT usr.id, usr.name, usr.email, usr.password, image.imagebitmap FROM usr " +
+        "LEFT OUTER JOIN image ON usr.id = image.owner AND usr.profileimage = image.id " + 
+        "WHERE usr.email ILIKE '" + email + "%';";
         User user = null;
         DbUtil database = new DbUtil();
         Connection connection = database.connection();
@@ -54,7 +54,8 @@ public class DbSelection {
                 rs.getString("name"),
                 rs.getString("email"),
                 rs.getString("password"),
-                rs.getInt("id")
+                rs.getInt("id"),
+                rs.getString("imagebitmap")
                 );
             }
         } catch (SQLException sqle){
@@ -152,10 +153,10 @@ public class DbSelection {
     
     public List<User> readFriends(User user) {
         String tableName = DbUtil.createFriendTableName(user.email());
-        final String SQL_SELECT_FRIENDS = "SELECT \"name\", \"email\", \"password\" "
+        final String SQL_SELECT_FRIENDS = "SELECT usr.id, usr.name, usr.email, usr.password, image.imagebitmap "
         + "FROM " + tableName + " "
         + "JOIN usr "
-        + "ON friend_id = usr.id";
+        + "ON friend_id = usr.id LEFT OUTER JOIN image ON usr.id = image.owner AND usr.profileimage = image.id";
         DbUtil database = new DbUtil();
         Connection connection = database.connection();
         Statement statement = null;
@@ -168,7 +169,9 @@ public class DbSelection {
                 friends.add(new User(
                 rs.getString("name"),
                 rs.getString("email"),
-                rs.getString("password")
+                rs.getString("password"),
+                rs.getInt("id"),
+                rs.getString("imagebitmap")
                 ));
             }
         } catch (SQLException sqle) {
@@ -186,6 +189,7 @@ public class DbSelection {
             }
             database.disconnect();
         }   
+        System.out.println("FriendList: " + friends.toString());
         return friends;
     }
     

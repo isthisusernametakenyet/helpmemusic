@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
             String imageString = new Image().encode(imageBitmap);
             Log.d(LOG_TAG, " Base64 encode " + imageString);
             mImageView.setImageBitmap(new Image().decode(imageString));
+            session.user().setProfileImage(imageBitmap);
             Log.d(LOG_TAG, " Decode base64 to bitmap");
             PictureHash ph = new PictureHash(session.user().name(), session.user().email());
             addProfileImage(new JsonParser().imageDataToJson(
@@ -237,10 +238,38 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
+        if(SessionObject.getInstance().user().profileImage() != null){
+            mImageView.setImageBitmap(SessionObject.getInstance().user().profileImage());
+        }else {
+            RequestQueue queue = Volley.newRequestQueue(this);
+            Log.d(LOG_TAG, " " + queue.toString());
+            final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                    Request.Method.GET,
+                    URL + "?getProfileImg=" + SessionObject.getInstance().user().email(),
+                    null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray array) {
+                            Log.d(LOG_TAG, " :" + array.toString());
+                            imageData = new JsonParser().parseImage(array);
+                            Log.d(LOG_TAG, ": before decoding " + imageData);
+                            Bitmap bitMap = null;
+                            bitMap = imageData != null ? new Image().decode(imageData) : null;
+                            Log.d(LOG_TAG, ": after decoding");
+                            //Log.d(LOG_TAG, ": Setting the bitmap " + bitMap.toString());
+                            mImageView.setImageBitmap(bitMap);
+
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
+                        }
                     }
-                }
-        );
-        queue.add(jsonArrayRequest);
+            );
+            queue.add(jsonArrayRequest);
+        }
     }
 
 }

@@ -23,12 +23,12 @@ public class JsonParser {
         try {
             JSONObject requestCodeObj = new JSONObject();
             requestCodeObj.put("requestCode", requestCode);
+            //array.put(requestCodeObj);
+            //JSONObject dataObj = new JSONObject();
+            requestCodeObj.put("imageFileName", pictureHash);
+            requestCodeObj.put("image", image);
+            requestCodeObj.put("email", email);
             array.put(requestCodeObj);
-            JSONObject dataObj = new JSONObject();
-            dataObj.put("pictureHash", pictureHash);
-            dataObj.put("image", image);
-            dataObj.put("email", email);
-            array.put(dataObj);
         } catch (JSONException je) {
             je.printStackTrace();
         }
@@ -68,6 +68,29 @@ public class JsonParser {
         return array;
     }
 
+    public JSONArray addFriend(String requestCode, String friendEmail,String thisName, String thisEmail){
+        JSONArray arr = new JSONArray();
+
+        try{
+            JSONObject requestCodeObj = new JSONObject();
+            JSONObject friendEmailObj = new JSONObject();
+            JSONObject thisEmailObj = new JSONObject();
+            requestCodeObj.put("requestCode", requestCode);
+            arr.put(requestCodeObj);
+            friendEmailObj.put("name", "");
+            friendEmailObj.put("email", friendEmail);
+            friendEmailObj.put("password", "");
+            arr.put(friendEmailObj);
+            thisEmailObj.put("name", thisName);
+            thisEmailObj.put("email", thisEmail);
+            thisEmailObj.put("password", "");
+            arr.put(thisEmailObj);
+        }catch(JSONException e){
+            e.getMessage();
+        }
+        return arr;
+    }
+
     public String jsonToLoginResponse(JSONArray array) {
         String response = "";
         try {
@@ -97,9 +120,9 @@ public class JsonParser {
                 JSONObject obj = array.getJSONObject(i);
                 String name = obj.getString("name");
                 String email = obj.getString("email");
-
-                Bitmap profileImage = new Image().decode(obj.getString("image"));
-
+                Log.d(LOG_TAG, ": init bitmap " + obj.get("imageData"));
+                Bitmap profileImage = new Image().decode(obj.getString("imageData"));
+                //Log.d(LOG_TAG, ": decode image " + profileImage.toString());
 
                 User u = new User(name, email);
                 u.setProfileImage(profileImage);
@@ -147,7 +170,7 @@ public class JsonParser {
 
     public String parseImage(JSONArray array){
         String imageData = null;
-        Log.d(LOG_TAG, ": Array length" + array.length());
+        Log.d(LOG_TAG, ": Array length " + array.length());
         for(int i = 0; i < array.length(); i++){
             try{
                 JSONObject obj = array.getJSONObject(i);
@@ -161,4 +184,5 @@ public class JsonParser {
         Log.d(LOG_TAG, ": List String = " + imageData);
         return imageData;
     }
+
 }

@@ -27,10 +27,6 @@ public class User implements Serializable {
         friends = new ArrayList<>();
     }
 
-    public void addFriend(User user) {
-        friends.add(user);
-    }
-
     public String name(){
         return name;
     }
