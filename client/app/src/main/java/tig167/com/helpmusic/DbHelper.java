@@ -63,8 +63,8 @@ public class DbHelper extends SQLiteOpenHelper {
         int id = getUserId(user.email());
         SQLiteDatabase db = this.getReadableDatabase();
         for (User friend : user.friends()) {
-            final String SQL_INSERT = "INSERT INTO " + user.email() + " "
-                    + "email, user_id "
+            final String SQL_INSERT = "INSERT INTO " + user.email() + "( "
+                    + "email, user_id )"
                     + "VALUES( '"
                     + friend.name() + "', '"
                     + friend.email() + "', '"
