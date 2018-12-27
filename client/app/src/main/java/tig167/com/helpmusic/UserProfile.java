@@ -29,7 +29,6 @@ import org.json.JSONArray;
 
 public class UserProfile extends Fragment {
 
-    private static final String URL = "http://10.0.2.2:8080/users";
     private String email;
     private Bundle args;
 
@@ -130,7 +129,7 @@ public class UserProfile extends Fragment {
         JSONArray json = new JsonParser().addFriend(Action.ADD_FRIEND.value(), email , SessionObject.getInstance().user().name(), SessionObject.getInstance().user().email());
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.POST,
-                URL,
+                MainActivity.URL,
                 json,
                 new Response.Listener<JSONArray>() {
                     @Override

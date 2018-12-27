@@ -31,7 +31,7 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String URL = "http://10.0.2.2:8080/users";
+    public static final String URL = "http://155.4.221.194:8080/users";
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static SessionObject session;
@@ -197,12 +197,12 @@ public class MainActivity extends AppCompatActivity {
         //Bitmap bitMap = null;
         if(SessionObject.getInstance().user().getProfileImage() != null){
             mImageView.setImageBitmap(SessionObject.getInstance().user().getProfileImage());
-        }else {
+        }/*else {
             RequestQueue queue = Volley.newRequestQueue(this);
             Log.d(LOG_TAG, " " + queue.toString());
             final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                     Request.Method.GET,
-                    URL + "?getProfileImg=" + SessionObject.getInstance().user().email(),
+                    URL + Action.GET_PROFILE_IMG.value() + SessionObject.getInstance().user().email(),
                     null,
                     new Response.Listener<JSONArray>() {
                         @Override
@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                     }
             );
             queue.add(jsonArrayRequest);
-        }
+        }*/
     }
 
 }
