@@ -115,7 +115,7 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS friend;");
-        db.execSQL("DROP TABLE IF EXISTS session_user;");
+        db.execSQL("DROP TABLE IF EXISTS user;");
         onCreate(db);
     }
 }
