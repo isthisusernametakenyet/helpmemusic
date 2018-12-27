@@ -26,7 +26,6 @@ import java.util.List;
 public class FriendsFragment extends ListFragment implements OnItemClickListener {
 
     private static SessionObject session;
-    private List<User> friends;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,7 +36,6 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        friends = new ArrayList<>();
         session = SessionObject.getInstance();
         getFriends();
         resetListView();
@@ -46,7 +44,7 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
 
     private void resetListView() {
         ListView listView = getListView();
-        UserAdapter userAdapter = new UserAdapter(getActivity(), friends);
+        UserAdapter userAdapter = new UserAdapter(getActivity(), session.user().friends());
         listView.setAdapter(userAdapter);
     }
 
@@ -60,9 +58,8 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray array) {
-                        friends = new JsonParser().jsonToUsers(array);
-                        session.user().setFriends(friends);
-                        Log.d("FriendsFragment: ", "friendList " + friends.toString());
+                        session.user().setFriends(new JsonParser().jsonToUsers(array));
+                        Log.d("FriendsFragment: ", "friendList " + session.user().friends());
                         resetListView();
                     }
                 },
@@ -82,9 +79,9 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
         Intent intent = new Intent(getActivity(), ShowProfileFragment.class);
         //Log.d(LOG_TAG, ": SearchBar onItemClick");
         //Log.d(LOG_TAG, ": user name " + friends.get(position).name());
-        intent.putExtra("name", friends.get(position).name());
-        intent.putExtra("image", friends.get(position).profileImage());
-        intent.putExtra("email", friends.get(position).email());
+        intent.putExtra("name", session.user().friends().get(position).name());
+        intent.putExtra("image", session.user().friends().get(position).profileImage());
+        intent.putExtra("email", session.user().friends().get(position).email());
         startActivity(intent);
 
         //resetListView();
