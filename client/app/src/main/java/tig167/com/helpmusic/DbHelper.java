@@ -73,11 +73,15 @@ public class DbHelper extends SQLiteOpenHelper {
     private void writeFriends(User user) {
         SQLiteDatabase db = this.getReadableDatabase();
         for (User friend : user.friends()) {
+            String img = "";
+            if (user.profileImage() != null) {
+                img = new Image().encode(user.profileImage());
+            }
             final String SQL_INSERT = "INSERT INTO friend (name, email, profile_img) "
                     + "VALUES( '"
                     + friend.name() + "', '"
                     + friend.email() + "', '"
-                    + new Image().encode(friend.profileImage()) + "');";
+                    + img + "');";
             db.execSQL(SQL_INSERT);
         }
         for (User f : user.friends()) {
