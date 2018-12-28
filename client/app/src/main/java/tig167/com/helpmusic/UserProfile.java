@@ -128,7 +128,12 @@ public class UserProfile extends Fragment {
 
     public void addFriend(View view){
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        JSONArray json = new JsonParser().addFriend(Action.ADD_FRIEND.value(), email , SessionObject.getInstance().user().name(), SessionObject.getInstance().user().email());
+        JSONArray json = new JsonParser().addFriend(
+                Action.ADD_FRIEND.value(),
+                email,
+                SessionObject.getInstance().user().name(),
+                SessionObject.getInstance().user().email()
+        );
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.POST,
                 URL,
@@ -138,7 +143,12 @@ public class UserProfile extends Fragment {
                     public void onResponse(JSONArray array) {
                         Context context = getActivity();
                         String str = new JsonParser().jsonToLoginResponse(array);
-                        if("ok".equalsIgnoreCase(str)){
+                        if("ok".equalsIgnoreCase(str)) {
+                            User friend = new User(
+                                    args.getString("name"),
+                                    email,
+                                    new Image().decode(args.getString("image")));
+                            SessionObject.getInstance().user().addFriend(friend);
                             CharSequence okText = "Added friend " + mTextView.getText();
                             Toast.makeText(context, okText, Toast.LENGTH_SHORT).show();
                         }else{
@@ -156,4 +166,5 @@ public class UserProfile extends Fragment {
         );
         queue.add(jsonArrayRequest);
     }
+
 }
