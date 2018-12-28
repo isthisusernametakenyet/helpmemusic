@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,11 +57,15 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void write(User user) {
         deleteOldSessionData();
+        String img = "";
+        if (user.profileImage() != null) {
+            img = new Image().encode(user.profileImage());
+        }
         final String SQL_INSERT = "INSERT INTO user (name, email, profile_img) "
                                 + "VALUES ('"
                                 + user.name() + "' , '"
                                 + user.email() + "' , '"
-                                + new Image().encode(user.profileImage()) + "');";
+                                + img + "');";
         this.getWritableDatabase().execSQL(SQL_INSERT);
         writeFriends(user);
     }
@@ -74,6 +79,9 @@ public class DbHelper extends SQLiteOpenHelper {
                     + friend.email() + "', '"
                     + new Image().encode(friend.profileImage()) + "');";
             db.execSQL(SQL_INSERT);
+        }
+        for (User f : user.friends()) {
+            System.out.println("friend: " + f.name());
         }
     }
 
@@ -103,11 +111,16 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         List<User> friends = new ArrayList<>();
         try (Cursor cursor = db.rawQuery(SQL_SELECT, null)) {
-            friends.add(new User(
-                    cursor.getString(0),
-                    cursor.getString(1),
-                    new Image().decode(cursor.getString(2))
-            ));
+            if (cursor.moveToFirst()) {
+                friends.add(new User(
+                        cursor.getString(0),
+                        cursor.getString(1),
+                        new Image().decode(cursor.getString(2))
+                ));
+            }
+        }
+        for (User f : friends) {
+            System.out.println("friend: " + f.name());
         }
         return friends;
     }
