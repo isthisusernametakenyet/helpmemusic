@@ -131,16 +131,14 @@ public class UserServlet extends HttpServlet {
             break;
             case ADD_FRIEND:
             List<User> users = parser.jsonToUsers(json);
-            if(new DbInsert().insertFriendship(users)){
+            if(new DbInsert().insertFriendship(users)) {
                 response.getWriter().println(parser.stringToJson("ok"));
             }else{
                 response.getWriter().println(parser.stringToJson("failed"));
             }
             break;
             case ADD_PROFILE_IMG:
-            //System.out.println(json.toString());
             String[] imageData = parser.parseImageData(json);
-            //System.out.println(imageData[0]);
             new DbInsert().insertImage(imageData[0], imageData[1], imageData[2]);
             break;
             default:

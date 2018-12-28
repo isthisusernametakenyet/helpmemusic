@@ -28,7 +28,7 @@ public class JsonParser {
             dataObj.put("imageFileName", pictureHash);
             dataObj.put("image", image);
             dataObj.put("email", email);
-            array.put(requestCodeObj);
+            array.put(dataObj);
         } catch (JSONException je) {
             je.printStackTrace();
         }

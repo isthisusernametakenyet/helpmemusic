@@ -66,8 +66,6 @@ public class JSONParser{
         JSONArray jsonArray = null;
         System.out.println("the json array: " + json);
         try {                  
-            //JSONTokener jsonTokener = new JSONTokener(json);
-            //JSONObject jsonObject = new JSONObject(jsonTokener);
             jsonArray = new JSONArray(json);            
         } catch (JSONException je) {                                       
             System.err.println("unable to init json array: "
@@ -81,7 +79,7 @@ public class JSONParser{
                 jsonObj.getString("name"),
                 jsonObj.getString("email"),
                 jsonObj.getString("password")
-                ));            
+                ));
             } catch (JSONException je) {
                 System.err.println("unable to parse: " + je.getMessage());
             }
@@ -127,41 +125,21 @@ public class JSONParser{
         String imageName = "";   
         String imageData = "";
         String email = "";
-        //String password = "";
 
-        JSONArray jsonArray = null;
+        JSONArray array = null;
         try {                  
-            System.err.println("  Ass wipe Henrik ");
-/*            JSONTokener jsonTokener = new JSONTokener(json);
-            JSONObject jsonObject = new JSONObject(jsonTokener);
-            jsonArray = jsonObject.getJSONArray("users");              
-            */
-            jsonArray = new JSONArray(json);  
-        } catch (JSONException je) {                                           
-            System.err.println("unable to init json array: "
-            + je.getMessage());
-        }
-        //System.err.println("  jsonArray: " + jsonArray);
-        for(int i = 0; i < jsonArray.length(); i++){
-            try{
-                System.err.println("  pincing obj");
-                JSONObject jsonObj = jsonArray.getJSONObject(i);
-                System.err.println("  pincing obj1");
-                imageName = jsonObj.getString("imageFileName");
-                System.err.println("  pincing obj2");
-                imageData = jsonObj.getString("image");
-                System.err.println("  pincing obj3");
-                email = jsonObj.getString("email");
-                //password = jsonObj.getString("password");
-            } catch(JSONException e){
-                System.out.println("faild to parse image data: " + e.getMessage());
-            }
+            array = new JSONArray(json);
+            JSONObject obj = array.getJSONObject(POST_DATA_INDEX);
+            imageName = obj.getString("imageFileName");
+            imageData = obj.getString("image");
+            email = obj.getString("email");
+        } catch(JSONException e){
+            System.out.println("faild to parse image data: " + e.getMessage());
         }
         String[] imageValue = new String[3];
         imageValue[0] = imageName;
         imageValue[1] = imageData;
         imageValue[2] = email;
-        //imageValue[3] = password;
         return imageValue;
     }
     
