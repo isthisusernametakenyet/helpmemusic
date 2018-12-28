@@ -20,9 +20,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FriendsFragment extends ListFragment implements OnItemClickListener {
 
     private static SessionObject session;

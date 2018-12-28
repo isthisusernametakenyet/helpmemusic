@@ -48,6 +48,10 @@ public class User implements Serializable {
         friends.addAll(data);
     }
 
+    public void addFriend(User friend) {
+        friends.add(friend);
+    }
+
     @Override public String toString() { return name + " " + email; }
 
 

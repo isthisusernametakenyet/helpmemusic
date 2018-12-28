@@ -26,7 +26,7 @@ public class Storage {
 
     public void load() {
         User user = database.read();
-        if (user != null) {
+        if (user != null && user.email().equals(session.user().email())) {
             session.setUser(user);
         }
     }

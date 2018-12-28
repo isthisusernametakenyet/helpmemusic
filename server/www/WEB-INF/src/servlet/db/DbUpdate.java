@@ -4,53 +4,23 @@ import java.sql.*;
 
 import servlet.model.User;
 
-public class DbUpdate{
+public class DbUpdate {
 
-    private enum Status{
-        SUCCESS(true),
-        FAILURE(false);
-
-        private boolean value;
-
-        Status(boolean b){
-            value = b;
-        }
-
-        public boolean value(){
-            return value;
-        }
-    }
-
-    public boolean updateProfileImage(int id, int imageId){
-        Status status = Status.FAILURE;
-        DbUtil database = new DbUtil();
-        Connection conn = database.connection();
-        //DbSelection selection = new DbSelection();
-        //int id = selection.readUserId(email);
-	    //int imageId = selection.profileImage(id);
-	    final String SQL_UPDATE = "UPDATE usr SET profileimage = ? WHERE \"id\" = " + id;
-        PreparedStatement pstm = null;
-        try{
-            pstm = conn.prepareStatement(SQL_UPDATE);
-        
-            pstm.setInt(1, imageId);
-            pstm.executeUpdate();
-            status = Status.SUCCESS;
-        }
-        catch(SQLException e){
+    public boolean updateProfileImage(int id, int imageId) {
+        final String SQL_UPDATE_IMG = "UPDATE usr SET profileimage = ? WHERE \"id\" = ?";
+        DbStatus status = DbStatus.FAILURE;
+        try (Connection connection = DbUtil.getInstance().connection();
+            PreparedStatement ps = connection.prepareStatement(SQL_UPDATE_IMG)) {
+            ps.setInt(1, imageId);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+            status = DbStatus.SUCCESS;
+        } catch (SQLException sqle) {
             System.err.println("unable to insert profile image data to database: " 
-                    + e.getMessage());
+                    + sqle.getMessage());
+            status = DbStatus.FAILURE;
         }
-        finally{
-            try{
-                pstm.close();
-            }
-            catch(SQLException e){
-                System.err.println("unable to insert profile image data to database: " 
-                    + e.getMessage());
-            }
-        }
-
-        return status.value();
+        return status.code();
     }
+    
 }
