@@ -147,7 +147,7 @@ public class UserProfile extends Fragment {
                             User friend = new User(
                                     args.getString("name"),
                                     email,
-                                    new Image().decode(args.getString("image")));
+                                    (Bitmap) args.get("image"));
                             SessionObject.getInstance().user().addFriend(friend);
                             CharSequence okText = "Added friend " + mTextView.getText();
                             Toast.makeText(context, okText, Toast.LENGTH_SHORT).show();
