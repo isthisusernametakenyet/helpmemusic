@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static SessionObject session;
+    private MainActivity mainActivity;
 
     private enum FragmentTab {
         NEWS("News"),
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         session = SessionObject.getInstance();
+        mainActivity = this;
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         for (FragmentTab tab : FragmentTab.values()) {
             tabLayout.addTab(tabLayout.newTab().setText(tab.text()));
@@ -91,7 +93,34 @@ public class MainActivity extends AppCompatActivity {
         mImageView = findViewById(R.id.imageView);
         profileImage();
         initSearch();
-        PictureHash p = new PictureHash("Marcus", "marcus@gmail.com");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Storage.getInstance(this).save();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Storage.getInstance(this).save();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Storage.getInstance(this).load();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 
     private void initSearch(){
@@ -182,8 +211,8 @@ public class MainActivity extends AppCompatActivity {
 
     String mCurrentPhotoPath;
 
-    private File createImageFile() throws IOException {
-        PictureHash ph = new PictureHash("Marcus", "marcus@gmail.com");
+    private File createImageFile() throws IOException { // never used
+        PictureHash ph = new PictureHash(session.user().name(), session.user().email());
         String fileName = "JPEG_" + ph.hash();
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(fileName, ".jpg", storageDir);
@@ -193,8 +222,9 @@ public class MainActivity extends AppCompatActivity {
 
     private String imageData;
 
-    public void profileImage(){
+    public void profileImage() {
         //Bitmap bitMap = null;
+
         if(SessionObject.getInstance().user().getProfileImage() != null){
             mImageView.setImageBitmap(SessionObject.getInstance().user().getProfileImage());
         }/*else {
@@ -216,17 +246,31 @@ public class MainActivity extends AppCompatActivity {
                             //Log.d(LOG_TAG, ": Setting the bitmap " + bitMap.toString());
                             mImageView.setImageBitmap(bitMap);
 
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
-                        }
-                    }
+        RequestQueue queue = Volley.newRequestQueue(this);
+        Log.d(LOG_TAG, " " + queue.toString());
+        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                URL + "?getProfileImg=" + session.user().email(),
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray array) {
+                        Log.d(LOG_TAG, " :" + array.toString());
+                        imageData = new JsonParser().parseImage(array);
+                        Log.d(LOG_TAG, ": before decoding " + imageData);
+                        Bitmap bitMap = null;
+                        bitMap = imageData != null ? new Image().decode(imageData) : null;
+                        Log.d(LOG_TAG, ": after decoding");
+                        //Log.d(LOG_TAG, ": Setting the bitmap " + bitMap.toString());
+                        mImageView.setImageBitmap(bitMap);
+
             );
             queue.add(jsonArrayRequest);
         }*/
-    }
 
+    }
 }
+
+
+
+

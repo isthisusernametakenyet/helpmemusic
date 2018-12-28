@@ -22,4 +22,6 @@ public class SessionObject {
         this.user = new User(name, email);
     }
 
+    public void setUser(User user) { this.user = user; }
+
 }

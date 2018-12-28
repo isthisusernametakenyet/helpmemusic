@@ -55,10 +55,9 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray array) {
                         String str = new JsonParser().jsonToLoginResponse(array);
-                        if ("ok".equalsIgnoreCase(str)) { // get username here instead of ok
-                                                          // remove getUserName()
-                            Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_SHORT).show();
+                        if ("ok".equalsIgnoreCase(str)) {
 
+                            Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_SHORT).show();
                             getUserName();
                         }else{
                             Toast.makeText(getApplicationContext(), "You entered the wrong password or email address", Toast.LENGTH_SHORT).show();

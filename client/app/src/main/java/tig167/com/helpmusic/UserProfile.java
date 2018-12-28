@@ -25,8 +25,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 
-//import android.support.v4.app.FragmentActivity;
-
 public class UserProfile extends Fragment {
 
     private String email;
@@ -99,18 +97,21 @@ public class UserProfile extends Fragment {
         mBitMap = view.findViewById(R.id.usrFragmentProfileImage);
         //Log.d(LOG_TAG, ": " + args.toString());
         if(args == null) {
-            if (SessionObject.getInstance().user().getProfileImage() != null) {
-                drawable = RoundedBitmapDrawableFactory.create( res, SessionObject.getInstance().user().getProfileImage());
+            if (SessionObject.getInstance().user().profileImage() != null) {
+                drawable = RoundedBitmapDrawableFactory.create( res, SessionObject.getInstance().user().profileImage());
 
                 drawable.setCornerRadius(cornerRadius);
 
                 mBitMap.setImageDrawable(drawable);
                 //mBitMap.setImageBitmap(SessionObject.getInstance().user().getProfileImage());
-                Log.d(LOG_TAG, ": bitmap " + SessionObject.getInstance().user().getProfileImage().toString());
+                Log.d(LOG_TAG, ": bitmap " + SessionObject.getInstance().user().profileImage().toString());
             }
             mTextView.setText(SessionObject.getInstance().user().name());
         }else{
 
+
+        mBitMap.setImageBitmap(SessionObject.getInstance().user().profileImage());
+        mTextView.setText(SessionObject.getInstance().user().name());
 
             String name = args.getString("name");
             mTextView.setText(name);

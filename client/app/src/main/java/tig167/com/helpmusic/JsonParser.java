@@ -23,11 +23,11 @@ public class JsonParser {
         try {
             JSONObject requestCodeObj = new JSONObject();
             requestCodeObj.put("requestCode", requestCode);
-            //array.put(requestCodeObj);
-            //JSONObject dataObj = new JSONObject();
-            requestCodeObj.put("imageFileName", pictureHash);
-            requestCodeObj.put("image", image);
-            requestCodeObj.put("email", email);
+            array.put(requestCodeObj);
+            JSONObject dataObj = new JSONObject();
+            dataObj.put("imageFileName", pictureHash);
+            dataObj.put("image", image);
+            dataObj.put("email", email);
             array.put(requestCodeObj);
         } catch (JSONException je) {
             je.printStackTrace();
