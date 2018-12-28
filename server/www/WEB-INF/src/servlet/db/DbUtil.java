@@ -4,6 +4,7 @@ import java.sql.*;
 
 public class DbUtil {
      
+    private static DbUtil instance;
     private static final String PATH = "db_access_data";
     private static final DbAccessData DATA;
     private Connection connection;
@@ -17,21 +18,18 @@ public class DbUtil {
         }
     }
 
-    public DbUtil() {
-        try {
-            connection = DriverManager.getConnection(
-                    DATA.dbUrl(),
-                    DATA.dbUser(),
-                    DATA.dbPasswd()
-            );
-	} catch (SQLException sqle) {
-            System.err.println("no connection to database " 
-				+ sqle.getMessage());
-	}
+    public static DbUtil getInstance() {
+        if (instance == null) {
+            instance = new DbUtil();
+        }
+        return instance;
     }
 
-    public Connection connection() {
-        return connection;
+    public Connection connection() throws SQLException {
+        return DriverManager.getConnection(
+                    DATA.dbUrl(),
+                    DATA.dbUser(),
+                    DATA.dbPasswd());
     }
 
     public void disconnect() {
@@ -40,11 +38,6 @@ public class DbUtil {
 	} catch (SQLException sqle) {
             System.err.println("connection not closed " + sqle.getMessage());
 	}
-    }
-
-    public ResultSet query(String sql) throws SQLException {
-        Statement statement = connection.createStatement();
-        return statement.executeQuery(sql);
     }
 
     public static String createFriendTableName(String email) {

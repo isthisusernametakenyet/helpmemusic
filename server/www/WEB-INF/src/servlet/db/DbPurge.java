@@ -6,31 +6,21 @@ import servlet.model.User;
 
 public class DbPurge {
 
-	public void deleteUser(String mail) {
-		final String SQL_DELETE = "DELETE FROM usr "
-					+ "WHERE email = '" 
-					+ email 
-					+ "'";
-		DbUtil database = new DbUtil();
-		Connection connection = database.connection();
-		Statement statement = null;
-		try {
-			statement = connection.createStatement();
-			statement.executeUpdate(SQL_DELETE);
-		} catch (SQLException sqle) {
-			System.err.println("unable to delete from database " 
+    public boolean deleteUser(String mail) {
+        ExitStatus status = ExitStatus.FAILURE;
+        final String SQL_DELETE_USER = "DELETE FROM usr "
+					+ "WHERE email = ?";
+        try (Connection connection = DbUtil.getInstance().connection();
+            PreparedStatement ps = connection.prepareStatement(SQL_DELETE_USER)) {
+            ps.setString(1, email);
+            ps.executeUpdate(SQL_DELETE_USER);
+            status = ExitStatus.SUCCESS;
+        } catch (SQLException sqle) {
+            System.err.println("unable to delete user from database: " 
 					+ sqle.getMessage());
-			System.exit(1);
-		} finally {
-			try {
-				statement.close();
-			} catch (SQLException sqle) {
-				System.err.println("unable to close statement " 
-						+ sqle.getMessage());
-				System.exit(1);
-			}
-			database.closeConnection();
-		}
+            status = ExitStatus.FAILURE;
 	}
+        return status.code()
+    }
 
 }
