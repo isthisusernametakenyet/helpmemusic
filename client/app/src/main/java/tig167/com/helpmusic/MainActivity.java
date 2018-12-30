@@ -31,7 +31,7 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String URL = "http://155.4.221.194:8080/users";
+    public static final String URL = "http://192.168.1.41:8080/users";
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static SessionObject session;
@@ -225,8 +225,8 @@ public class MainActivity extends AppCompatActivity {
     public void profileImage() {
         //Bitmap bitMap = null;
 
-        if(SessionObject.getInstance().user().getProfileImage() != null){
-            mImageView.setImageBitmap(SessionObject.getInstance().user().getProfileImage());
+        if(SessionObject.getInstance().user().profileImage() != null){
+            mImageView.setImageBitmap(SessionObject.getInstance().user().profileImage());
         }/*else {
             RequestQueue queue = Volley.newRequestQueue(this);
             Log.d(LOG_TAG, " " + queue.toString());
