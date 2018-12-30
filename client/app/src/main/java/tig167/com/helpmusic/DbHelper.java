@@ -9,7 +9,7 @@ import android.graphics.Bitmap;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DbHelper extends SQLiteOpenHelper implements Storage {
+public class DbHelper extends SQLiteOpenHelper implements Storage<User> {
 
     private static final String DATABASE_NAME = "session_user_db";
     private static final int DATABASE_VERSION = 1;

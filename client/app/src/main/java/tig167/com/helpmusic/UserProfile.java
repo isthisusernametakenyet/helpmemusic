@@ -32,6 +32,7 @@ public class UserProfile extends Fragment {
 
     private static final String LOG_TAG = UserProfile.class.getSimpleName();
     private static SessionObject session = SessionObject.getInstance();
+    private static DbHelper userDao;
 
     private Bundle args;
     private User user;
@@ -40,7 +41,7 @@ public class UserProfile extends Fragment {
     TextView mTextView;
     ImageView mBitMap;
 
-    public static UserProfile newInstance(Bundle args){
+    public static UserProfile newInstance(Bundle args) {
         UserProfile u = new UserProfile();
 
         u.setArguments(args);
@@ -51,6 +52,8 @@ public class UserProfile extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        userDao = DbHelper.getInstance(getContext());
 
         View view;
         args = getArguments();
@@ -137,7 +140,7 @@ public class UserProfile extends Fragment {
                         String str = new JsonParser().jsonToLoginResponse(array);
                         if ("ok".equalsIgnoreCase(str)) {
                             session.user().addFriend(user);
-                            DbHelper.getInstance(getContext()).saveFriend(user);
+                            userDao.saveFriend(user);
                             CharSequence okText = "Added friend " + mTextView.getText();
                             Toast.makeText(context, okText, Toast.LENGTH_SHORT).show();
                         } else {

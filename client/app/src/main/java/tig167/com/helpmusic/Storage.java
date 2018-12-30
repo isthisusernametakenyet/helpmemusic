@@ -1,11 +1,11 @@
 package tig167.com.helpmusic;
 
-public interface Storage {
+public interface Storage<T> {
 
-    void saveSession(User user);
+    void saveSession(T t);
 
-    void saveFriend(User friend);
+    void saveFriend(T t);
 
-    User loadSession();
+    T loadSession();
 
 }
