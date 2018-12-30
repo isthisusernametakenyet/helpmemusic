@@ -140,7 +140,7 @@ public class UserProfile extends Fragment {
                         String str = new JsonParser().jsonToLoginResponse(array);
                         if ("ok".equalsIgnoreCase(str)) {
                             session.user().addFriend(user);
-                            userDao.saveFriend(user);
+                            userDao.save(user);
                             CharSequence okText = "Added friend " + mTextView.getText();
                             Toast.makeText(context, okText, Toast.LENGTH_SHORT).show();
                         } else {

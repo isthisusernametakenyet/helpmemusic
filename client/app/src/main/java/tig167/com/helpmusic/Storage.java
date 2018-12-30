@@ -4,7 +4,7 @@ public interface Storage<T> {
 
     void saveSession(T t);
 
-    void saveFriend(T t);
+    void save(T t);
 
     T loadSession();
 

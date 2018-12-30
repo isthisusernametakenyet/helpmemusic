@@ -38,7 +38,7 @@ public class DbHelper extends SQLiteOpenHelper implements Storage<User> {
     }
 
     @Override
-    public void saveFriend(User friend) {
+    public void save(User friend) {
         System.out.println("save friend");
         writeFriend(friend);
     }
