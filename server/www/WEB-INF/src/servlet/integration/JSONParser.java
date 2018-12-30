@@ -62,18 +62,12 @@ public class JSONParser{
         return array;
     }
     
-    public List<User> jsonToUsers(String json) {                            
+    public List<User> jsonToUsers(String json) {
         JSONArray jsonArray = null;
-        System.out.println("the json array: " + json);
-        try {                  
-            jsonArray = new JSONArray(json);            
-        } catch (JSONException je) {                                       
-            System.err.println("unable to init json array: "
-            + je.getMessage());
-        }
         List<User> users = new ArrayList<User>();
         for (int i = 1; i < jsonArray.length(); i++) {
             try {
+                jsonArray = new JSONArray(json);
                 JSONObject jsonObj = jsonArray.getJSONObject(i);
                 users.add(new User(
                 jsonObj.getString("name"),
@@ -85,6 +79,23 @@ public class JSONParser{
             }
         }
         return users;
+    }
+
+    public String[] jsonToIdentifiers(String json) {
+        String email = "";
+        String fEmail = "";
+        try {
+            JSONArray array = new JSONArray(json);
+            JSONObject obj = array.getJSONObject(POST_DATA_INDEX);
+            email = obj.getString("email");
+            fEmail = obj.getString("fEmail");
+        } catch (JSONException je) {
+            System.err.println("unable to parse: " + je.getMessage());
+        }
+        String[] identifiers = new String[2];
+        identifiers[0] = email;
+        identifiers[1] = fEmail;
+        return identifiers;
     }
     
     public User jsonToUser(String json) {
@@ -125,7 +136,6 @@ public class JSONParser{
         String imageName = "";   
         String imageData = "";
         String email = "";
-
         JSONArray array = null;
         try {                  
             array = new JSONArray(json);

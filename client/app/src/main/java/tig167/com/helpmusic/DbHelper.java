@@ -9,9 +9,9 @@ import android.graphics.Bitmap;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DbHelper extends SQLiteOpenHelper {
+public class DbHelper extends SQLiteOpenHelper implements Storage {
 
-    private static final String DATABASE_NAME = "client_session";
+    private static final String DATABASE_NAME = "session_user_db";
     private static final int DATABASE_VERSION = 1;
     private static DbHelper instance;
 
@@ -29,6 +29,24 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         createUserTable(db);
+    }
+
+    @Override
+    public void saveSession(User user) {
+        System.out.println("save session");
+        writeSession(user);
+    }
+
+    @Override
+    public void saveFriend(User friend) {
+        System.out.println("save friend");
+        writeFriend(friend);
+    }
+
+    @Override
+    public User loadSession() {
+        System.out.println("load session");
+        return readUserData();
     }
 
     private void createUserTable(SQLiteDatabase db) {
@@ -55,7 +73,7 @@ public class DbHelper extends SQLiteOpenHelper {
         this.getWritableDatabase().execSQL("DELETE FROM friend WHERE id > 0;");
     }
 
-    public void write(User user) {
+    public void writeSession(User user) {
         deleteOldSessionData();
         String img = "";
         if (user.profileImage() != null) {
@@ -71,25 +89,27 @@ public class DbHelper extends SQLiteOpenHelper {
     }
 
     private void writeFriends(User user) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        this.getWritableDatabase().execSQL("DELETE FROM friend WHERE id > 0;");
         for (User friend : user.friends()) {
-            String img = "";
-            if (user.profileImage() != null) {
-                img = new Image().encode(user.profileImage());
-            }
-            final String SQL_INSERT = "INSERT INTO friend (name, email, profile_img) "
-                    + "VALUES( '"
-                    + friend.name() + "', '"
-                    + friend.email() + "', '"
-                    + img + "');";
-            db.execSQL(SQL_INSERT);
-        }
-        for (User f : user.friends()) {
-            System.out.println("friend: " + f.name());
+            writeFriend(friend);
         }
     }
 
-    public User read() {
+    public void writeFriend(User friend) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String img = "";
+        if (friend.profileImage() != null) {
+            img = new Image().encode(friend.profileImage());
+        }
+        final String SQL_INSERT = "INSERT INTO friend (name, email, profile_img) "
+                + "VALUES( '"
+                + friend.name() + "', '"
+                + friend.email() + "', '"
+                + img + "');";
+        db.execSQL(SQL_INSERT);
+    }
+
+    public User readUserData() {
         final String SQL_SELECT = "SELECT name, email, profile_img "
                                 + "FROM user;";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -104,7 +124,9 @@ public class DbHelper extends SQLiteOpenHelper {
             }
         }
         if (user != null) {
-            user.setFriends(readFriends());
+            for (User friend : readFriends()) {
+                user.addFriend(friend);
+            }
         }
         return user;
     }
@@ -122,9 +144,6 @@ public class DbHelper extends SQLiteOpenHelper {
                         new Image().decode(cursor.getString(2))
                 ));
             }
-        }
-        for (User f : friends) {
-            System.out.println("friend: " + f.name());
         }
         return friends;
     }

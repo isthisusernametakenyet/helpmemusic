@@ -68,24 +68,20 @@ public class JsonParser {
         return array;
     }
 
-    public JSONArray addFriend(String requestCode, String friendEmail,String thisName, String thisEmail){
+        public JSONArray friendshipToJson(
+            String requestCode,
+            String email,
+            String fEmail) {
         JSONArray arr = new JSONArray();
-
         try{
             JSONObject requestCodeObj = new JSONObject();
-            JSONObject friendEmailObj = new JSONObject();
-            JSONObject thisEmailObj = new JSONObject();
+            JSONObject dataObj = new JSONObject();
             requestCodeObj.put("requestCode", requestCode);
             arr.put(requestCodeObj);
-            friendEmailObj.put("name", "");
-            friendEmailObj.put("email", friendEmail);
-            friendEmailObj.put("password", "");
-            arr.put(friendEmailObj);
-            thisEmailObj.put("name", thisName);
-            thisEmailObj.put("email", thisEmail);
-            thisEmailObj.put("password", "");
-            arr.put(thisEmailObj);
-        }catch(JSONException e){
+            dataObj.put("email", email);
+            dataObj.put("fEmail", fEmail);
+            arr.put(dataObj);
+        } catch (JSONException e){
             e.getMessage();
         }
         return arr;

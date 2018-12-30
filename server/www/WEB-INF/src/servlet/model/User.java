@@ -11,54 +11,55 @@ public class User {
 	private int id;
 
 	public User(
-			String name,
-			String email,
-            String password) {
-		this.name = name;
-		this.email = email;
-		this.password = password;
+                String name,
+                String email,
+                String password) {
+            this.name = name;
+            this.email = email;
+            this.password = password;
 	}
-	//Added id to the user.
-	public User(String name,
-				String email,
-				String password,
-				int id){
-			this(name, email, password);
-			this.id = id;
+	public User(
+                String name,
+                String email,
+                String password,
+                int id) {
+            this(name, email, password);
+            this.id = id;
 	}
 	
-	public User(String name,
-				String email,
-				String password,
-				int id,
-				String image){
-		this(name, email, password, id);
-		this.image = image;
+	public User(
+                String name,
+                String email,
+                String password,
+                int id,
+                String image) {
+            this(name, email, password, id);
+            this.image = image;
 	}
 
 	public String name() {
-		return name;
+            return name;
 	}
 
 	public String password() {
-		return password;
+            return password;
 	}
 
 	public String email() {
-		return email;
+            return email;
 	}
 
-	public int id(){
-		return id;
+	public int id() {
+            return id;
 	}
 
-	public String image(){
-		return image;
+	public String image() {
+            return image;
 	}
 
 	@Override
 	public String toString() {
-		return name + " ][ " + email + " ][ " + password;
+            return name + " ][ " + email + " ][ " + password;
 	}
 
 }

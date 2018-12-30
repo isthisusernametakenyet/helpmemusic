@@ -25,7 +25,8 @@ public class DbSelection {
                 }
             }
         } catch (SQLException sqle) {
-            System.err.println("unable to read user-id from database: " + sqle.getMessage());
+            System.err.println("unable to read user-id from database: " 
+                    + sqle.getMessage());
         }
         return id;
     }
