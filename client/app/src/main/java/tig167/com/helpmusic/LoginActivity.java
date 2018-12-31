@@ -20,7 +20,7 @@ import org.json.JSONArray;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = ShowProfileFragment.class.getSimpleName();
+    private static final String LOG_TAG = LoginActivity.class.getSimpleName();
 
     private static SessionObject session;
     private String identifier;
@@ -131,15 +131,17 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(JSONArray array) {
                         for (User friend : new JsonParser().jsonToUsers(array)) {
                             session.user().addFriend(friend);
+                            Log.d(LOG_TAG, friend.name() + " added from server db");
                         }
-                        Log.d(LOG_TAG, "friends: \n" + session.user().friends());
+                        DbHelper.getInstance(getApplicationContext()).saveSession(session.user());
+                        Log.d(LOG_TAG, " friends: \n" + session.user().friends());
                         nextActivity();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d(LOG_TAG, "getFriends " + error.getCause().getMessage());
+                        Log.d(LOG_TAG, " getFriends error " + error.getCause().getMessage());
                     }
                 }
         );
@@ -148,6 +150,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void nextActivity() {
         Intent intent = new Intent(this, MainActivity.class);
+        Log.d(LOG_TAG, " intent: start main activity");
         startActivity(intent);
     }
 

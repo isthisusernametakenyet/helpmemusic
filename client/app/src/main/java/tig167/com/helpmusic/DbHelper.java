@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 public class DbHelper extends SQLiteOpenHelper implements Storage<User> {
 
     private static final String DATABASE_NAME = "session_user_db";
+    private static final String LOG_TAG = DbHelper.class.getSimpleName();
     private static final int DATABASE_VERSION = 1;
     private static DbHelper instance;
 
@@ -33,19 +35,16 @@ public class DbHelper extends SQLiteOpenHelper implements Storage<User> {
 
     @Override
     public void saveSession(User user) {
-        System.out.println("save session");
         writeSession(user);
     }
 
     @Override
     public void save(User friend) {
-        System.out.println("save friend");
         writeFriend(friend);
     }
 
     @Override
     public User loadSession() {
-        System.out.println("load session");
         return readUserData();
     }
 
@@ -95,7 +94,7 @@ public class DbHelper extends SQLiteOpenHelper implements Storage<User> {
         }
     }
 
-    public void writeFriend(User friend) {
+    private void writeFriend(User friend) {
         SQLiteDatabase db = this.getReadableDatabase();
         String img = "";
         if (friend.profileImage() != null) {
@@ -109,7 +108,7 @@ public class DbHelper extends SQLiteOpenHelper implements Storage<User> {
         db.execSQL(SQL_INSERT);
     }
 
-    public User readUserData() {
+    private User readUserData() {
         final String SQL_SELECT = "SELECT name, email, profile_img "
                                 + "FROM user;";
         SQLiteDatabase db = this.getReadableDatabase();
@@ -123,9 +122,11 @@ public class DbHelper extends SQLiteOpenHelper implements Storage<User> {
                 );
             }
         }
+        Log.d(LOG_TAG," read user data\nload friends from storage:");
         if (user != null) {
             for (User friend : readFriends()) {
                 user.addFriend(friend);
+                Log.d(LOG_TAG, friend.name());
             }
         }
         return user;

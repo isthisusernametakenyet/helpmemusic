@@ -1,13 +1,14 @@
 package tig167.com.helpmusic;
 
 import android.graphics.Bitmap;
+import android.os.Parcelable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class User implements Serializable {
+public class User {
 
     private String name;
     private String email;

@@ -20,6 +20,7 @@ import org.json.JSONArray;
 
 public class SignUp extends AppCompatActivity {
 
+    private static final String LOG_TAG = SignUp.class.getSimpleName();
     private static SessionObject session;
     private String name;
     private String email;
@@ -59,6 +60,8 @@ public class SignUp extends AppCompatActivity {
                         String str = new JsonParser().jsonToSignupResponse(array);
                         if ("ok".equalsIgnoreCase(str)) {
                             session.setUser(name, email);
+                            DbHelper.getInstance(getApplicationContext())
+                                    .saveSession(session.user());
                             nextActivity();
                         }
                     }
@@ -66,7 +69,7 @@ public class SignUp extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("error: addUser ", error.getCause().getMessage());
+                        Log.d(LOG_TAG, " error addUser " + error.getCause().getMessage());
                     }
                 }
         );
@@ -75,6 +78,7 @@ public class SignUp extends AppCompatActivity {
 
     private void nextActivity() {
         Intent intent = new Intent(this, MainActivity.class);
+        Log.d(LOG_TAG, " intent: start main activity");
         startActivity(intent);
     }
 

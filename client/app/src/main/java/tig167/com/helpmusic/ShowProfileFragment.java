@@ -40,7 +40,6 @@ public class ShowProfileFragment extends FragmentActivity {
 
         Bundle args = getIntent().getExtras();
 
-
         UserProfile userProfile = UserProfile.newInstance(args);
         Log.d(LOG_TAG, ": Create UserProfile");
 

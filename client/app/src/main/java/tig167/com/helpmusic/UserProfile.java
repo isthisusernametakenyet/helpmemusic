@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.util.Log;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +30,7 @@ public class UserProfile extends Fragment {
 
     private static final String LOG_TAG = UserProfile.class.getSimpleName();
     private static SessionObject session = SessionObject.getInstance();
-    private static DbHelper userDao;
+    private static DbHelper storage;
 
     private Bundle args;
     private User user;
@@ -50,10 +48,10 @@ public class UserProfile extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        userDao = DbHelper.getInstance(getContext());
+        storage = DbHelper.getInstance(getContext());
 
         View view;
         args = getArguments();
@@ -89,7 +87,7 @@ public class UserProfile extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         float cornerRadius = 7f;
@@ -103,7 +101,7 @@ public class UserProfile extends Fragment {
         //Log.d(LOG_TAG, ": " + args.toString());
         if (args == null) {
             if (session.user().profileImage() != null) {
-                drawable = RoundedBitmapDrawableFactory.create( res, session.user().profileImage());
+                drawable = RoundedBitmapDrawableFactory.create(res, session.user().profileImage());
 
                 drawable.setCornerRadius(cornerRadius);
 
@@ -140,7 +138,7 @@ public class UserProfile extends Fragment {
                         String str = new JsonParser().jsonToLoginResponse(array);
                         if ("ok".equalsIgnoreCase(str)) {
                             session.user().addFriend(user);
-                            userDao.save(user);
+                            storage.save(user);
                             CharSequence okText = "Added friend " + mTextView.getText();
                             Toast.makeText(context, okText, Toast.LENGTH_SHORT).show();
                         } else {

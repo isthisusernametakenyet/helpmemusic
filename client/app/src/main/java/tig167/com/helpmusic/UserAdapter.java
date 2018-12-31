@@ -23,6 +23,11 @@ public class UserAdapter extends ArrayAdapter<User> {
         friendList = list;
     }
 
+    @Override
+    public int getCount() {
+        return friendList.size();
+    }
+
     @NonNull
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -35,7 +40,7 @@ public class UserAdapter extends ArrayAdapter<User> {
         ImageView imageView = listItem.findViewById(R.id.imageView);
 
         imageView.setImageBitmap(friend.profileImage());
-        if(friend.profileImage() != null) {
+        if (friend.profileImage() != null) {
             imageView.setImageBitmap(friend.profileImage());
         }
         TextView name = listItem.findViewById(R.id.textView_name);

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -62,11 +63,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         session = SessionObject.getInstance();
-        mainActivity = this;
         storage = DbHelper.getInstance(this);
+        mainActivity = this;
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         for (FragmentTab tab : FragmentTab.values()) {
             tabLayout.addTab(tabLayout.newTab().setText(tab.text()));
+            Log.d(LOG_TAG, " adding tab: " + tab.text());
         }
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         final ViewPager viewPager = findViewById(R.id.view_pager);
@@ -79,16 +81,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                Log.d(LOG_TAG, " current tab: " + tab.getText());
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                Log.d(LOG_TAG, " previous tab: " + tab.getText());
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                Log.d(LOG_TAG, " revisit tab: " + tab.getText());
             }
         });
 
@@ -97,46 +100,51 @@ public class MainActivity extends AppCompatActivity {
         initSearch();
     }
 
+    private void getSession() {
+        if (null == session.user()) {
+            session.setUser(storage.loadSession());
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-        System.out.println("start app:");
-        storage.saveSession(session.user());
-        System.out.println("session saved");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        System.out.println("pause app:");
-        storage.saveSession(session.user());
-        System.out.println("session saved");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        System.out.println("destroy app:");
-        storage.saveSession(session.user());
-        System.out.println("session saved");
+        getSession();
+        Log.d(LOG_TAG, " start app");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        System.out.println("resume app:");
-        User user = storage.loadSession();
-        System.out.println("session loaded");
-        if (user != null) {
-            System.out.println("setting user... ");
-            session.setUser(user);
-            System.out.println("session data restored");
-        }
+        getSession();
+        Log.d(LOG_TAG, " resume app");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        storage.saveSession(session.user());
+        Log.d(LOG_TAG, " pause app");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        storage.saveSession(session.user());
+        Log.d(LOG_TAG, " destroy app");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        storage.saveSession(session.user());
+        Log.d(LOG_TAG, " stop app");
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
+        Log.d(LOG_TAG, " start app");
 
     }
 
@@ -145,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
     }
 
-    private void initSearch(){
+    private void initSearch() {
         SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = findViewById(R.id.search_bar);
 
@@ -156,22 +164,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onSearchRequested() {
+        Log.d(LOG_TAG, " request search");
         return super.onSearchRequested();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void cameraClick(View view) {
@@ -213,13 +207,13 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray array) {
-
+                        Log.d("addProfileImage response: ", array.toString().substring(0, 20) + "...");
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("error: addProfileImg ", error.getCause().getMessage());
+                        Log.d("error: addProfileImage ", error.getCause().getMessage());
                     }
                 }
         );
@@ -228,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
 
     String mCurrentPhotoPath;
 
-    private File createImageFile() throws IOException { // never used
+    private File createImageFile() throws IOException {
         PictureHash ph = new PictureHash(session.user().name(), session.user().email());
         String fileName = "JPEG_" + ph.hash();
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
