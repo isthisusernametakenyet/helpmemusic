@@ -144,13 +144,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        Log.d(LOG_TAG, " start app");
+        Log.d(LOG_TAG, " save instance state");
 
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+        Log.d(LOG_TAG, " restore instance state");
     }
 
     private void initSearch() {
