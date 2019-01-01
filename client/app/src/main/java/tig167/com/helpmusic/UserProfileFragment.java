@@ -26,9 +26,9 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 
-public class UserProfile extends Fragment {
+public class UserProfileFragment extends Fragment {
 
-    private static final String LOG_TAG = UserProfile.class.getSimpleName();
+    private static final String LOG_TAG = UserProfileFragment.class.getSimpleName();
     private static SessionObject session = SessionObject.getInstance();
     private static DbHelper storage;
 
@@ -39,8 +39,8 @@ public class UserProfile extends Fragment {
     TextView mTextView;
     ImageView mBitMap;
 
-    public static UserProfile newInstance(Bundle args) {
-        UserProfile u = new UserProfile();
+    public static UserProfileFragment newInstance(Bundle args) {
+        UserProfileFragment u = new UserProfileFragment();
 
         u.setArguments(args);
 

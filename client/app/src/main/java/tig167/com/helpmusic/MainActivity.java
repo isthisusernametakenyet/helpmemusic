@@ -8,12 +8,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -36,26 +33,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static SessionObject session;
-    private MainActivity mainActivity;
     private static DbHelper storage;
 
-    private enum FragmentTab {
-        NEWS("News"),
-        FRIENDS("Friends"),
-        PROFILE("Profile"),
-        MUSIC("Music");
+    private MainActivity mainActivity;
 
-        private final String text;
-
-        FragmentTab(String str) {
-            text = str;
-        }
-
-        public String text() {
-            return text;
-        }
-    }
-
+    private TabLayout tabLayout;
     private ImageView mImageView;
 
     @Override
@@ -65,39 +47,36 @@ public class MainActivity extends AppCompatActivity {
         session = SessionObject.getInstance();
         storage = DbHelper.getInstance(this);
         mainActivity = this;
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
-        for (FragmentTab tab : FragmentTab.values()) {
-            tabLayout.addTab(tabLayout.newTab().setText(tab.text()));
-            Log.d(LOG_TAG, " adding tab: " + tab.text());
-        }
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        final ViewPager viewPager = findViewById(R.id.view_pager);
-        final PagerAdapter adapter = new PagerAdapter
-                (getSupportFragmentManager(), tabLayout.getTabCount());
-        viewPager.setAdapter(adapter);
+        final PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        this.tabLayout = PagerAdapter.createTabLayout(findViewById(R.id.tab_layout));
+        ViewPager viewPager = findViewById(R.id.view_pager);
+        viewPager.setAdapter(pagerAdapter);
+        addTabListeners(viewPager);
+        mImageView = findViewById(R.id.imageView);
+        profileImage();
+        initSearch();
+    }
+
+    private void addTabListeners(final ViewPager viewPager) {
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
-                Log.d(LOG_TAG, " current tab: " + tab.getText());
+                Log.d(LOG_TAG, "Current tab: " + tab.getText());
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-                Log.d(LOG_TAG, " previous tab: " + tab.getText());
+                Log.d(LOG_TAG, "Previous tab: " + tab.getText());
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                Log.d(LOG_TAG, " revisit tab: " + tab.getText());
+                Log.d(LOG_TAG, "Revisit tab: " + tab.getText());
             }
         });
-
-        mImageView = findViewById(R.id.imageView);
-        profileImage();
-        initSearch();
     }
 
     private void getSession() {

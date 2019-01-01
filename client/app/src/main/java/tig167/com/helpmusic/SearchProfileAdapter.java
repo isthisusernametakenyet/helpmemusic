@@ -11,7 +11,7 @@ public class SearchProfileAdapter extends FragmentStatePagerAdapter {
     }
 
     public Fragment getItem(int pos){
-        return new UserProfile();
+        return new UserProfileFragment();
     }
 
     public int getCount(){

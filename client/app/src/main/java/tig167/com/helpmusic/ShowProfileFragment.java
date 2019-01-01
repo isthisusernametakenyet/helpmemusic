@@ -40,8 +40,8 @@ public class ShowProfileFragment extends FragmentActivity {
 
         Bundle args = getIntent().getExtras();
 
-        UserProfile userProfile = UserProfile.newInstance(args);
-        Log.d(LOG_TAG, ": Create UserProfile");
+        UserProfileFragment userProfile = UserProfileFragment.newInstance(args);
+        Log.d(LOG_TAG, ": Create UserProfileFragment");
 
         ft.add(mViewPager.getId(), userProfile);
         Log.d(LOG_TAG, ": commit FragmentManager and FragmentTransaction");
