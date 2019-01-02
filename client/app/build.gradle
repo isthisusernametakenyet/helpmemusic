@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "tig167.com.helpmusic"
+        applicationId "com.tig167.helpmusic"
         minSdkVersion 26
         targetSdkVersion 27
         versionCode 1

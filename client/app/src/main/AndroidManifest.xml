@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:http="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    package="tig167.com.helpmusic">
+    package="com.tig167.helpmusic">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -20,7 +20,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="tig167.com.helpmusic.fileprovider"
+            android:authorities="com.tig167.helpmusic.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -29,7 +29,7 @@
         </provider>
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".main_app.ui.LoginActivity"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,17 +40,17 @@
 
         </activity>
         <activity
-            android:name=".SignUp"
+            android:name=".main_app.ui.SignUp"
             android:windowSoftInputMode="adjustPan"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".main_app.ui.MainActivity"
             android:windowSoftInputMode="adjustPan">
 
             <meta-data android:name="android.app.default_searchable"
                 android:value=".SearchBar" />
         </activity>
 
-        <activity android:name=".SearchBar"
+        <activity android:name=".main_app.ui.SearchBar"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTop">
             <intent-filter>
@@ -62,7 +62,7 @@
                 android:resource="@xml/searchable" />
         </activity>
 
-        <activity android:name=".ShowProfileFragment"
+        <activity android:name=".main_app.ui.fragment.ShowProfileFragment"
                   android:windowSoftInputMode="adjustPan">
 
             <meta-data android:name="android.app.default_searchable"

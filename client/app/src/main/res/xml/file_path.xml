@@ -2,5 +2,5 @@
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
     <external-path
         name="images"
-        path="Android/data/tig167.com.helpmusic/files/Pictures"></external-path>
+        path="Android/data/com.tig167.helpmusic/files/Pictures"></external-path>
 </paths>
