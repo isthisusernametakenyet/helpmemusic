@@ -10,14 +10,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.tig167.helpmusic.data.remote.JsonParser;
 import com.tig167.helpmusic.R;
+import com.tig167.helpmusic.data.remote.VolleyResultCallback;
+import com.tig167.helpmusic.data.remote.VolleyService;
 import com.tig167.helpmusic.main_app.model.User;
 import com.tig167.helpmusic.main_app.ui.fragment.ShowProfileFragment;
 import com.tig167.helpmusic.main_app.ui.fragment.UserAdapter;
@@ -33,6 +30,7 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
     SearchView mSearchBar;
     ListView mListView;
     private List<User> users;
+    private VolleyService volleyService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,38 +42,32 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
         Intent intent = getIntent();
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
+            setResultCallback();
             doMySearch(query);
         }
     }
 
-    public void doMySearch(String query){
-        RequestQueue queue = Volley.newRequestQueue(this);
+    private void setResultCallback() {
+        volleyService = new VolleyService(new VolleyResultCallback() {
+            
+            @Override
+            public void notifySuccess(String requestType, JSONArray arr) {
+                users = new JsonParser().jsonToUsers(arr);
+                Log.d(LOG_TAG, "parsed json " + users.toString());
+                resetListView();
+            }
 
-        Log.d(LOG_TAG, ": query = " + query);
+            @Override
+            public void notifyError(String requestType, VolleyError ve) {
+                Log.d(LOG_TAG, "Volley requester " + requestType);
+                Log.d(LOG_TAG, "Error: " + ve.getCause().getMessage());
+            }
+        }, getApplicationContext());
+    }
 
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                MainActivity.URL+"?getSearchResult=" + query,
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray array) {
-
-                        JsonParser parser = new JsonParser();
-                        users = parser.jsonToUsers(array);
-                        Log.d(LOG_TAG, ": parsed json " + users.toString());
-                        resetListView();
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
-                    }
-                }
-        );
-        queue.add(jsonArrayRequest);
+    private void doMySearch(String query) {
+        final String URL = MainActivity.URL + "?getSearchResult=" + query;
+        volleyService.getDataVolley("GET", URL);
     }
 
     private void resetListView(){
@@ -88,7 +80,6 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
         Intent intent = new Intent(this, ShowProfileFragment.class);
         Log.d(LOG_TAG, ": SearchBar onItemClick");
         User user = users.get(position);
