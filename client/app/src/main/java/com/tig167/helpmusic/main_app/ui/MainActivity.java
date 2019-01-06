@@ -152,14 +152,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-        public boolean onSearchRequested() {
+    public boolean onSearchRequested() {
         Log.d(LOG_TAG, "Request search");
         return super.onSearchRequested();
     }
 
     public void cameraClick(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(intent.resolveActivity(getPackageManager()) != null) {
+        if (intent.resolveActivity(getPackageManager()) != null) {
             Log.d(LOG_TAG, "Click camera");
             //intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);

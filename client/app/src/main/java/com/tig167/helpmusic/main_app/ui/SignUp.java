@@ -16,6 +16,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.tig167.helpmusic.data.remote.JsonParser;
+import com.tig167.helpmusic.data.remote.VolleyResultCallback;
+import com.tig167.helpmusic.data.remote.VolleyService;
 import com.tig167.helpmusic.util.PasswordHash;
 import com.tig167.helpmusic.R;
 import com.tig167.helpmusic.main_app.SessionObject;
@@ -27,6 +29,7 @@ import org.json.JSONArray;
 public class SignUp extends AppCompatActivity {
 
     private static final String LOG_TAG = SignUp.class.getSimpleName();
+    private VolleyService volleyService;
     private static SessionObject session;
     private String name;
     private String email;
@@ -47,44 +50,49 @@ public class SignUp extends AppCompatActivity {
         email = emailField.getText().toString();
         if(!email.contains("@")){
             emailField.setTextColor(Color.RED);
-            Toast.makeText(getApplicationContext(), "Not a valid email address", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Invalid email", Toast.LENGTH_SHORT).show();
             return;
         }
         String securePassword = ph.getSHA256SecurePassword(passwordField.getText().toString());
-        addUser(new JsonParser().signupDataToJson(ServerAction.ADD_USER.value(), name, email, securePassword));
+        initCallback();
+        volleyService.postDataVolley(
+                "POST",
+                MainActivity.URL,
+                new JsonParser().signupDataToJson(
+                        ServerAction.ADD_USER.value(),
+                        name,
+                        email,
+                        securePassword
+                )
+        );
     }
 
-    private void addUser(JSONArray json) {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.POST,
-                MainActivity.URL,
-                json,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray array) {
-                        String str = new JsonParser().jsonToSignupResponse(array);
-                        if ("ok".equalsIgnoreCase(str)) {
-                            session.setUser(name, email);
-                            DbHelper.getInstance(getApplicationContext())
-                                    .saveSession(session.user());
-                            nextActivity();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(LOG_TAG, " error addUser " + error.getCause().getMessage());
-                    }
+    private void initCallback() {
+        volleyService = new VolleyService(new VolleyResultCallback() {
+
+            @Override
+            public void notifySuccess(String requestType, JSONArray response) {
+                Log.d(LOG_TAG, "Volley requester " + requestType);
+                String str = new JsonParser().jsonToSignupResponse(response);
+                if ("ok".equalsIgnoreCase(str)) {
+                    session.setUser(name, email);
+                    DbHelper.getInstance(getApplicationContext())
+                            .saveSession(session.user());
+                    nextActivity();
                 }
-        );
-        queue.add(jsonArrayRequest);
+            }
+
+            @Override
+            public void notifyError(String requestType, VolleyError error) {
+                Log.d(LOG_TAG, "Volley requester " + requestType);
+                Log.d(LOG_TAG, "Error addUser " + error.getCause().getMessage());
+            }
+        },this);
     }
 
     private void nextActivity() {
         Intent intent = new Intent(this, MainActivity.class);
-        Log.d(LOG_TAG, " intent: start main activity");
+        Log.d(LOG_TAG, "Intent: start main activity");
         startActivity(intent);
     }
 

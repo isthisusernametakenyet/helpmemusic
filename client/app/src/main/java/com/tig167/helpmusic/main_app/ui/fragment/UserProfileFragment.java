@@ -1,6 +1,5 @@
 package com.tig167.helpmusic.main_app.ui.fragment;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -17,14 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.tig167.helpmusic.data.remote.JsonParser;
 import com.tig167.helpmusic.R;
+import com.tig167.helpmusic.data.remote.VolleyResultCallback;
+import com.tig167.helpmusic.data.remote.VolleyService;
 import com.tig167.helpmusic.main_app.SessionObject;
 import com.tig167.helpmusic.data.local.db.DbHelper;
 import com.tig167.helpmusic.main_app.model.User;
@@ -39,6 +35,7 @@ public class UserProfileFragment extends Fragment {
     private static SessionObject session = SessionObject.getInstance();
     private static DbHelper storage;
 
+    private VolleyService volleyService;
     private Bundle args;
     private User user;
 
@@ -74,12 +71,22 @@ public class UserProfileFragment extends Fragment {
         if (args == null || user.isUnfriendable(session.user())) {
             view = inflater.inflate(R.layout.user_profile_no_button, container, false);
         } else {
+            onResult();
             view = inflater.inflate(R.layout.user_profile, container, false);
             mButton = view.findViewById(R.id.usrFragmentAddFriend);
             mButton.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View view) {
-                    addFriend(view);
+                    volleyService.postDataVolley(
+                            "POST",
+                            MainActivity.URL,
+                            new JsonParser().friendshipToJson(
+                                    ServerAction.ADD_FRIEND.value(),
+                                    session.user().email(),
+                                    user.email()
+                            )
+                    );
                 }
             });
         }
@@ -89,7 +96,6 @@ public class UserProfileFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-
         Log.d(LOG_TAG, ": Create activity");
     }
 
@@ -127,41 +133,28 @@ public class UserProfileFragment extends Fragment {
         }
     }
 
-    public void addFriend(View view) {
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        JSONArray json = new JsonParser().friendshipToJson(
-                ServerAction.ADD_FRIEND.value(),
-                session.user().email(),
-                user.email()
-        );
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.POST,
-                MainActivity.URL,
-                json,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray array) {
-                        Context context = getActivity();
-                        String str = new JsonParser().jsonToLoginResponse(array);
-                        if ("ok".equalsIgnoreCase(str)) {
-                            session.user().addFriend(user);
-                            storage.save(user);
-                            CharSequence okText = "Added friend " + mTextView.getText();
-                            Toast.makeText(context, okText, Toast.LENGTH_SHORT).show();
-                        } else {
-                            CharSequence failedText = "Failed to add friend " + mTextView.getText();
-                            Toast.makeText(context, failedText, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
-                    }
+    private void onResult() {
+        volleyService = new VolleyService(new VolleyResultCallback() {
+
+            @Override
+            public void notifySuccess(String requestType, JSONArray arr) {
+                String str = new JsonParser().jsonToLoginResponse(arr);
+                if ("ok".equalsIgnoreCase(str)) {
+                    session.user().addFriend(user);
+                    storage.save(user);
+                    CharSequence okText = "Added friend " + mTextView.getText();
+                    Toast.makeText(getContext(), okText, Toast.LENGTH_SHORT).show();
+                } else {
+                    CharSequence failedText = "Failed to add friend " + mTextView.getText();
+                    Toast.makeText(getContext(), failedText, Toast.LENGTH_SHORT).show();
                 }
-        );
-        queue.add(jsonArrayRequest);
+            }
+
+            @Override
+            public void notifyError(String requestType, VolleyError error) {
+                Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
+            }
+        }, getContext());
     }
 
 }
