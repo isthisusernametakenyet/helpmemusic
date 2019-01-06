@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                                     Toast.LENGTH_SHORT
                             ).show();
                             getUserData();
-                        }else{
+                        } else {
                             Toast.makeText(
                                     getApplicationContext(),
                                     "You entered the wrong password or email address",

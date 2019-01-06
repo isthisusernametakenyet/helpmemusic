@@ -2,6 +2,7 @@ package com.tig167.helpmusic.data.remote;
 
 public enum ServerAction {
 
+    CONNECT("connect"),
     LOGIN("login"),
     ADD_USER("addUser"),
     GET_USER_NAME("getUserName"),

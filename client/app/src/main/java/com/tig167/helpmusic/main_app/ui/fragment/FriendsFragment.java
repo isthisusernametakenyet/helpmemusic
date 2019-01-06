@@ -22,14 +22,14 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-        Log.d(LOG_TAG," create view");
+        Log.d(LOG_TAG,"Create view");
         return inflater.inflate(R.layout.fragment_friends, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.d(LOG_TAG," activity created");
+        Log.d(LOG_TAG,"Activity created");
         session = SessionObject.getInstance();
         resetListView();
         getListView().setOnItemClickListener(this);
@@ -37,7 +37,7 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
 
     public void resetListView() {
         getListView().setAdapter(new UserAdapter(getActivity(), session.user().friends()));
-        Log.d(LOG_TAG," reset list-view");
+        Log.d(LOG_TAG,"Reset list-view");
     }
 
     @Override
@@ -47,7 +47,7 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
         intent.putExtra("name", user.name());
         intent.putExtra("email", user.email());
         intent.putExtra("image", user.profileImage());
-        Log.d(LOG_TAG," Intent: show profile");
+        Log.d(LOG_TAG,"Intent: show profile");
         startActivity(intent);
     }
 

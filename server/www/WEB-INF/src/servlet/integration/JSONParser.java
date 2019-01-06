@@ -10,7 +10,7 @@ public class JSONParser{
     
     private static final int POST_REQUEST_INDEX = 0;
     private static final int POST_DATA_INDEX = 1;
-    
+
     public String jsonToRequestCode(String json) {
         String requestCode = "";
         try {

@@ -29,7 +29,6 @@ import java.util.List;
 public class SearchBar extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private static final String LOG_TAG = SearchBar.class.getSimpleName();
-    private static final String URL = "http://10.0.2.2:8080/users";
 
     SearchView mSearchBar;
     ListView mListView;
@@ -56,7 +55,7 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
 
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                URL+"?getSearchResult=" + query,
+                MainActivity.URL+"?getSearchResult=" + query,
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -83,7 +82,7 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
         mListView.setOnItemClickListener(this);
         ListView listView = findViewById(R.id.searchResult);
         UserAdapter adapter = new UserAdapter(getApplicationContext(), users);
-        //Log.d(LOG_TAG, ": create a new adapter whith count " + adapter.getCount());
+        //Log.d(LOG_TAG, ": create a new adapter with count " + adapter.getCount());
         listView.setAdapter(adapter);
     }
 

@@ -91,7 +91,7 @@ public class DbInsert {
             pstmt.executeUpdate();
             status = DbStatus.SUCCESS;
         } catch (SQLException sqle) {
-            System.err.println("unable to close statement "
+            System.err.println("unable to insert friend "
                         + sqle.getMessage());
             status = DbStatus.FAILURE;
         }

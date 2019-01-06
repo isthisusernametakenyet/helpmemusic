@@ -20,6 +20,7 @@ public class UserServlet extends HttpServlet {
     private static final String JSON_CONTENT = "application/json;charset=UTF-8";
     
     private enum RequestCode {
+        CONNECT("connect"),
         LOGIN("login"),
         ADD_USER("addUser"),
         GET_USER_NAME("getUserName"),
@@ -70,6 +71,11 @@ public class UserServlet extends HttpServlet {
         User user = null;
         List<User> users = null;
         switch (requestCode) {
+            case CONNECT:
+            if ("hello".equalsIgnoreCase(queryStrings[DATA_INDEX])) {
+                response.getWriter().println(parser.stringToJson("world"));
+            }
+            break;
             case GET_PROFILE_IMG:
             array = parser.imageToJson(queryStrings[DATA_INDEX]);
             response.getWriter().println(array.toString());

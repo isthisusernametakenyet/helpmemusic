@@ -155,7 +155,7 @@ public class JsonParser {
                 String email = obj.getString("email");
                 String imageString = obj.getString("profileimage");
 
-                User  u = new User(name, email);
+                User u = new User(name, email);
                 u.setProfileImage(ImageUtil.decode(imageString));
 
                 users.add(u);

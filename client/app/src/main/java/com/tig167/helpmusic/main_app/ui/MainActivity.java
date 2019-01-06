@@ -11,6 +11,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -97,69 +99,68 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         getSession();
-        Log.d(LOG_TAG, " start app");
+        Log.d(LOG_TAG, "Start main");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         getSession();
-        Log.d(LOG_TAG, " resume app");
+        Log.d(LOG_TAG, "Resume main");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         storage.saveSession(session.user());
-        Log.d(LOG_TAG, " pause app");
+        Log.d(LOG_TAG, "Pause main");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         storage.saveSession(session.user());
-        Log.d(LOG_TAG, " destroy app");
+        Log.d(LOG_TAG, "Destroy main");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         storage.saveSession(session.user());
-        Log.d(LOG_TAG, " stop app");
+        Log.d(LOG_TAG, "Stop main");
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        Log.d(LOG_TAG, " save instance state");
-
+        Log.d(LOG_TAG, "Save instance state");
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Log.d(LOG_TAG, " restore instance state");
+        Log.d(LOG_TAG, "Restore instance state");
     }
 
     private void initSearch() {
+        Log.d(LOG_TAG, "Init search");
         SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = findViewById(R.id.search_bar);
-
         searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
         searchView.setSubmitButtonEnabled(true);
         //searchView.setIconifiedByDefault(false);
     }
 
     @Override
-    public boolean onSearchRequested() {
-        Log.d(LOG_TAG, " request search");
+        public boolean onSearchRequested() {
+        Log.d(LOG_TAG, "Request search");
         return super.onSearchRequested();
     }
 
     public void cameraClick(View view) {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if(intent.resolveActivity(getPackageManager()) != null) {
-            Log.d(LOG_TAG, " Click camera");
+            Log.d(LOG_TAG, "Click camera");
             //intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
             startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
         }
@@ -168,14 +169,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Log.d(LOG_TAG, " data.getExtra() " + data.getExtras().toString());
+            Log.d(LOG_TAG, "data.getExtra() " + data.getExtras().toString());
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            String imageString = new ImageUtil().encode(imageBitmap);
-            Log.d(LOG_TAG, " Base64 encode " + imageString);
-            mImageView.setImageBitmap(new ImageUtil().decode(imageString));
+            String imageString = ImageUtil.encode(imageBitmap);
+            Log.d(LOG_TAG, "Base64 encode " + imageString);
+            mImageView.setImageBitmap(ImageUtil.decode(imageString));
             session.user().setProfileImage(imageBitmap);
-            Log.d(LOG_TAG, " Decode base64 to bitmap");
+            Log.d(LOG_TAG, "Decode base64 to bitmap");
             PictureHash ph = new PictureHash(session.user().name(), session.user().email());
             addProfileImage(new JsonParser().imageDataToJson(
                     ServerAction.ADD_PROFILE_IMG.value(),
@@ -195,13 +196,13 @@ public class MainActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray array) {
-                        Log.d("addProfileImage response: ", array.toString().substring(0, 20) + "...");
+
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("error: addProfileImage ", error.getCause().getMessage());
+                        Log.d("Error: addProfileImage ", error.getCause().getMessage());
                     }
                 }
         );
@@ -236,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                         imageData = new JsonParser().parseImage(array);
                         Log.d(LOG_TAG, ": before decoding " + imageData);
                         Bitmap bitMap = null;
-                        bitMap = imageData != null ? new ImageUtil().decode(imageData) : null;
+                        bitMap = imageData != null ? ImageUtil.decode(imageData) : null;
                         Log.d(LOG_TAG, ": after decoding");
                         //Log.d(LOG_TAG, ": Setting the bitmap " + bitMap.toString());
                         mImageView.setImageBitmap(bitMap);
@@ -263,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
                                             imageData = new JsonParser().parseImage(array);
                                             Log.d(LOG_TAG, ": before decoding " + imageData);
                                             Bitmap bitMap = null;
-                                            bitMap = imageData != null ? new ImageUtil().decode(imageData) : null;
+                                            bitMap = imageData != null ? ImageUtil.decode(imageData) : null;
                                             Log.d(LOG_TAG, ": after decoding");
                                             //Log.d(LOG_TAG, ": Setting the bitmap " + bitMap.toString());
                                             mImageView.setImageBitmap(bitMap);
@@ -285,7 +286,3 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
-
-
-
-

@@ -29,25 +29,31 @@
         </provider>
 
         <activity
-            android:name=".main_app.ui.LoginActivity"
+            android:name=".main_app.ui.StartScreen"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-
         </activity>
+
+        <activity
+            android:name=".main_app.ui.LoginActivity"
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+
         <activity
             android:name=".main_app.ui.SignUp"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan">
+        </activity>
+
         <activity
             android:name=".main_app.ui.MainActivity"
             android:windowSoftInputMode="adjustPan">
 
             <meta-data android:name="android.app.default_searchable"
-                android:value=".SearchBar" />
+                android:value=".main_app.ui.SearchBar" />
         </activity>
 
         <activity android:name=".main_app.ui.SearchBar"
@@ -66,8 +72,9 @@
                   android:windowSoftInputMode="adjustPan">
 
             <meta-data android:name="android.app.default_searchable"
-                android:value=".SearchBar" />
+                android:value=".main_app.ui.SearchBar" />
         </activity>
+
     </application>
 
 </manifest>
