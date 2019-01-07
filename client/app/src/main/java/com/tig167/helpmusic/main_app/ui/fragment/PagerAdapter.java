@@ -42,15 +42,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-    public static TabLayout createTabLayout(View view) {
-        TabLayout tabLayout = (TabLayout) view;
-        for (FragmentTab tab : FragmentTab.values()) {
-            tabLayout.addTab(tabLayout.newTab().setText(tab.title()));
-        }
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        return tabLayout;
-    }
-
     @Override
     public Fragment getItem(int position) {
         FragmentTab tab = tabs.get(position);

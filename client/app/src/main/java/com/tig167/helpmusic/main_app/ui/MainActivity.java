@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         storage = DbHelper.getInstance(this);
         mainActivity = this;
         final PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
-        tabLayout = PagerAdapter.createTabLayout(findViewById(R.id.tab_layout));
+        tabLayout = TabLayoutFactory.create(findViewById(R.id.tab_layout));
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(pagerAdapter);
         addTabListeners(viewPager);
