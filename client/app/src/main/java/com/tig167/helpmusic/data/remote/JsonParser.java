@@ -90,7 +90,7 @@ public class JsonParser {
         return arr;
     }
 
-    public String jsonToLoginResponse(JSONArray array) {
+    public String jsonToString(JSONArray array) {
         String response = "";
         try {
             JSONObject obj = array.getJSONObject(0);

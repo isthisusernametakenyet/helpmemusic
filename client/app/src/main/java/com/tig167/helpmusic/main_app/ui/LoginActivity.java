@@ -9,15 +9,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.tig167.helpmusic.data.remote.VolleyResultCallback;
 import com.tig167.helpmusic.data.remote.VolleyService;
-import com.tig167.helpmusic.util.ImageUtil;
 import com.tig167.helpmusic.data.remote.JsonParser;
 import com.tig167.helpmusic.util.PasswordHash;
 import com.tig167.helpmusic.R;
@@ -85,10 +79,10 @@ public class LoginActivity extends AppCompatActivity {
                     email.setTextColor(Color.RED);
                     password.setTextColor(Color.RED);
                 } else {
-                    session.setUser(users.get(0));
-                    users.remove(0);
-                    for (User friend : users) {
-                        session.user().addFriend(friend);
+                    session.setUser(users.get(0)); // first element in list is THIS_USER
+                    users.remove(0); // only friends left in list
+                    for (User user : users) {
+                        session.user().addFriend(user);
                     }
                     DbHelper.getInstance(getApplicationContext()).saveSession(session.user());
                     Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_SHORT).show();

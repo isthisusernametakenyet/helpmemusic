@@ -42,8 +42,10 @@ public class User {
         return Collections.unmodifiableList(friends);
     }
 
-    public void addFriend(User friend) {
-        friends.add(friend);
+    public void addFriend(User user) {
+        if (!isUnfriendable(user)) {
+            friends.add(user);
+        }
     }
 
     public boolean hasFriend(User user) {

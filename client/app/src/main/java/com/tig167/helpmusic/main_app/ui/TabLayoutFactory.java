@@ -5,9 +5,9 @@ import android.view.View;
 
 import com.tig167.helpmusic.main_app.ui.fragment.PagerAdapter;
 
-public class TabLayoutFactory {
+class TabLayoutFactory {
 
-    public static TabLayout create(View view) {
+    static TabLayout create(View view) {
         TabLayout tabLayout = (TabLayout) view;
         for (PagerAdapter.FragmentTab tab : PagerAdapter.FragmentTab.values()) {
             tabLayout.addTab(tabLayout.newTab().setText(tab.title()));

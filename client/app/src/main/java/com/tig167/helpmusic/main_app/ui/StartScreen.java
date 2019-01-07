@@ -43,7 +43,7 @@ public class StartScreen extends AppCompatActivity {
             @Override
             public void notifySuccess(String requestType, JSONArray response) {
                 Log.d(LOG_TAG, "Volley requester " + requestType);
-                String str = new JsonParser().jsonToLoginResponse(response);
+                String str = new JsonParser().jsonToString(response);
                 if ("world".equalsIgnoreCase(str)) {
                     String msg = "Connected to server";
                     textView.setText(msg);

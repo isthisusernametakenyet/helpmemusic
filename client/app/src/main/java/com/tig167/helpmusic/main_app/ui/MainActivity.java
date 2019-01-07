@@ -25,6 +25,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.tig167.helpmusic.R;
 import com.tig167.helpmusic.data.remote.ServerAction;
+import com.tig167.helpmusic.data.remote.VolleyResultCallback;
+import com.tig167.helpmusic.data.remote.VolleyService;
 import com.tig167.helpmusic.main_app.SessionObject;
 import com.tig167.helpmusic.util.ImageUtil;
 import com.tig167.helpmusic.data.remote.JsonParser;
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private static SessionObject session;
     private static DbHelper storage;
 
-    private MainActivity mainActivity;
+    private VolleyService volleyService;
 
     private TabLayout tabLayout;
     private ImageView mImageView;
@@ -56,15 +58,42 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         session = SessionObject.getInstance();
         storage = DbHelper.getInstance(this);
-        mainActivity = this;
         final PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
         tabLayout = TabLayoutFactory.create(findViewById(R.id.tab_layout));
         ViewPager viewPager = findViewById(R.id.view_pager);
         viewPager.setAdapter(pagerAdapter);
         addTabListeners(viewPager);
         mImageView = findViewById(R.id.imageView);
-        profileImage();
+        instantiateVolleyCallback();
         initSearch();
+    }
+
+    private void instantiateVolleyCallback() {
+        volleyService = new VolleyService(new VolleyResultCallback() {
+            @Override
+            public void notifySuccess(String requestType, JSONArray response) {
+                Log.d(LOG_TAG, "Volley requester " + requestType);
+                if ("ok".equals(new JsonParser().jsonToString(response))) {
+                    Log.d(LOG_TAG, "Image added");
+                } else {
+                    Log.d(LOG_TAG, "Image was NOT added");
+                }
+            }
+
+            @Override
+            public void notifyError(String requestType, VolleyError error) {
+                Log.d("Error: addProfileImage ", error.getCause().getMessage());
+            }
+        }, this);
+    }
+
+    private void initSearch() {
+        Log.d(LOG_TAG, "Init search");
+        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = findViewById(R.id.search_bar);
+        searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
+        searchView.setSubmitButtonEnabled(true);
+        //searchView.setIconifiedByDefault(false);
     }
 
     private void addTabListeners(final ViewPager viewPager) {
@@ -142,15 +171,6 @@ public class MainActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "Restore instance state");
     }
 
-    private void initSearch() {
-        Log.d(LOG_TAG, "Init search");
-        SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = findViewById(R.id.search_bar);
-        searchView.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
-        searchView.setSubmitButtonEnabled(true);
-        //searchView.setIconifiedByDefault(false);
-    }
-
     @Override
     public boolean onSearchRequested() {
         Log.d(LOG_TAG, "Request search");
@@ -178,35 +198,17 @@ public class MainActivity extends AppCompatActivity {
             session.user().setProfileImage(imageBitmap);
             Log.d(LOG_TAG, "Decode base64 to bitmap");
             PictureHash ph = new PictureHash(session.user().name(), session.user().email());
-            addProfileImage(new JsonParser().imageDataToJson(
-                    ServerAction.ADD_PROFILE_IMG.value(),
-                    ph.hash(),
-                    imageString,
-                    session.user().email()
-            ));
+            volleyService.postDataVolley(
+                    "POST",
+                    URL,
+                    new JsonParser().imageDataToJson(
+                            ServerAction.ADD_PROFILE_IMG.value(),
+                            ph.hash(),
+                            imageString,
+                            session.user().email()
+                    )
+            );
         }
-    }
-
-    private void addProfileImage(JSONArray json) {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.POST,
-                URL,
-                json,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray array) {
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Error: addProfileImage ", error.getCause().getMessage());
-                    }
-                }
-        );
-        queue.add(jsonArrayRequest);
     }
 
     String mCurrentPhotoPath;
@@ -220,69 +222,4 @@ public class MainActivity extends AppCompatActivity {
         return image;
     }
 
-    private String imageData;
-
-    public void profileImage() {
-        //Bitmap bitMap = null;
-        RequestQueue queue = Volley.newRequestQueue(this);
-        Log.d(LOG_TAG, " " + queue.toString());
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                URL + "?getProfileImg=" + session.user().email(),
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray array) {
-                        Log.d(LOG_TAG, " :" + array.toString());
-                        imageData = new JsonParser().parseImage(array);
-                        Log.d(LOG_TAG, ": before decoding " + imageData);
-                        Bitmap bitMap = null;
-                        bitMap = imageData != null ? ImageUtil.decode(imageData) : null;
-                        Log.d(LOG_TAG, ": after decoding");
-                        //Log.d(LOG_TAG, ": Setting the bitmap " + bitMap.toString());
-                        mImageView.setImageBitmap(bitMap);
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
-                        if (SessionObject.getInstance().user().profileImage() != null) {
-                            mImageView.setImageBitmap(SessionObject.getInstance().user().profileImage());
-                        } else {
-                            RequestQueue queue = Volley.newRequestQueue(mainActivity);
-                            Log.d(LOG_TAG, " " + queue.toString());
-                            final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                                    Request.Method.GET,
-                                    URL + "?getProfileImg=" + SessionObject.getInstance().user().email(),
-                                    null,
-                                    new Response.Listener<JSONArray>() {
-                                        @Override
-                                        public void onResponse(JSONArray array) {
-                                            Log.d(LOG_TAG, " :" + array.toString());
-                                            imageData = new JsonParser().parseImage(array);
-                                            Log.d(LOG_TAG, ": before decoding " + imageData);
-                                            Bitmap bitMap = null;
-                                            bitMap = imageData != null ? ImageUtil.decode(imageData) : null;
-                                            Log.d(LOG_TAG, ": after decoding");
-                                            //Log.d(LOG_TAG, ": Setting the bitmap " + bitMap.toString());
-                                            mImageView.setImageBitmap(bitMap);
-
-                                        }
-                                    },
-                                    new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            Log.d(LOG_TAG, " cause: " + error.getCause().getMessage());
-                                        }
-                                    }
-                            );
-                            queue.add(jsonArrayRequest);
-                        }
-                    }
-                }
-        );
-
-    }
 }

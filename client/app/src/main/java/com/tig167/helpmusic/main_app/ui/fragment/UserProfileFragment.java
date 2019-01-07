@@ -138,7 +138,7 @@ public class UserProfileFragment extends Fragment {
 
             @Override
             public void notifySuccess(String requestType, JSONArray arr) {
-                String str = new JsonParser().jsonToLoginResponse(arr);
+                String str = new JsonParser().jsonToString(arr);
                 if ("ok".equalsIgnoreCase(str)) {
                     session.user().addFriend(user);
                     storage.save(user);
