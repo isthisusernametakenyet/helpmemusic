@@ -1,12 +1,10 @@
 package com.tig167.helpmusic.main_app.ui.fragment;
 
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import android.util.SparseArray;
-import android.view.View;
 
 public class PagerAdapter extends FragmentStatePagerAdapter {
 

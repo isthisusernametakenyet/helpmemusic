@@ -134,9 +134,11 @@ public class UserServlet extends HttpServlet {
                 users.add(0, u);
                 JSONArray array = parser.usersToJson(users);
                 System.out.println(array.toString());
-                response.getWriter().println(array.toString());
+                response.getWriter().println(array);
             } else {
-                response.getWriter().println(parser.stringToJson("access denied"));
+                List<User> empty = new ArrayList<>();
+                response.getWriter().println(parser.usersToJson(empty));
+                System.out.println(empty);
                 System.out.println("access denied");
             }
             break;
