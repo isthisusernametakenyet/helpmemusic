@@ -42,7 +42,7 @@ public class VolleyService {
 
             queue.add(jsonArrayRequest);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -68,7 +68,7 @@ public class VolleyService {
 
             queue.add(jsonArrayRequest);
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

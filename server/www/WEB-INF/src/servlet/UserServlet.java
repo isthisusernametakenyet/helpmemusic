@@ -129,7 +129,12 @@ public class UserServlet extends HttpServlet {
             case LOGIN:
             String[] val = parser.jsonToLoginData(json);
             if (new DbSelection().hasUser(val[0], val[1])) {
-                response.getWriter().println(parser.stringToJson("ok"));
+                User u = new DbSelection().getUser(val[0]);
+                List<User> users = new DbSelection().readFriends(u);
+                users.add(0, u);
+                JSONArray array = parser.usersToJson(users);
+                System.out.println(array.toString());
+                response.getWriter().println(array.toString());
             } else {
                 response.getWriter().println(parser.stringToJson("access denied"));
                 System.out.println("access denied");

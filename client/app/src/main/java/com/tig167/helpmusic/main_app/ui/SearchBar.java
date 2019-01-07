@@ -49,7 +49,7 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
 
     private void setResultCallback() {
         volleyService = new VolleyService(new VolleyResultCallback() {
-            
+
             @Override
             public void notifySuccess(String requestType, JSONArray arr) {
                 users = new JsonParser().jsonToUsers(arr);

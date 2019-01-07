@@ -15,6 +15,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.tig167.helpmusic.data.remote.VolleyResultCallback;
+import com.tig167.helpmusic.data.remote.VolleyService;
 import com.tig167.helpmusic.util.ImageUtil;
 import com.tig167.helpmusic.data.remote.JsonParser;
 import com.tig167.helpmusic.util.PasswordHash;
@@ -26,12 +28,14 @@ import com.tig167.helpmusic.data.remote.ServerAction;
 
 import org.json.JSONArray;
 
+import java.util.List;
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();
 
     private static SessionObject session;
-    private String identifier;
+    private VolleyService volleyService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,111 +53,55 @@ public class LoginActivity extends AppCompatActivity {
         EditText emailField = findViewById(R.id.loginEmail);
         EditText passwordField = findViewById(R.id.loginPassword);
         String securePassword = ph.getSHA256SecurePassword(passwordField.getText().toString());
-        identifier = emailField.getText().toString();
+        String identifier = emailField.getText().toString();
         session = SessionObject.getInstance();
-        getAccess(new JsonParser().loginDataToJson(ServerAction.LOGIN.value(), identifier, securePassword));
-    }
-
-    private void getAccess(JSONArray json) {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.POST,
+        prepareLoginResponse();
+        volleyService.postDataVolley(
+                "POST",
                 MainActivity.URL,
-                json,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray array) {
-                        String str = new JsonParser().jsonToLoginResponse(array);
-                        if ("ok".equalsIgnoreCase(str)) {
-                            Toast.makeText(
-                                    getApplicationContext(),
-                                    "Welcome",
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                            getUserData();
-                        } else {
-                            Toast.makeText(
-                                    getApplicationContext(),
-                                    "You entered the wrong password or email address",
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                            EditText email = findViewById(R.id.loginEmail);
-                            EditText password = findViewById(R.id.loginPassword);
-                            email.setTextColor(Color.RED);
-                            password.setTextColor(Color.RED);
-                        }
-
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        Log.d(LOG_TAG, "getAccess " + error.getCause().getMessage());
-                    }
-                }
+                new JsonParser().loginDataToJson(
+                        ServerAction.LOGIN.value(),
+                        identifier,
+                        securePassword
+                )
         );
-        queue.add(jsonArrayRequest);
     }
 
-    private void getUserData() {
-        final String SERVER_REQUEST_USER_NAME = "?getUserName=";
-        RequestQueue queue = Volley.newRequestQueue(this);
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                MainActivity.URL + SERVER_REQUEST_USER_NAME + identifier,
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray array) {
-                        session.setUser(new User(
-                                new JsonParser().jsonToUserName(array),
-                                identifier,
-                                ImageUtil.decode(new JsonParser().parseImage(array))
-                        ));
-                        getFriends();
-                        Log.d(LOG_TAG, array.toString());
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+    private void prepareLoginResponse() {
+        volleyService = new VolleyService(new VolleyResultCallback() {
 
-                        Log.d(LOG_TAG, "get user data " + error.getCause().getMessage());
+            @Override
+            public void notifySuccess(String requestType, JSONArray array) {
+                Log.d(LOG_TAG, "Volley requester " + requestType);
+                List<User> users = new JsonParser().jsonToUsers(array);
+                if (users.size() == 0) {
+                    Toast.makeText(
+                            getApplicationContext(),
+                            "You entered the wrong password or email address",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                    EditText email = findViewById(R.id.loginEmail);
+                    EditText password = findViewById(R.id.loginPassword);
+                    email.setTextColor(Color.RED);
+                    password.setTextColor(Color.RED);
+                } else {
+                    session.setUser(users.get(0));
+                    users.remove(0);
+                    for (User friend : users) {
+                        session.user().addFriend(friend);
                     }
+                    DbHelper.getInstance(getApplicationContext()).saveSession(session.user());
+                    Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_SHORT).show();
+                    nextActivity();
                 }
-        );
-        queue.add(jsonArrayRequest);
-    }
+            }
 
-    private void getFriends() {
-        final String SERVER_REQUEST_FRIENDS = "?getFriends=";
-        RequestQueue queue = Volley.newRequestQueue(this);
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                MainActivity.URL + SERVER_REQUEST_FRIENDS + identifier,
-                null,
-                new Response.Listener<JSONArray>() {
-
-                    @Override
-                    public void onResponse(JSONArray array) {
-                        for (User friend : new JsonParser().jsonToUsers(array)) {
-                            session.user().addFriend(friend);
-                            Log.d(LOG_TAG, friend.name() + " added from server db");
-                        }
-                        DbHelper.getInstance(getApplicationContext()).saveSession(session.user());
-                        Log.d(LOG_TAG, " friends: \n" + session.user().friends());
-                        nextActivity();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d(LOG_TAG, " getFriends error " + error.getCause().getMessage());
-                    }
-                }
-        );
-        queue.add(jsonArrayRequest);
+            @Override
+            public void notifyError(String requestType, VolleyError ve) {
+                Log.d(LOG_TAG, "Volley requester " + requestType);
+                Log.d(LOG_TAG, "Error login " + ve.getCause().getMessage());
+            }
+        }, this);
     }
 
     private void nextActivity() {
