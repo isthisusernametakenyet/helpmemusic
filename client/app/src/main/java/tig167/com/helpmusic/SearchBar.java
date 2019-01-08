@@ -84,18 +84,13 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
         Intent intent = new Intent(this, ShowProfileFragment.class);
         Log.d(LOG_TAG, ": SearchBar onItemClick");
         Log.d(LOG_TAG, ": user name " + users.get(position).name());
-        intent.putExtra("userName", users.get(position).name());
-        intent.putExtra("image", users.get(position).profileImage());
         intent.putExtra("name", users.get(position).name());
-        intent.putExtra("image", users.get(position).profileImage());
         intent.putExtra("email", users.get(position).email());
+        intent.putExtra("image", users.get(position).profileImage());
         startActivity(intent);
-
-        //resetListView();
     }
 
     public void onNewIntent(Intent intent){

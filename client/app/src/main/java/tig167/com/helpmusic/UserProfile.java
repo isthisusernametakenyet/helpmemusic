@@ -27,14 +27,17 @@ import org.json.JSONArray;
 
 public class UserProfile extends Fragment {
 
-    private String email;
-    private Bundle args;
+
 
     public UserProfile(){
 
     }
 
     private static final String LOG_TAG = UserProfile.class.getSimpleName();
+    private static SessionObject session = SessionObject.getInstance();
+
+    private Bundle args;
+    private User user;
 
     Button mButton;
     TextView mTextView;
@@ -52,27 +55,29 @@ public class UserProfile extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        View view;
         args = getArguments();
 
+        if (args != null) {
+            user = new User(
+                    args.getString("name"),
+                    args.getString("email"),
+                    (Bitmap) args.get("image")
+            );
+        }
 
-        View view;
-
-        if(args == null || SessionObject.getInstance().user().friends().contains(args.getString("email")) || SessionObject.getInstance().user().email().equals(args.getString("email"))) {
+        if (args == null || user.isUnfriendable(session.user())) {
             view = inflater.inflate(R.layout.user_profile_no_button, container, false);
-
-        }else{
+        } else {
             view = inflater.inflate(R.layout.user_profile, container, false);
             mButton = view.findViewById(R.id.usrFragmentAddFriend);
-            //adding a onClickListener since fragment dont have one
-            mButton.setOnClickListener(new View.OnClickListener(){
+            mButton.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view){
+                public void onClick(View view) {
                     addFriend(view);
                 }
             });
         }
-
-
         return view;
     }
 
@@ -96,42 +101,33 @@ public class UserProfile extends Fragment {
         mTextView = view.findViewById(R.id.profile_name);
         mBitMap = view.findViewById(R.id.usrFragmentProfileImage);
         //Log.d(LOG_TAG, ": " + args.toString());
-        if(args == null) {
-            if (SessionObject.getInstance().user().profileImage() != null) {
-                drawable = RoundedBitmapDrawableFactory.create( res, SessionObject.getInstance().user().profileImage());
+        if (args == null) {
+            if (session.user().profileImage() != null) {
+                drawable = RoundedBitmapDrawableFactory.create( res, session.user().profileImage());
 
                 drawable.setCornerRadius(cornerRadius);
 
                 mBitMap.setImageDrawable(drawable);
                 //mBitMap.setImageBitmap(SessionObject.getInstance().user().getProfileImage());
-                Log.d(LOG_TAG, ": bitmap " + SessionObject.getInstance().user().profileImage().toString());
+                Log.d(LOG_TAG, ": bitmap " + session.user().profileImage().toString());
             }
-            mTextView.setText(SessionObject.getInstance().user().name());
-        }else{
-
-
-        mBitMap.setImageBitmap(SessionObject.getInstance().user().profileImage());
-        mTextView.setText(SessionObject.getInstance().user().name());
-
-            String name = args.getString("name");
-            mTextView.setText(name);
-            Bitmap image = (Bitmap) args.get("image");
-            drawable = RoundedBitmapDrawableFactory.create( res, image);
-
+            mTextView.setText(session.user().name());
+        } else {
+            mBitMap.setImageBitmap(session.user().profileImage());
+            mTextView.setText(session.user().name());
+            mTextView.setText(user.name());
+            drawable = RoundedBitmapDrawableFactory.create(res, user.profileImage());
             drawable.setCornerRadius(cornerRadius);
-
             mBitMap.setImageDrawable(drawable);
-            email = args.getString("email");
         }
     }
 
-    public void addFriend(View view){
+    public void addFriend(View view) {
         RequestQueue queue = Volley.newRequestQueue(getActivity());
-        JSONArray json = new JsonParser().addFriend(
+        JSONArray json = new JsonParser().friendshipToJson(
                 Action.ADD_FRIEND.value(),
-                email,
-                SessionObject.getInstance().user().name(),
-                SessionObject.getInstance().user().email()
+                session.user().email(),
+                user.email()
         );
         final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
                 Request.Method.POST,
@@ -142,15 +138,12 @@ public class UserProfile extends Fragment {
                     public void onResponse(JSONArray array) {
                         Context context = getActivity();
                         String str = new JsonParser().jsonToLoginResponse(array);
-                        if("ok".equalsIgnoreCase(str)) {
-                            User friend = new User(
-                                    args.getString("name"),
-                                    email,
-                                    new Image().decode(args.getString("image")));
-                            SessionObject.getInstance().user().addFriend(friend);
+                        if ("ok".equalsIgnoreCase(str)) {
+                            session.user().addFriend(user);
+                            DbHelper.getInstance(getContext()).saveFriend(user);
                             CharSequence okText = "Added friend " + mTextView.getText();
                             Toast.makeText(context, okText, Toast.LENGTH_SHORT).show();
-                        }else{
+                        } else {
                             CharSequence failedText = "Failed to add friend " + mTextView.getText();
                             Toast.makeText(context, failedText, Toast.LENGTH_SHORT).show();
                         }

@@ -33,55 +33,23 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        System.out.println("on activity created: friendsFragment");
         session = SessionObject.getInstance();
-        getFriends();
         resetListView();
         getListView().setOnItemClickListener(this);
     }
 
-    private void resetListView() {
-        ListView listView = getListView();
-        UserAdapter userAdapter = new UserAdapter(getActivity(), session.user().friends());
-        listView.setAdapter(userAdapter);
-    }
-
-    private void getFriends() {
-        final String SERVER_REQUEST_FRIENDS = "?getFriends=";
-        RequestQueue queue = Volley.newRequestQueue(getActivity());
-        final JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                MainActivity.URL + SERVER_REQUEST_FRIENDS + session.user().email(),
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray array) {
-                        session.user().setFriends(new JsonParser().jsonToUsers(array));
-                        Log.d("FriendsFragment: ", "friendList " + session.user().friends());
-                        resetListView();
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("error: getFriends. ", error.getCause().getMessage());
-                    }
-                }
-        );
-        queue.add(jsonArrayRequest);
+    public void resetListView() {
+        getListView().setAdapter(new UserAdapter(getActivity(), session.user().friends()));
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
         Intent intent = new Intent(getActivity(), ShowProfileFragment.class);
-        //Log.d(LOG_TAG, ": SearchBar onItemClick");
-        //Log.d(LOG_TAG, ": user name " + friends.get(position).name());
         intent.putExtra("name", session.user().friends().get(position).name());
-        intent.putExtra("image", session.user().friends().get(position).profileImage());
         intent.putExtra("email", session.user().friends().get(position).email());
+        intent.putExtra("image", session.user().friends().get(position).profileImage());
         startActivity(intent);
-
-        //resetListView();
     }
 
 }

@@ -1,34 +1,11 @@
 package tig167.com.helpmusic;
 
-import android.content.Context;
+public interface Storage {
 
-public class Storage {
+    void saveSession(User user);
 
-    private static Storage instance;
-    private static DbHelper database;
-    private static SessionObject session;
+    void saveFriend(User friend);
 
-    public static Storage getInstance(Context context) {
-        if (instance == null) {
-            instance = new Storage(context);
-        }
-        return instance;
-    }
-
-    private Storage(Context context) {
-        database = DbHelper.getInstance(context);
-        session = SessionObject.getInstance();
-    }
-
-    public void save() {
-        database.write(session.user());
-    }
-
-    public void load() {
-        User user = database.read();
-        if (user != null && user.email().equals(session.user().email())) {
-            session.setUser(user);
-        }
-    }
+    User loadSession();
 
 }

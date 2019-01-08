@@ -66,25 +66,26 @@ public class DbInsert {
         return status.code();
     }
     
-    public boolean insertFriendship(List<User> users) {
+    public boolean insertFriendship(String[] identifiers) {
         DbSelection selection = new DbSelection();
         return insertFriend(
-        users.get(0),
-        selection.readUserId(users.get(1).email()),
-        users.get(1).email())
+        identifiers[0],
+        selection.readUserId(identifiers[1]),
+        identifiers[1])
         && insertFriend(
-        users.get(1),
-        selection.readUserId(users.get(0).email()),
-        users.get(0).email());
+        identifiers[1],
+        selection.readUserId(identifiers[0]),
+        identifiers[0]);
     }
     
-    private boolean insertFriend(User user, int friendId, String friendEmail) {
+    private boolean insertFriend(String email, int friendId, String friendEmail) {
         status = DbStatus.FAILURE;
-        String tableName = DbUtil.createFriendTableName(user.email());
-        final String SQL_INSERT_FRIENDS = "INSERT INTO " + tableName + " (friend_id, friend_email) "
-        + "VALUES (?, ?)";
+        String tableName = DbUtil.createFriendTableName(email);
+        final String SQL_INSERT_FRIEND = "INSERT INTO " + tableName + " "
+                                       + "(friend_id, friend_email) " 
+                                       + "VALUES (?, ?)";
         try (Connection connection = database.connection();
-            PreparedStatement pstmt = connection.prepareStatement(SQL_INSERT_FRIENDS)) {
+            PreparedStatement pstmt = connection.prepareStatement(SQL_INSERT_FRIEND)) {
             pstmt.setInt(1, friendId);
             pstmt.setString(2, friendEmail);
             pstmt.executeUpdate();

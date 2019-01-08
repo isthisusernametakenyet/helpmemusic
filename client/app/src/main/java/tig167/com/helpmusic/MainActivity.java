@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static SessionObject session;
     private MainActivity mainActivity;
+    private static DbHelper storage;
 
     private enum FragmentTab {
         NEWS("News"),
@@ -62,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         session = SessionObject.getInstance();
         mainActivity = this;
+        storage = DbHelper.getInstance(this);
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         for (FragmentTab tab : FragmentTab.values()) {
             tabLayout.addTab(tabLayout.newTab().setText(tab.text()));
@@ -96,26 +98,46 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        System.out.println("start app:");
+        storage.saveSession(session.user());
+        System.out.println("session saved");
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
-        Storage.getInstance(this).save();
+        System.out.println("pause app:");
+        storage.saveSession(session.user());
+        System.out.println("session saved");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Storage.getInstance(this).save();
+        System.out.println("destroy app:");
+        storage.saveSession(session.user());
+        System.out.println("session saved");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Storage.getInstance(this).load();
+        System.out.println("resume app:");
+        User user = storage.loadSession();
+        System.out.println("session loaded");
+        if (user != null) {
+            System.out.println("setting user... ");
+            session.setUser(user);
+            System.out.println("session data restored");
+        }
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
+
     }
 
     @Override
@@ -150,11 +172,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
     }
 
     public void cameraClick(View view) {
@@ -202,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("error: addUser ", error.getCause().getMessage());
+                        Log.d("error: addProfileImg ", error.getCause().getMessage());
                     }
                 }
         );
