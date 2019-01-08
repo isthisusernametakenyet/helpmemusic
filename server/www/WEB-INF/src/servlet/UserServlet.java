@@ -20,6 +20,7 @@ public class UserServlet extends HttpServlet {
     private static final String JSON_CONTENT = "application/json;charset=UTF-8";
     
     private enum RequestCode {
+        CONNECT("connect"),
         LOGIN("login"),
         ADD_USER("addUser"),
         GET_USER_NAME("getUserName"),
@@ -70,6 +71,11 @@ public class UserServlet extends HttpServlet {
         User user = null;
         List<User> users = null;
         switch (requestCode) {
+            case CONNECT:
+            if ("hello".equalsIgnoreCase(queryStrings[DATA_INDEX])) {
+                response.getWriter().println(parser.stringToJson("world"));
+            }
+            break;
             case GET_PROFILE_IMG:
             array = parser.imageToJson(queryStrings[DATA_INDEX]);
             response.getWriter().println(array.toString());
@@ -123,9 +129,16 @@ public class UserServlet extends HttpServlet {
             case LOGIN:
             String[] val = parser.jsonToLoginData(json);
             if (new DbSelection().hasUser(val[0], val[1])) {
-                response.getWriter().println(parser.stringToJson("ok"));
+                User u = new DbSelection().getUser(val[0]);
+                List<User> users = new DbSelection().readFriends(u);
+                users.add(0, u);
+                JSONArray array = parser.usersToJson(users);
+                System.out.println(array.toString());
+                response.getWriter().println(array);
             } else {
-                response.getWriter().println(parser.stringToJson("access denied"));
+                List<User> empty = new ArrayList<>();
+                response.getWriter().println(parser.usersToJson(empty));
+                System.out.println(empty);
                 System.out.println("access denied");
             }
             break;
@@ -139,7 +152,11 @@ public class UserServlet extends HttpServlet {
             break;
             case ADD_PROFILE_IMG:
             String[] imageData = parser.parseImageData(json);
-            new DbInsert().insertImage(imageData[0], imageData[1], imageData[2]);
+            if (new DbInsert().insertImage(imageData[0], imageData[1], imageData[2])) {
+                response.getWriter().println(parser.stringToJson("ok"));
+            } else {
+                response.getWriter().println(parser.stringToJson("failed"));
+            }
             break;
             default:
             System.err.println("illegal action");

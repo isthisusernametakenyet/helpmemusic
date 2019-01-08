@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,6 +24,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+import com.tig167.helpmusic.data.local.db.DbHelper;
+import com.tig167.helpmusic.data.remote.JsonParser;
+import com.tig167.helpmusic.main_app.SessionObject;
+import com.tig167.helpmusic.util.ImageUtil;
+import com.tig167.helpmusic.util.PictureHash;
 
 import org.json.JSONArray;
 
@@ -189,9 +195,9 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, " data.getExtra() " + data.getExtras().toString());
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
-            String imageString = new Image().encode(imageBitmap);
+            String imageString = new ImageUtil().encode(imageBitmap);
             Log.d(LOG_TAG, " Base64 encode " + imageString);
-            mImageView.setImageBitmap(new Image().decode(imageString));
+            mImageView.setImageBitmap(new ImageUtil().decode(imageString));
             session.user().setProfileImage(imageBitmap);
             Log.d(LOG_TAG, " Decode base64 to bitmap");
             PictureHash ph = new PictureHash(session.user().name(), session.user().email());
