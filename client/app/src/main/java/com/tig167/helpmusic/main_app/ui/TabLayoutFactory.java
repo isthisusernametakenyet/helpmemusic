@@ -5,6 +5,9 @@ import android.view.View;
 
 import com.tig167.helpmusic.main_app.ui.fragment.PagerAdapter;
 
+/**
+ * Creates the tab layout with titled tabs used in main activity.
+ */
 class TabLayoutFactory {
 
     static TabLayout create(View view) {

@@ -24,6 +24,9 @@ import org.json.JSONArray;
 
 import java.util.List;
 
+/**
+ * Handle user login or go to sign up.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = LoginActivity.class.getSimpleName();

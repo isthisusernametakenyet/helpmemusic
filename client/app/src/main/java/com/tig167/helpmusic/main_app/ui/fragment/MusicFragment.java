@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import com.tig167.helpmusic.R;
 
 /**
+ * Music functionality placeholder.
  * This class is under construction.
  */
 public class MusicFragment extends Fragment {  // TODO

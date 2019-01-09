@@ -24,6 +24,9 @@ import org.json.JSONArray;
 
 import java.util.List;
 
+/**
+ * Provides the search functionality accessed from main activity.
+ */
 public class SearchBar extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private static final String LOG_TAG = SearchBar.class.getSimpleName();
@@ -79,6 +82,14 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
         listView.setAdapter(adapter);
     }
 
+    /**
+     * Provide user profile fragment with user data on item click.
+     *
+     * @param parent        the parent AdapterView where the click was detected
+     * @param view          the clicked view within AdapterView provided by adapter
+     * @param position      the view position in adapter
+     * @param id            the clicked item row id
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(this, ShowProfileFragment.class);

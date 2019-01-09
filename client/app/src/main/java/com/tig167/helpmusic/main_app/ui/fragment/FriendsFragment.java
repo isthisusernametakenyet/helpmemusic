@@ -15,7 +15,7 @@ import com.tig167.helpmusic.main_app.SessionObject;
 import com.tig167.helpmusic.main_app.model.User;
 
 /**
- * Fragment with list of friends and logic to control it, eg. show profile when clicked.
+ * Fragment with logic to control list of friends, eg. show profile when clicked.
  */
 
 public class FriendsFragment extends ListFragment implements OnItemClickListener {

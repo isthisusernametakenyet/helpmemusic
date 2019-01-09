@@ -44,7 +44,7 @@ public class User {
     /**
      * Accessor for friend data
      *
-     * @return  an unmodifiable list of friends
+     * @return  a read-only list of friends
      */
     public List<User> friends() {
         return Collections.unmodifiableList(friends);

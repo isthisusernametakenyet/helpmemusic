@@ -3,6 +3,9 @@ package com.tig167.helpmusic.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * Generates hashed passwords.
+ */
 public class PasswordHash {
 
     public String getSHA256SecurePassword(String passwordToHash){

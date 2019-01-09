@@ -30,6 +30,12 @@ import com.tig167.helpmusic.main_app.ui.MainActivity;
 
 import org.json.JSONArray;
 
+/**
+ * Holds a profile for the specified user.
+ * Logic to add the owner of this profile as a new friend.
+ * Writes to local and remote storage if user added.
+ */
+
 public class UserProfileFragment extends Fragment {
 
     private static final String LOG_TAG = UserProfileFragment.class.getSimpleName();

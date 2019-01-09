@@ -7,6 +7,9 @@ import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 
+/**
+ * Format image, eg. a profile image.
+ */
 public class ImageUtil {
 
     public static String encode(Bitmap bitmap) {

@@ -23,6 +23,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * Displays the app name and checks server connection.
+ * Takes you to login if connection was established.
+ */
 public class StartScreen extends AppCompatActivity {
 
     private static final String LOG_TAG = StartScreen.class.getSimpleName();

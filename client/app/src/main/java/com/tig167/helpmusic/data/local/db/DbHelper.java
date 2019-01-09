@@ -14,6 +14,10 @@ import com.tig167.helpmusic.main_app.model.User;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Database helper: local storage.
+ * Handles an SQLite database to save and load session data.
+ */
 public class DbHelper extends SQLiteOpenHelper implements Storage<User> {
 
     private static final String DATABASE_NAME = "session_user_db";

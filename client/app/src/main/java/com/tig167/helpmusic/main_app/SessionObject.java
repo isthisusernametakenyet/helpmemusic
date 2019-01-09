@@ -3,6 +3,10 @@ package com.tig167.helpmusic.main_app;
 import com.tig167.helpmusic.main_app.model.User;
 import com.tig167.helpmusic.main_app.model.UserFactory;
 
+/**
+ * Represents current session.
+ * Holds a reference to user who is owner of session.
+ */
 public class SessionObject {
 
     private static SessionObject instance;

@@ -26,6 +26,9 @@ import com.tig167.helpmusic.data.remote.ServerAction;
 
 import org.json.JSONArray;
 
+/**
+ * Handles sign up activity and takes you to the main activity on success.
+ */
 public class SignUp extends AppCompatActivity {
 
     private static final String LOG_TAG = SignUp.class.getSimpleName();

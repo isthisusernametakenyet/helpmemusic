@@ -14,10 +14,22 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Put data in json arrays, or get data from json arrays.
+ */
 public class JsonParser {
 
     private static final String LOG_TAG = JsonParser.class.getSimpleName();
 
+    /**
+     * Put data in json objects when handling images.
+     * The object containing the request code is object 0 in the json array returned.
+     *
+     * @param requestCode   the server request code
+     * @param pictureHash   the image meta data
+     * @param image         the primary image data
+     * @param email         the app user identifier
+     */
     public JSONArray imageDataToJson(
             String requestCode,
             String pictureHash,
@@ -39,6 +51,14 @@ public class JsonParser {
         return array;
     }
 
+    /**
+     * Put data in json objects at login.
+     * The object containing the request code is object 0 in the json array returned.
+     *
+     * @param requestCode   the server request code
+     * @param email         the app user identifier
+     * @param str           the very secret password
+     */
     public JSONArray loginDataToJson(String requestCode, String email, String str) {
         JSONArray array = new JSONArray();
         try {
@@ -55,6 +75,15 @@ public class JsonParser {
         return array;
     }
 
+    /**
+     * Put data in json objects at sign up.
+     * The object containing the request code is object 0 in the json array returned.
+     *
+     * @param requestCode   the server request code
+     * @param name          the user name
+     * @param email         the app user identifier
+     * @param str           nothing appropriate
+     */
     public JSONArray signupDataToJson(String requestCode, String name, String email, String str) {
         JSONArray array = new JSONArray();
         try {
@@ -72,7 +101,15 @@ public class JsonParser {
         return array;
     }
 
-        public JSONArray friendshipToJson(
+    /**
+     * Put data in json objects when friend is to be added.
+     * The object containing the request code is object 0 in the json array returned.
+     *
+     * @param requestCode   the server request code
+     * @param email         the app user identifier
+     * @param fEmail        the soon-to-be-friend user identifier
+     */
+    public JSONArray friendshipToJson(
             String requestCode,
             String email,
             String fEmail) {
@@ -91,6 +128,12 @@ public class JsonParser {
         return arr;
     }
 
+    /**
+     * Parse json to plain old string object.
+     *
+     * @param array     the json array to be parsed
+     * @return          a simple text response
+     */
     public String jsonToString(JSONArray array) {
         String response = "";
         try {
@@ -102,6 +145,12 @@ public class JsonParser {
         return response;
     }
 
+    /**
+     * Take a json array and blurt out a list of users.
+     *
+     * @param array     the json array to be processed
+     * @return          the user data in a list
+     */
     public List<User> jsonToUsers(JSONArray array){
         List<User> userList = new ArrayList<>();
         for(int i = 0; i < array.length(); i++) {
