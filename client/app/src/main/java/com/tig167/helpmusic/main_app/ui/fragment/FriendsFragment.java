@@ -14,6 +14,10 @@ import com.tig167.helpmusic.R;
 import com.tig167.helpmusic.main_app.SessionObject;
 import com.tig167.helpmusic.main_app.model.User;
 
+/**
+ * Fragment with list of friends and logic to control it, eg. show profile when clicked.
+ */
+
 public class FriendsFragment extends ListFragment implements OnItemClickListener {
 
     private static final String LOG_TAG = FriendsFragment.class.getSimpleName();
@@ -40,6 +44,14 @@ public class FriendsFragment extends ListFragment implements OnItemClickListener
         Log.d(LOG_TAG,"Reset list-view");
     }
 
+    /**
+     * Callback method to show profile when clicked in list.
+     *
+     * @param parent    the parent AdapterView where the click was detected
+     * @param view      the clicked view within AdapterView provided by adapter
+     * @param position  the view position in adapter
+     * @param id        the clicked item row id
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Intent intent = new Intent(getActivity(), ShowProfileFragment.class);
