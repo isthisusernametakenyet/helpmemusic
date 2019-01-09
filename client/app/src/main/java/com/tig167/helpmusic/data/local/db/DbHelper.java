@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.tig167.helpmusic.data.local.Storage;
+import com.tig167.helpmusic.main_app.model.UserFactory;
 import com.tig167.helpmusic.util.ImageUtil;
 import com.tig167.helpmusic.main_app.model.User;
 
@@ -118,7 +119,7 @@ public class DbHelper extends SQLiteOpenHelper implements Storage<User> {
         User user = null;
         try (Cursor cursor = db.rawQuery(SQL_SELECT, null)) {
             if (cursor.moveToFirst()) {
-                user = new User(
+                user = UserFactory.create(
                         cursor.getString(0),
                         cursor.getString(1),
                         ImageUtil.decode(cursor.getString(2))
@@ -142,7 +143,7 @@ public class DbHelper extends SQLiteOpenHelper implements Storage<User> {
         List<User> friends = new ArrayList<>();
         try (Cursor cursor = db.rawQuery(SQL_SELECT, null)) {
             if (cursor.moveToFirst()) {
-                friends.add(new User(
+                friends.add(UserFactory.create(
                         cursor.getString(0),
                         cursor.getString(1),
                         ImageUtil.decode(cursor.getString(2))

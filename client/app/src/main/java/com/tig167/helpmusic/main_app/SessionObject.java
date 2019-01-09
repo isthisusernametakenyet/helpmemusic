@@ -1,6 +1,7 @@
 package com.tig167.helpmusic.main_app;
 
 import com.tig167.helpmusic.main_app.model.User;
+import com.tig167.helpmusic.main_app.model.UserFactory;
 
 public class SessionObject {
 
@@ -21,7 +22,7 @@ public class SessionObject {
     }
 
     public void setUser(String name, String email) {
-        this.user = new User(name, email);
+        this.user = UserFactory.create(name, email);
     }
 
     public void setUser(User user) {

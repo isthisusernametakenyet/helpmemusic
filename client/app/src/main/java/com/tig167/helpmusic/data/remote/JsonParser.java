@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.tig167.helpmusic.main_app.model.User;
+import com.tig167.helpmusic.main_app.model.UserFactory;
 import com.tig167.helpmusic.util.ImageUtil;
 
 import org.json.JSONArray;
@@ -112,8 +113,7 @@ public class JsonParser {
                 Bitmap profileImage = ImageUtil.decode(obj.getString("imageData"));
                 //Log.d(LOG_TAG, ": decode image " + profileImage.toString());
 
-                User u = new User(name, email);
-                u.setProfileImage(profileImage);
+                User u = UserFactory.create(name, email, profileImage);
                 userList.add(u);
             }
             catch(JSONException e) {

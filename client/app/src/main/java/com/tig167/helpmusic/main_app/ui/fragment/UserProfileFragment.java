@@ -25,6 +25,7 @@ import com.tig167.helpmusic.data.remote.VolleyResultCallback;
 import com.tig167.helpmusic.data.remote.VolleyService;
 import com.tig167.helpmusic.main_app.SessionObject;
 import com.tig167.helpmusic.main_app.model.User;
+import com.tig167.helpmusic.main_app.model.UserFactory;
 import com.tig167.helpmusic.main_app.ui.MainActivity;
 
 import org.json.JSONArray;
@@ -62,7 +63,7 @@ public class UserProfileFragment extends Fragment {
         args = getArguments();
 
         if (args != null) {
-            user = new User(
+            user = UserFactory.create(
                     args.getString("name"),
                     args.getString("email"),
                     (Bitmap) args.get("image")
