@@ -17,14 +17,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.tig167.helpmusic.data.remote.JsonParser;
 import com.tig167.helpmusic.R;
+import com.tig167.helpmusic.data.local.db.DbHelper;
+import com.tig167.helpmusic.data.remote.JsonParser;
+import com.tig167.helpmusic.data.remote.ServerAction;
 import com.tig167.helpmusic.data.remote.VolleyResultCallback;
 import com.tig167.helpmusic.data.remote.VolleyService;
 import com.tig167.helpmusic.main_app.SessionObject;
-import com.tig167.helpmusic.data.local.db.DbHelper;
 import com.tig167.helpmusic.main_app.model.User;
-import com.tig167.helpmusic.data.remote.ServerAction;
 import com.tig167.helpmusic.main_app.ui.MainActivity;
 
 import org.json.JSONArray;
@@ -32,6 +32,7 @@ import org.json.JSONArray;
 public class UserProfileFragment extends Fragment {
 
     private static final String LOG_TAG = UserProfileFragment.class.getSimpleName();
+
     private static SessionObject session = SessionObject.getInstance();
     private static DbHelper storage;
 
