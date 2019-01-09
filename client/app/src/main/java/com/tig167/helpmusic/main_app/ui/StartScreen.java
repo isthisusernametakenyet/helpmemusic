@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.tig167.helpmusic.R;
+import com.tig167.helpmusic.data.remote.ServerAction;
 import com.tig167.helpmusic.data.remote.VolleyResultCallback;
 import com.tig167.helpmusic.data.remote.JsonParser;
 import com.tig167.helpmusic.data.remote.VolleyService;
@@ -37,6 +38,21 @@ public class StartScreen extends AppCompatActivity {
         initVolley();
     }
 
+    /**
+     * Say hello to the server in order to check the connection.
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "onResume, start-screen");
+        final String URL = MainActivity.URL + ServerAction.CONNECT.value() + "hello";
+        volleyService.getDataVolley("GET", URL);
+    }
+
+
+    /**
+     * If the answer to "hello" is "world" we have a connection and are good to go.
+     */
     private void initVolley() {
         volleyService = new VolleyService(new VolleyResultCallback() {
 
@@ -60,14 +76,6 @@ public class StartScreen extends AppCompatActivity {
                 Log.d(LOG_TAG, "serverConnection " + error.getCause().getMessage());
             }
         },this);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(LOG_TAG, "onResume, start-screen");
-        final String URL = MainActivity.URL + "?connect=hello";
-        volleyService.getDataVolley("GET", URL);
     }
 
     private void nextActivity() {

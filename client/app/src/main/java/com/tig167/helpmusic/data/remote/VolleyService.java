@@ -35,7 +35,7 @@ public class VolleyService {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    if(resultCallback != null)
+                    if (resultCallback != null)
                         resultCallback.notifyError(requestType, error);
                 }
             });
@@ -61,7 +61,7 @@ public class VolleyService {
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    if(resultCallback != null)
+                    if (resultCallback != null)
                         resultCallback.notifyError(requestType, error);
                 }
             });

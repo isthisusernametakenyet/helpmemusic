@@ -68,7 +68,7 @@ public class UserProfileFragment extends Fragment {
             );
         }
 
-        if (args == null || user.isUnfriendable(session.user())) {
+        if (args == null || session.user().isUnfriendable(user)) {
             view = inflater.inflate(R.layout.user_profile_no_button, container, false);
         } else {
             onResult();

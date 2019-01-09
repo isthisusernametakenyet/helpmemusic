@@ -11,18 +11,11 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.tig167.helpmusic.R;
 import com.tig167.helpmusic.data.remote.ServerAction;
 import com.tig167.helpmusic.data.remote.VolleyResultCallback;
@@ -70,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void instantiateVolleyCallback() {
         volleyService = new VolleyService(new VolleyResultCallback() {
+
             @Override
             public void notifySuccess(String requestType, JSONArray response) {
                 Log.d(LOG_TAG, "Volley requester " + requestType);
@@ -186,6 +180,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Process the newly taken picture returned from camera. Set the user's profile image (bitmap)
+     * and send encoded & hashed image-string as json to server
+     *
+     * @param requestCode   the type of request sent to camera, eg. take a picture
+     * @param resultCode    the status of the task performed by camera, eg. ok
+     * @param data          the intent containing the image returned from camera activity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {

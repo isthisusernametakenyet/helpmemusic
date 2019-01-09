@@ -39,8 +39,16 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
         session = SessionObject.getInstance();
+        initCallback();
     }
 
+    /**
+     *
+     * Validate email, encrypt password and send a sign-up request
+     * with the new user data as json to server
+     *
+     * @param view the button
+     */
     public void signUpButton(View view) {
         PasswordHash ph = new PasswordHash();
         EditText nameField = findViewById(R.id.signUpName);
@@ -54,7 +62,6 @@ public class SignUp extends AppCompatActivity {
             return;
         }
         String securePassword = ph.getSHA256SecurePassword(passwordField.getText().toString());
-        initCallback();
         volleyService.postDataVolley(
                 "POST",
                 MainActivity.URL,
@@ -67,13 +74,18 @@ public class SignUp extends AppCompatActivity {
         );
     }
 
+    /**
+     * Instantiate volley result callback for the sign up request.
+     * On success: set user to this session, save new session in local database
+     * and continue to main activity
+     */
     private void initCallback() {
         volleyService = new VolleyService(new VolleyResultCallback() {
 
             @Override
             public void notifySuccess(String requestType, JSONArray response) {
                 Log.d(LOG_TAG, "Volley requester " + requestType);
-                String str = new JsonParser().jsonToSignupResponse(response);
+                String str = new JsonParser().jsonToString(response);
                 if ("ok".equalsIgnoreCase(str)) {
                     session.setUser(name, email);
                     DbHelper.getInstance(getApplicationContext())

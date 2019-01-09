@@ -2,14 +2,16 @@ package com.tig167.helpmusic.data.remote;
 
 public enum ServerAction {
 
-    CONNECT("connect"),
+    /**
+     * Valid server requests
+     */
+
+    CONNECT("?connect="),
     LOGIN("login"),
     ADD_USER("addUser"),
-    GET_USER_NAME("getUserName"),
-    GET_FRIENDS("getFriends"),
     ADD_FRIEND("addFriend"),
-    GET_PROFILE_IMG("getProfileImg"),
-    ADD_PROFILE_IMG("addProfileImg");
+    ADD_PROFILE_IMG("addProfileImg"),
+    GET_SEARCH_RESULT("?getSearchResult=");
 
     private String value;
 

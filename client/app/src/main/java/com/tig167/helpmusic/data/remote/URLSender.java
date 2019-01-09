@@ -9,6 +9,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Obsolete.
+ * This has been replaced with Volley throughout the whole application.
+ */
 public class URLSender extends AsyncTask<String, Void, String> {
 
     private static final String LOG_TAG = URLSender.class.getSimpleName();

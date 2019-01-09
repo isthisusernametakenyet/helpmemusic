@@ -13,6 +13,7 @@ import android.widget.SearchView;
 import com.android.volley.VolleyError;
 import com.tig167.helpmusic.data.remote.JsonParser;
 import com.tig167.helpmusic.R;
+import com.tig167.helpmusic.data.remote.ServerAction;
 import com.tig167.helpmusic.data.remote.VolleyResultCallback;
 import com.tig167.helpmusic.data.remote.VolleyService;
 import com.tig167.helpmusic.main_app.model.User;
@@ -66,7 +67,7 @@ public class SearchBar extends AppCompatActivity implements AdapterView.OnItemCl
     }
 
     private void doMySearch(String query) {
-        final String URL = MainActivity.URL + "?getSearchResult=" + query;
+        final String URL = MainActivity.URL + ServerAction.GET_SEARCH_RESULT.value() + query;
         volleyService.getDataVolley("GET", URL);
     }
 
