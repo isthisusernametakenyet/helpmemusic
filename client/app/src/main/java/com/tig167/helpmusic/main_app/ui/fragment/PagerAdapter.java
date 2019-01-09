@@ -6,11 +6,17 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import android.util.SparseArray;
 
+/**
+ * Use a fragment to manage each page
+ */
 public class PagerAdapter extends FragmentStatePagerAdapter {
 
     private static final String LOG_TAG = PagerAdapter.class.getSimpleName();
     private int count;
 
+    /**
+     * Page names
+     */
     public enum FragmentTab {
         NEWS_FEED("News"),
         FRIENDS("Friends"),
@@ -40,6 +46,11 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
+    /**
+     * Return the fragment associated with a specified position.
+     * @param position  the specified position
+     * @return          the fragment with this position
+     */
     @Override
     public Fragment getItem(int position) {
         FragmentTab tab = tabs.get(position);

@@ -33,7 +33,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * The main screen consists of 
+ * The main screen consists of
  *  - a search bar
  *  - your profile image
  *  - a not yet implemented status update function

@@ -10,7 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6868e6b3-09c0-4ef6-ade3-e9ab58cb485c" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gradle/4.6/taskHistory/taskHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.6/taskHistory/taskHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/fragment/PagerAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/fragment/PagerAdapter.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/app/build/intermediates/annotation_processor_list/" />
@@ -67,20 +70,11 @@
       <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/MainActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="35" column="31" lean-forward="true" selection-start-line="35" selection-start-column="31" selection-end-line="35" selection-end-column="31" />
+            <state relative-caret-position="-2703">
+              <caret line="33" selection-start-line="33" selection-end-line="33" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PagerAdapter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/fragment/PagerAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="85">
-              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
             </state>
           </provider>
         </entry>
@@ -2354,7 +2348,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/data/remote/IResult.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/data/remote/VolleyResultCallback.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/fragment/FriendsFragment.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/fragment/PagerAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/TabLayoutFactory.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/model/User.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/LoginActivity.java" />
@@ -2368,6 +2361,7 @@
         <option value="$PROJECT_DIR$/app/build.gradle" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/data/remote/VolleyService.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/MainActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/fragment/PagerAdapter.java" />
       </list>
     </option>
   </component>
@@ -2599,7 +2593,7 @@
       <window_info id="Image Layers" order="2" />
       <window_info id="Build Variants" order="2" side_tool="true" />
       <window_info anchor="right" id="Capture Analysis" order="3" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5030303" side_tool="true" visible="true" weight="0.31833333" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5030303" side_tool="true" weight="0.18166667" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.49924242" weight="0.18936877" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Terminal" order="7" />
@@ -2608,7 +2602,7 @@
       <window_info id="Capture Tool" order="2" />
       <window_info id="Designer" order="2" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28181818" />
-      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.4969697" visible="true" weight="0.31833333" />
+      <window_info anchor="bottom" id="Build" order="7" sideWeight="0.4969697" visible="true" weight="0.115" />
       <window_info anchor="right" id="Gradle" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Device File Explorer" order="3" side_tool="true" />
@@ -2987,14 +2981,14 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/fragment/PagerAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+          <caret line="9" column="37" lean-forward="true" selection-start-line="9" selection-start-column="37" selection-end-line="9" selection-end-column="37" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/tig167/helpmusic/main_app/ui/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="35" column="31" lean-forward="true" selection-start-line="35" selection-start-column="31" selection-end-line="35" selection-end-column="31" />
+        <state relative-caret-position="-2703">
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
