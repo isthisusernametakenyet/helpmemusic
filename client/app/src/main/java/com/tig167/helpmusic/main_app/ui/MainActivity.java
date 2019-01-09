@@ -32,6 +32,10 @@ import org.json.JSONArray;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The main screen consists of a tabbed layout, plus a search bar and a button for camera access.
+ */
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String URL = "http://10.0.2.2:8080/users";

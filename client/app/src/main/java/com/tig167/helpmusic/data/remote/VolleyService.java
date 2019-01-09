@@ -11,6 +11,10 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 
+/**
+ * Handles all volley requests throughout the application.
+ */
+
 public class VolleyService {
 
     private VolleyResultCallback resultCallback;
