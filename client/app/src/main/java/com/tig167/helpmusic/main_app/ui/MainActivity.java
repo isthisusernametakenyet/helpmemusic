@@ -33,7 +33,16 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * The main screen consists of a tabbed layout, plus a search bar and a button for camera access.
+ * The main screen consists of 
+ *  - a search bar
+ *  - your profile image
+ *  - a not yet implemented status update function
+ *  - a button for camera access
+ *  - a tabbed layout.
+ * Tab 1: news feed placeholder
+ * Tab 2: friends
+ * Tab 3: user profile
+ * Tab 4: music functionality placeholder
  */
 
 public class MainActivity extends AppCompatActivity {
