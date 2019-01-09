@@ -4,6 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
+/**
+ * Not used.
+ */
+
 public class SearchProfileAdapter extends FragmentStatePagerAdapter {
 
     public SearchProfileAdapter(FragmentManager fm){

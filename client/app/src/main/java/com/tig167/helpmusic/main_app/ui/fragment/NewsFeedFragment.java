@@ -12,6 +12,10 @@ import com.tig167.helpmusic.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Feed placeholder.
+ * This class is under construction.
+ */
 public class NewsFeedFragment extends ListFragment {
 
     @Override
@@ -24,9 +28,7 @@ public class NewsFeedFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        /*
-         *  DEBUG
-         */
+        // Feed placeholder
         List<NewsFeedElement> feed = new ArrayList<>();
         feed.add(new NewsFeedElement("hello feed"));
         ListView listView = getListView();

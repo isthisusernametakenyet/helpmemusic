@@ -12,6 +12,9 @@ import com.tig167.helpmusic.R;
 
 import java.util.List;
 
+/**
+ * This class is under construction.
+ */
 public class NewsFeedElementAdapter extends ArrayAdapter<NewsFeedElement> {
 
     private Context c;

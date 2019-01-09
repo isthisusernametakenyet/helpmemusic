@@ -14,6 +14,9 @@ import com.tig167.helpmusic.main_app.model.User;
 
 import java.util.List;
 
+/**
+ * Logic to control each item in friends fragment list.
+ */
 public class UserAdapter extends ArrayAdapter<User> {
 
     private Context c;

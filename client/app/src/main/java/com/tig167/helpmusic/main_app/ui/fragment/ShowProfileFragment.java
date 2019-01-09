@@ -14,8 +14,9 @@ import com.tig167.helpmusic.R;
 
 //import android.support.v7.app.AppCompatActivity;
 
-
-
+/**
+ * Creates a user profile instance with the specified user data.
+ */
 public class ShowProfileFragment extends FragmentActivity {
 
     private static final String LOG_TAG = ShowProfileFragment.class.getSimpleName();
@@ -25,6 +26,12 @@ public class ShowProfileFragment extends FragmentActivity {
     TextView mTextView;
     ImageView mBitMap;
 
+    /**
+     * Supply data in a bundle via fragment transaction to user profile
+     * when it's about to be shown on screen.
+     *
+     * @param savedInstanceState    the state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
