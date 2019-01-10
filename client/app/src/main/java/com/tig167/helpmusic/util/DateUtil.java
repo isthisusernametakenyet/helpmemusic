@@ -18,8 +18,8 @@ public class DateUtil {
         return FORMATTER.format(time);
     }
 
-    public static String getMinutesSince(LocalDateTime ldt) {
-        return Long.toString(ChronoUnit.MINUTES.between(ldt, LocalDateTime.now()));
+    public static String getMinutesSince(LocalDateTime earlier) {
+        return Long.toString(ChronoUnit.MINUTES.between(earlier, LocalDateTime.now()));
     }
 
 }

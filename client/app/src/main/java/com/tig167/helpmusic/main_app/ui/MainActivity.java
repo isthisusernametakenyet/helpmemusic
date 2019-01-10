@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getSession() {
         if (null == session.user()) {
-            SessionObject.getInstance().setUser(storage.loadSession());
+            SessionObject.getInstance().setUser(DbHelper.getInstance(this).loadSession());
             session.setSessionStart();
         }
         Log.d(LOG_TAG, "Time since session start: " + session.timeElapsed());
@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
 
     String mCurrentPhotoPath;
 
-    //Will be used to create a image file on the phone in the completed application.
+    //Will be used to create an image file on the phone in the completed application.
     //TODO: fix the method so it works.
     private File createImageFile() throws IOException {
         PictureHash ph = new PictureHash(session.user().name(), session.user().email());
