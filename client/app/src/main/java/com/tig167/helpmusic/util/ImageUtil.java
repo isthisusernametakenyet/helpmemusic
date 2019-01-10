@@ -8,7 +8,7 @@ import android.util.Log;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Format image, eg. a profile image.
+ * Formats an image, eg. a profile image.
  */
 public class ImageUtil {
 

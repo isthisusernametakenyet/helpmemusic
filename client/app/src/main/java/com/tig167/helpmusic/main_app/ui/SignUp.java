@@ -27,7 +27,7 @@ import com.tig167.helpmusic.data.remote.ServerAction;
 import org.json.JSONArray;
 
 /**
- * Handles sign up activity and takes you to the main activity on success.
+ * Handles user sign up, and takes you to the main activity on success.
  */
 public class SignUp extends AppCompatActivity {
 
@@ -46,7 +46,6 @@ public class SignUp extends AppCompatActivity {
     }
 
     /**
-     *
      * Validate email, encrypt password and send a sign-up request
      * with the new user data as json to server
      *

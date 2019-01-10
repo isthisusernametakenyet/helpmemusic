@@ -44,7 +44,6 @@ import java.io.IOException;
  * Tab 3: user profile
  * Tab 4: music functionality placeholder
  */
-
 public class MainActivity extends AppCompatActivity {
 
     public static final String URL = "http://10.0.2.2:8080/users";

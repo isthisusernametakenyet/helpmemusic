@@ -5,7 +5,7 @@ import com.tig167.helpmusic.main_app.model.UserFactory;
 
 /**
  * Represents current session.
- * Holds a reference to user who is owner of session.
+ * Holds a reference to a user object, i.e. the owner of current session.
  */
 public class SessionObject {
 

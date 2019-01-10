@@ -1,10 +1,9 @@
 package com.tig167.helpmusic.data.remote;
 
+/**
+ * Holds the different types of requests available backend.
+ */
 public enum ServerAction {
-
-    /**
-     * Valid server requests
-     */
 
     CONNECT("?connect="),
     LOGIN("login"),
