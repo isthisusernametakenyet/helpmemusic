@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Process the newly taken picture returned from camera. Set the user's profile image (bitmap)
-     * and send encoded & hashed image-string as json to server
+     * and send encoded and hashed image-string as json to server
      *
      * @param requestCode   the type of request sent to camera, eg. take a picture
      * @param resultCode    the status of the task performed by camera, eg. ok
@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
     String mCurrentPhotoPath;
 
     //Will be used to create a image file on the phone in the completed application.
-    //TODO: fixe the method so it works.
+    //TODO: fix the method so it works.
     private File createImageFile() throws IOException {
         PictureHash ph = new PictureHash(session.user().name(), session.user().email());
         String fileName = "JPEG_" + ph.hash();
