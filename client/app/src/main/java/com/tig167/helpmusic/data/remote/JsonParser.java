@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,6 +30,7 @@ public class JsonParser {
      * @param pictureHash   the image meta data
      * @param image         the primary image data
      * @param email         the app user identifier
+     * @return              the json array of image data
      */
     public JSONArray imageDataToJson(
             String requestCode,
@@ -58,6 +60,7 @@ public class JsonParser {
      * @param requestCode   the server request code
      * @param email         the app user identifier
      * @param str           the very secret password
+     * @return              the json array with login data
      */
     public JSONArray loginDataToJson(String requestCode, String email, String str) {
         JSONArray array = new JSONArray();
@@ -81,7 +84,7 @@ public class JsonParser {
      *
      * @param requestCode   the server request code
      * @param name          the user name
-     * @param email         the app user identifier
+     * @param email         the user email
      * @param str           nothing appropriate
      */
     public JSONArray signupDataToJson(String requestCode, String name, String email, String str) {
@@ -106,8 +109,9 @@ public class JsonParser {
      * The object containing the request code is object 0 in the json array returned.
      *
      * @param requestCode   the server request code
-     * @param email         the app user identifier
-     * @param fEmail        the soon-to-be-friend user identifier
+     * @param email         the user email
+     * @param fEmail        the other user email
+     * @return              a json array containing two email addresses
      */
     public JSONArray friendshipToJson(
             String requestCode,
@@ -129,10 +133,10 @@ public class JsonParser {
     }
 
     /**
-     * Parse json to plain old string object.
+     * Parse json to string.
      *
      * @param array     the json array to be parsed
-     * @return          a simple text response
+     * @return          a text response
      */
     public String jsonToString(JSONArray array) {
         String response = "";
@@ -146,10 +150,10 @@ public class JsonParser {
     }
 
     /**
-     * Take a json array and blurt out a list of users.
+     * Parse json array to list of users.
      *
      * @param array     the json array to be processed
-     * @return          the user data in a list
+     * @return          a list of user data
      */
     public List<User> jsonToUsers(JSONArray array){
         List<User> userList = new ArrayList<>();

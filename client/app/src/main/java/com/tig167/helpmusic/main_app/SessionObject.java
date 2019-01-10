@@ -2,6 +2,10 @@ package com.tig167.helpmusic.main_app;
 
 import com.tig167.helpmusic.main_app.model.User;
 import com.tig167.helpmusic.main_app.model.UserFactory;
+import com.tig167.helpmusic.util.DateUtil;
+
+import java.time.LocalDateTime;
+import java.time.Period;
 
 /**
  * Represents current session.
@@ -11,6 +15,7 @@ public class SessionObject {
 
     private static SessionObject instance;
     private User user;
+    private LocalDateTime start;
 
     private SessionObject() {}
 
@@ -19,6 +24,18 @@ public class SessionObject {
             instance = new SessionObject();
         }
         return instance;
+    }
+
+    public void setSessionStart() {
+        start = LocalDateTime.now();
+    }
+
+    public LocalDateTime getSessionStart() {
+        return start;
+    }
+
+    public String timeElapsed() {
+        return DateUtil.getMinutesSince(start) + " minutes";
     }
 
     public User user() {

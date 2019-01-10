@@ -3,7 +3,7 @@ package com.tig167.helpmusic.main_app.model;
 import android.graphics.Bitmap;
 
 /**
- * Creates all users.
+ * Responsible for creation of user object.
  */
 public class UserFactory {
 

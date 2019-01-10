@@ -127,7 +127,9 @@ public class MainActivity extends AppCompatActivity {
     private void getSession() {
         if (null == session.user()) {
             session.setUser(storage.loadSession());
+            session.setSessionStart();
         }
+        Log.d(LOG_TAG, "Time since session start: " + session.timeElapsed());
     }
 
     @Override

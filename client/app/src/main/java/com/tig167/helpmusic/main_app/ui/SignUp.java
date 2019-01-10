@@ -18,6 +18,7 @@ import com.android.volley.toolbox.Volley;
 import com.tig167.helpmusic.data.remote.JsonParser;
 import com.tig167.helpmusic.data.remote.VolleyResultCallback;
 import com.tig167.helpmusic.data.remote.VolleyService;
+import com.tig167.helpmusic.util.DateUtil;
 import com.tig167.helpmusic.util.PasswordHash;
 import com.tig167.helpmusic.R;
 import com.tig167.helpmusic.main_app.SessionObject;
@@ -99,6 +100,9 @@ public class SignUp extends AppCompatActivity {
                 String str = new JsonParser().jsonToString(response);
                 if ("ok".equalsIgnoreCase(str)) {
                     session.setUser(name, email);
+                    session.setSessionStart();
+                    String sessionStart = DateUtil.format(session.getSessionStart());
+                    Log.d(LOG_TAG, sessionStart + " " + session.user().email());
                     DbHelper.getInstance(getApplicationContext())
                             .saveSession(session.user());
                     nextActivity();

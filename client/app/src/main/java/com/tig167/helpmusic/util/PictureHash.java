@@ -5,23 +5,21 @@ import android.util.Log;
 import java.time.LocalDateTime;
 
 /**
- * Provides functionality to set hash with name, email and date to pictures.
+ * Provides functionality to set hash to pictures, with name, email and date.
  */
 public class PictureHash {
     private String hashStart;
     private static final String LOG_TAG = "PictureHash: ";
 
-    public PictureHash(String name, String mail) {
-        hashStart = name + mail;
+    public PictureHash(String name, String email) {
+        hashStart = name + email;
         setHashStart(hashStart);
     }
 
     private void setHashStart(String hashStart) {
-        //Time time = new Time();
         LocalDateTime now = LocalDateTime.now();
 
-        hashStart += now.toString();
-
+        hashStart += DateUtil.format(now);
 
         Log.d(LOG_TAG, hashStart);
     }
