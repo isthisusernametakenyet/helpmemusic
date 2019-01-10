@@ -82,6 +82,9 @@ public class StartScreen extends AppCompatActivity {
         },this);
     }
 
+    /**
+     * Continue to login since connection was ok.
+     */
     private void nextActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
         Log.d(LOG_TAG, "Intent: start login activity");

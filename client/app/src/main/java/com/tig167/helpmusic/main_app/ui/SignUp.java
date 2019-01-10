@@ -46,6 +46,24 @@ public class SignUp extends AppCompatActivity {
     }
 
     /**
+     * Send new user data to server.
+     *
+     * @param securePassword    the encrypted password
+     */
+    private void sendServerPostRequest(String securePassword) {
+        volleyService.postDataVolley(
+                "POST",
+                MainActivity.URL,
+                new JsonParser().signupDataToJson(
+                        ServerAction.ADD_USER.value(),
+                        name,
+                        email,
+                        securePassword
+                )
+        );
+    }
+
+    /**
      * Validate email, encrypt password and send a sign-up request
      * with the new user data as json to server
      *
@@ -64,16 +82,7 @@ public class SignUp extends AppCompatActivity {
             return;
         }
         String securePassword = ph.getSHA256SecurePassword(passwordField.getText().toString());
-        volleyService.postDataVolley(
-                "POST",
-                MainActivity.URL,
-                new JsonParser().signupDataToJson(
-                        ServerAction.ADD_USER.value(),
-                        name,
-                        email,
-                        securePassword
-                )
-        );
+        sendServerPostRequest(securePassword);
     }
 
     /**
@@ -104,6 +113,9 @@ public class SignUp extends AppCompatActivity {
         },this);
     }
 
+    /**
+     * Sign up was successful, continue to main activity.
+     */
     private void nextActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         Log.d(LOG_TAG, "Intent: start main activity");
