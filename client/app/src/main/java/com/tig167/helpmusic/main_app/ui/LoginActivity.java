@@ -25,7 +25,7 @@ import org.json.JSONArray;
 import java.util.List;
 
 /**
- * Handle user login or go to sign up.
+ * Handles user login or takes you to sign up.
  */
 public class LoginActivity extends AppCompatActivity {
 

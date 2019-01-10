@@ -57,7 +57,7 @@ public class VolleyService {
     }
 
     /**
-     * Handle POST requests.
+     * Handle GET requests.
      * @param requestType   a string with the specified request type i.e. get
      * @param url           the server url for this request
      */
