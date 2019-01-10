@@ -3,12 +3,15 @@ package com.tig167.helpmusic.main_app.ui;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -69,6 +72,20 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
         addTabListeners(viewPager);
         mImageView = findViewById(R.id.imageView);
+
+        float cornerRadius = 7f;
+        Resources res = getResources();
+        RoundedBitmapDrawable drawable;
+        if (session.user().profileImage() != null) {
+            drawable = RoundedBitmapDrawableFactory.create(res, session.user().profileImage());
+
+            drawable.setCornerRadius(cornerRadius);
+
+            mImageView.setImageDrawable(drawable);
+
+            Log.d(LOG_TAG, ": bitmap " + session.user().profileImage().toString());
+        }
+
         instantiateVolleyCallback();
         initSearch();
     }
@@ -227,6 +244,8 @@ public class MainActivity extends AppCompatActivity {
 
     String mCurrentPhotoPath;
 
+    //Will be used to create a image file on the phone in the complected application.
+    //TODO: fixe the method so it works.
     private File createImageFile() throws IOException {
         PictureHash ph = new PictureHash(session.user().name(), session.user().email());
         String fileName = "JPEG_" + ph.hash();
