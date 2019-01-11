@@ -12,9 +12,6 @@ public class DateUtil {
             DateTimeFormatter.ofPattern(PATTERN);
 
     public static String format(LocalDateTime time) {
-        if (time == null) {
-            return null;
-        }
         return FORMATTER.format(time);
     }
 
