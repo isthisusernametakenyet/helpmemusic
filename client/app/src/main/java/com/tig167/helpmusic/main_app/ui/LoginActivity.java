@@ -93,9 +93,7 @@ public class LoginActivity extends AppCompatActivity {
     private void setSessionData(List<User> users) {
         User user = users.get(0); // get a ref to current user
         users.remove(0); // modify list to friend data by removing current user
-        for (User f : users) {
-            user.addFriend(f);
-        }
+        users.forEach(user::addFriend);
         session.setUser(user);
         session.setSessionStart();
         String sessionStart = DateUtil.format(session.getSessionStart());

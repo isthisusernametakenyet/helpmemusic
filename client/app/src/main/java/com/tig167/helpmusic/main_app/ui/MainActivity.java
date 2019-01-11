@@ -24,6 +24,8 @@ import com.tig167.helpmusic.data.remote.ServerAction;
 import com.tig167.helpmusic.data.remote.VolleyResultCallback;
 import com.tig167.helpmusic.data.remote.VolleyService;
 import com.tig167.helpmusic.main_app.SessionObject;
+import com.tig167.helpmusic.main_app.model.User;
+import com.tig167.helpmusic.util.DateUtil;
 import com.tig167.helpmusic.util.ImageUtil;
 import com.tig167.helpmusic.data.remote.JsonParser;
 import com.tig167.helpmusic.main_app.ui.fragment.PagerAdapter;
@@ -34,6 +36,8 @@ import org.json.JSONArray;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The main screen consists of
@@ -145,8 +149,10 @@ public class MainActivity extends AppCompatActivity {
         if (null == session.user()) {
             SessionObject.getInstance().setUser(DbHelper.getInstance(this).loadSession());
             session.setSessionStart();
+            Log.d(LOG_TAG, "New session: " + DateUtil.format(session.getSessionStart()));
+        } else {
+            Log.d(LOG_TAG, "Session length: " + session.timeElapsed());
         }
-        Log.d(LOG_TAG, "Time since session start: " + session.timeElapsed());
     }
 
     @Override

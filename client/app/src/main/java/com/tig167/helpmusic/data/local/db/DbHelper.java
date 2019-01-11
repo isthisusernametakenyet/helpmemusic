@@ -99,6 +99,7 @@ public class DbHelper extends SQLiteOpenHelper implements Storage<User> {
         this.getWritableDatabase().execSQL("DELETE FROM friend WHERE id > 0;");
         for (User friend : user.friends()) {
             writeFriend(friend);
+            Log.d(LOG_TAG, "wrote friend to db: " + friend.email());
         }
     }
 
@@ -130,12 +131,8 @@ public class DbHelper extends SQLiteOpenHelper implements Storage<User> {
                 );
             }
         }
-        Log.d(LOG_TAG," read user data\nload friends from storage:");
         if (user != null) {
-            for (User friend : readFriends()) {
-                user.addFriend(friend);
-                Log.d(LOG_TAG, friend.name());
-            }
+            readFriends().forEach(user::addFriend);
         }
         return user;
     }
@@ -146,7 +143,7 @@ public class DbHelper extends SQLiteOpenHelper implements Storage<User> {
         SQLiteDatabase db = this.getReadableDatabase();
         List<User> friends = new ArrayList<>();
         try (Cursor cursor = db.rawQuery(SQL_SELECT, null)) {
-            if (cursor.moveToFirst()) {
+            while (cursor.moveToNext()) {
                 friends.add(UserFactory.create(
                         cursor.getString(0),
                         cursor.getString(1),
