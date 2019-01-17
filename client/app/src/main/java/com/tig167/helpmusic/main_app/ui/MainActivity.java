@@ -53,7 +53,7 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity {
 
-    public static final String URL = "http://10.0.2.2:8080/users";
+    public static final String URL = "http://158.174.14.53:8080/users";
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static SessionObject session;
